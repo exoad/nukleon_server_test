@@ -5,17 +5,29 @@
 
 typedef enum
 {
-    NK_TILE_EMPTY,
-    NK_TILE_CELL
-} NkTileType;
+    NK_COMPONENT_EMPTY,
+    NK_COMPONENT_CELL,
+} NkComponent;
 
 typedef struct
 {
-    NkTileType type;
-    NkInt32 heat;
-    NkInt32 power;
-    NkInt32 health;
+    NkComponent component;
+    NkInt16 tier;
+    NkFloat32 heat;
+    NkFloat32 power;
+    NkFloat32 health;
     NkBool active;
+    // flexible fields
+    NkInt32 custom1;
+    NkInt32 custom2;
 } NkTile;
+
+typedef struct
+{
+    NkString name;
+    NkFloat32 heatOutput;
+    NkFloat32 powerOutput;
+    NkInt32 durability;
+} NkComponentTier;
 
 #endif
