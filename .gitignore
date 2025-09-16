@@ -1,0 +1,8 @@
+*.exe
+*.out
+*.dll
+*.so
+*.dylib
+.vscode
+/obj
+*.o
