@@ -73,11 +73,13 @@ NkVoid newNkReactor(NkInt16 width, NkInt16 height)
         }
         for(NkInt16 x = 0; x < width; x++)
         {
-            reactor[y][x].component = NK_COMPONENT_EMPTY;
-            reactor[y][x].heat = 0;
-            reactor[y][x].power = 0;
-            reactor[y][x].health = 100;
-            reactor[y][x].active = 0;
+            reactor[x][y].componentId = NK_EMPTY;
+            
+            // reactor[y][x].component = NK_COMPONENT_EMPTY;
+            // reactor[y][x].heat = 0;
+            // reactor[y][x].power = 0;
+            // reactor[y][x].health = 100;
+            // reactor[y][x].active = 0;
         }
     }
     _height = height;
