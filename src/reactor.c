@@ -53,8 +53,8 @@ NkVoid newNkReactor(NkInt16 width, NkInt16 height)
     {
         return; // already created
     }
-    NkSize H = (NkSize)height;
-    NkSize W = (NkSize)width;
+    NkSize H = (NkSize) height;
+    NkSize W = (NkSize) width;
     nkGameInstance.reactor = (NkTile**) malloc(H * sizeof *(nkGameInstance.reactor));
     if(!nkGameInstance.reactor)
     {
@@ -65,7 +65,7 @@ NkVoid newNkReactor(NkInt16 width, NkInt16 height)
     {
         nkGameInstance.totalHeat = NK_REACTOR_DEFAULT_START_HEAT;
         nkGameInstance.maxHeat = NK_REACTOR_DEFAULT_MAX_HEAT;
-        nkGameInstance.reactor[y] = (NkTile*) malloc(W * sizeof *(nkGameInstance.reactor[y]));
+        nkGameInstance. reactor[y] = (NkTile*) malloc(W * sizeof *(nkGameInstance.reactor[y]));
         if(!nkGameInstance.reactor[y])
         {
             NK_PANICF("Failed to allocate reactor row %d.", y);

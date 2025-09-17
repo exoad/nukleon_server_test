@@ -33,6 +33,7 @@ NkInt32 main(NkVoid)
     nkUpgradeCellComponent(&tile);
     nkUpgradeCellComponent(&tile);
     nkReactorSet(4, 3, tile);
+    nkGameLoop();
     printReactor();
     freeNkReactor();
     NK_PRINTLN("%s", "Bye bye.");

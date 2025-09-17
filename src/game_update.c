@@ -24,7 +24,7 @@ NkVoid nkGameLoop()
                 nextTime = startTime + tickCount * dt;
                 if(++safety > 10000) // make sure it isnt catching up to an infinite bound
                 {
-                    NK_PRINTLN("WARNING: Runaway catch up, stopping... (Behind by: %f)", time - nextTime);
+                    NK_PRINTLN("WARNING: Runaway catch up, stopping... (behind by: %f)", time - nextTime);
                     tickCount = (NkUInt64) ((time - startTime) / dt) + 1;
                     nextTime = time + dt;
                     break;
@@ -37,7 +37,7 @@ NkVoid nkGameLoop()
             if(remaining > 0)
             {
                 NkFloat64 sleepTime = (remaining - 0.001) * 1000.0;
-                if(sleepTime > 0.5) // make sure we dont yield for when the sleep time is too small
+                if(sleepTime > 0.5) // make sure we dont sleep for when the time is too small
                 {
                     nkSleepMs(sleepTime);
                 }
@@ -52,5 +52,5 @@ NkVoid nkGameLoop()
 
 NkVoid nkUpdate(NkFloat64 dt)
 {
-    
+    NK_PRINTLN("DT = %5.6f", dt);
 }

@@ -6,9 +6,9 @@ else ifeq ($(filter asan,$(MAKECMDGOALS)),asan)
     ASAN_FLAGS = -fsanitize=address -fsanitize=undefined -fsanitize-trap=all
 endif
 
-CFLAGS = -Wall -Wextra -Wpedantic -Wunused -Wcast-align -Wno-unused-function -Wshadow -O3 $(ASAN_FLAGS) -std=c17 -Iinclude
+CFLAGS = -Wall -Wextra -Wpedantic -Wunused -Wcast-align -Wno-unused-function -Wshadow -O3 $(ASAN_FLAGS) -Iinclude
 
-LDFLAGS = $(ASAN_FLAGS)
+LDFLAGS = $(ASAN_FLAGS) -lrt
 
 BIN = nukleon_server
 
@@ -16,7 +16,7 @@ SRCDIR = src
 INCDIR = include
 OBJDIR = obj
 
-C_FILES = $(wildcard *.c) $(wildcard $(SRCDIR)/*.c) $(wildcard)
+C_FILES = $(wildcard *.c) $(wildcard $(SRCDIR)/*.c)
 
 OBJ_FILES = $(patsubst %.c,$(OBJDIR)/%.o,$(notdir $(C_FILES)))
 

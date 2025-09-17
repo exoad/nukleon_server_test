@@ -35,6 +35,7 @@ NkVoid nkYield()
 #else
 #include <time.h>
 #include <unistd.h>
+#include <sched.h>
 NkVoid nkTimeInit() {}
 
 NkFloat64 nkTimeNowSec()
@@ -49,7 +50,10 @@ NkVoid nkSleepMs(NkInt32 ms) {
     {
         return;
     }
-    usleep((useconds_t) ms * 1000);
+    struct timespec ts;
+    ts.tv_sec = ms / 1000;
+    ts.tv_nsec = (ms % 1000) * 1000000;
+    nanosleep(&ts, NULL);
 }
 
 NkVoid nkYield()
