@@ -44,7 +44,7 @@ typedef NkVoid* NkAny;
 } while(0)
 
 #define NK_ASSERT(condition, msg) do {                          \
-    if (!(condition))                                         \
+    if(!(condition))                                         \
     {                                                         \
         fprintf(stderr, "ASSERTION FAILED: %s at %s:%d in %s()\n", msg, __FILE__, __LINE__, __func__); \
         exit(1);                                              \
@@ -52,7 +52,8 @@ typedef NkVoid* NkAny;
 } while(0)
 
 #define NK_CHECK(condition, msg) do { \
-    if (!(condition)) {             \
+    if(!(condition))  \
+    {             \
         NK_PANIC(msg);                 \
     }                               \
 } while(0)
