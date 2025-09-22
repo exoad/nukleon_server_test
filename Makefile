@@ -6,19 +6,20 @@ else ifeq ($(filter asan,$(MAKECMDGOALS)),asan)
     ASAN_FLAGS = -fsanitize=address -fsanitize=undefined -fsanitize-trap=all
 endif
 
-CFLAGS = -Wall -Wextra -Wpedantic -Wunused -Wcast-align -Wno-unused-function -Wshadow -O3 $(ASAN_FLAGS) -Iinclude
-
-LDFLAGS = $(ASAN_FLAGS) -lrt
-
-BIN = nukleon_server
-
-SRCDIR = src
-INCDIR = include
-OBJDIR = obj
+SRCDIR   = src
+INCDIR   = include
+ASSETDIR = assets/components
+OBJDIR   = obj
+BIN      = nukleon_server
 
 C_FILES = $(wildcard *.c) $(wildcard $(SRCDIR)/*.c)
-
 OBJ_FILES = $(patsubst %.c,$(OBJDIR)/%.o,$(notdir $(C_FILES)))
+
+DEF_FILES = $(wildcard $(ASSETDIR)/*.def)
+
+CFLAGS = -Wall -Wextra -Wpedantic -Wunused -Wcast-align -Wno-unused-function -Wshadow -O3 \
+         $(ASAN_FLAGS) -I$(INCDIR) -I$(ASSETDIR)
+LDFLAGS = $(ASAN_FLAGS) -lrt
 
 all: $(BIN)
 
@@ -28,10 +29,10 @@ $(OBJDIR):
 $(BIN): $(OBJ_FILES) | $(OBJDIR)
 	$(CC) $(OBJ_FILES) -o $@ $(LDFLAGS)
 
-$(OBJDIR)/%.o: %.c | $(OBJDIR)
+$(OBJDIR)/%.o: %.c $(DEF_FILES) | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
+$(OBJDIR)/%.o: $(SRCDIR)/%.c $(DEF_FILES) | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:

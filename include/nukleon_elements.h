@@ -31,6 +31,22 @@ typedef enum
     NK_COMPONENT_FLAG_USER_PLACEABLE = 1u << 1
 } NkComponentFlags;
 
+typedef enum
+{
+    NK_COMPONENT_CAT_INTERNAL = 0,
+    NK_COMPONENT_CAT_SINGLE_FUEL_CELL,
+    NK_COMPONENT_CAT_COUNT // only used for counting total
+} NkComponentCategory;
+
+#define NK_COMPONENT_LEAF -1
+
+typedef enum {
+#define component(cat, sym, name, heat, power, dura, price, flags, upgrade) sym,
+#include "../assets/components.def"
+#undef component
+    NK_COMPONENT_COUNT
+} NkComponentId;
+
 typedef struct
 {
     NkInt32 id;
@@ -62,29 +78,7 @@ static inline NkBool nkComponentHasFlag(const NkComponent* c, NkUInt32 flag)
 
 NkVoid nkUpgradeCellComponent(NkTile* tile);
 
-typedef enum
-{
-    // -- Internal Components
-    NK_AIR = 0,
-    NK_BARRIER,
-    // -- Singular Power Cells
-    NK_SINGLE_URANIUM_CELL,
-    NK_SINGLE_THORIUM_CELL,
-    NK_SINGLE_PLUTONIUM_CELL,
-    NK_SINGLE_CURIUM_CELL,
-    NK_SINGLE_FERMIUM_CELL,
-    NK_SINGLE_QUANTONIUM_CELL,
-    NK_SINGLE_THRAXIUM_CELL,
-    NK_SINGLE_SOLYTRIUM_CELL,
-    NK_SINGLE_CATANIONIUM_CELL,
-    NK_SINGLE_NEUTRACITE_CELL,
-    NK_SINGLE_TACHYTRIUM_CELL,
-    NK_SINGLE_PATCHNOTIUM_CELL
-
-} NkComponentsList;
-#define NK_COMPONENT_LEAF -1
-
-extern NkComponent componentRegistry[];
+extern NkComponent componentRegistry[NK_COMPONENT_COUNT];
 
 NkVoid nkTileToAir(NkTile* tile);
 

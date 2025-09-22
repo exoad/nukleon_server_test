@@ -28,11 +28,11 @@ NkInt32 main(NkVoid)
     nkTimeInit();
     NK_PRINTLN("%s", "Hello World!");
     newNkReactor(REACTOR_WIDTH, REACTOR_HEIGHT);
-    NkTile tile = (NkTile) { .componentId = NK_SINGLE_URANIUM_CELL, .active = true };
-    nkUpgradeCellComponent(&tile);
-    nkUpgradeCellComponent(&tile);
-    nkUpgradeCellComponent(&tile);
-    nkReactorSet(4, 3, tile);
+    // NkTile tile = (NkTile) { .componentId = NK_SINGLE_URANIUM_CELL, .active = true };
+    // nkUpgradeCellComponent(&tile);
+    // nkUpgradeCellComponent(&tile);
+    // nkUpgradeCellComponent(&tile);
+    // nkReactorSet(4, 3, tile);
     nkGameLoop();
     printReactor();
     freeNkReactor();

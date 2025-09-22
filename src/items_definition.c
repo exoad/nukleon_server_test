@@ -3,160 +3,174 @@
 
 #define NK_SINGLE_CELL_FLAGS (NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE)
 
-NkComponent componentRegistry[] = {
-    // -- Internal components
-    {
-        NK_AIR,
-        .name = "Air",
-        .heatOutput = 0,
-        .powerOutput = 0,
-        .durability = -9999,
-        .flags = 0
-    },
-    {
-        NK_BARRIER,
-        .name = "Barrier",
-        .heatOutput = 0,
-        .powerOutput = 0,
-        .durability = -9999,
-        .flags = 0
-    },
-
-    // -- Singular Power Cells
-    {
-        NK_SINGLE_URANIUM_CELL,
-        .name = "Uranium Cell",
-        .heatOutput = 5,
-        .powerOutput = 10,
-        .durability = 100,
-        .upgradeFx = nkUpgradeCellComponent,
-        .upgradeToId = NK_SINGLE_THORIUM_CELL,
-        .flags = NK_SINGLE_CELL_FLAGS
-    },
-    {
-        NK_SINGLE_THORIUM_CELL,
-        .name = "Thorium Cell",
-        .heatOutput = 8,
-        .powerOutput = 20,
-        .durability = 150,
-        .upgradeFx = nkUpgradeCellComponent,
-        .upgradeToId = NK_SINGLE_PLUTONIUM_CELL,
-        .flags = NK_SINGLE_CELL_FLAGS
-    },
-    {
-        NK_SINGLE_PLUTONIUM_CELL,
-        .name = "Plutonium Cell",
-        .heatOutput = 15,
-        .powerOutput = 40,
-        .durability = 200,
-        .upgradeFx = nkUpgradeCellComponent,
-        .upgradeToId = NK_SINGLE_CURIUM_CELL,
-        .flags = NK_SINGLE_CELL_FLAGS
-    },
-    {
-        NK_SINGLE_CURIUM_CELL,
-        .name = "Curium Cell",
-        .heatOutput = 20,
-        .powerOutput = 55,
-        .durability = 220,
-        .upgradeFx = nkUpgradeCellComponent,
-        .upgradeToId = NK_SINGLE_FERMIUM_CELL,
-        .flags = NK_SINGLE_CELL_FLAGS
-    },
-    {
-        NK_SINGLE_FERMIUM_CELL,
-        .name = "Fermium Cell",
-        .heatOutput = 25,
-        .powerOutput = 70,
-        .durability = 240,
-        .upgradeFx = nkUpgradeCellComponent,
-        .upgradeToId = NK_SINGLE_QUANTONIUM_CELL,
-        .flags = NK_SINGLE_CELL_FLAGS
-    },
-    {
-        NK_SINGLE_QUANTONIUM_CELL,
-        .name = "Quantonium Cell",
-        .heatOutput = 30,
-        .powerOutput = 90,
-        .durability = 260,
-        .upgradeFx = nkUpgradeCellComponent,
-        .upgradeToId = NK_SINGLE_THRAXIUM_CELL,
-        .flags = NK_SINGLE_CELL_FLAGS
-    },
-    {
-        NK_SINGLE_THRAXIUM_CELL,
-        .name = "Thraxium Cell",
-        .heatOutput = 35,
-        .powerOutput = 110,
-        .durability = 280,
-        .upgradeFx = nkUpgradeCellComponent,
-        .upgradeToId = NK_SINGLE_SOLYTRIUM_CELL,
-        .flags = NK_SINGLE_CELL_FLAGS
-    },
-    {
-        NK_SINGLE_SOLYTRIUM_CELL,
-        .name = "Solytrium Cell",
-        .heatOutput = 40,
-        .powerOutput = 135,
-        .durability = 300,
-        .upgradeFx = nkUpgradeCellComponent,
-        .upgradeToId = NK_SINGLE_CATANIONIUM_CELL,
-        .flags = NK_SINGLE_CELL_FLAGS
-    },
-    {
-        NK_SINGLE_CATANIONIUM_CELL,
-        .name = "Catanionium Cell",
-        .heatOutput = 45,
-        .powerOutput = 160,
-        .durability = 320,
-        .upgradeFx = nkUpgradeCellComponent,
-        .upgradeToId = NK_SINGLE_NEUTRACITE_CELL,
-        .flags = NK_SINGLE_CELL_FLAGS
-    },
-    {
-        NK_SINGLE_NEUTRACITE_CELL,
-        .name = "Neutracite Cell",
-        .heatOutput = 50,
-        .powerOutput = 190,
-        .durability = 340,
-        .upgradeFx = nkUpgradeCellComponent,
-        .upgradeToId = NK_SINGLE_TACHYTRIUM_CELL,
-        .flags = NK_SINGLE_CELL_FLAGS
-    },
-    {
-        NK_SINGLE_TACHYTRIUM_CELL,
-        .name = "Tachytrium Cell",
-        .heatOutput = 55,
-        .powerOutput = 220,
-        .durability = 360,
-        .upgradeFx = nkUpgradeCellComponent,
-        .upgradeToId = NK_SINGLE_PATCHNOTIUM_CELL,
-        .flags = NK_SINGLE_CELL_FLAGS
-    },
-    {
-        NK_SINGLE_PATCHNOTIUM_CELL,
-        .name = "Patchnotium Cell",
-        .heatOutput = 60,
-        .powerOutput = 250,
-        .durability = 400,
-        .upgradeFx = nkUpgradeCellComponent,
-        .upgradeToId = NK_COMPONENT_LEAF,
-        .flags = NK_SINGLE_CELL_FLAGS
-    }
+NkComponent componentRegistry[NK_COMPONENT_COUNT] = {
+#define component(cat, sym, name, heat, power, dura, price, flags, upgrade) \
+    { .id = sym, .cat = cat, .name = name, .heatOutput = (heat), .powerOutput = (power), \
+      .durability = (dura), .upgradeFx = NULL, .upgradeToId = (upgrade), \
+      .basePrice = (price), .flags = (flags) },
+#include "../assets/components.def"
+#undef component
 };
 
-NkComponent* nkFindComponentById(NkInt32 id)
-{
-    NkSize count = sizeof(componentRegistry) / sizeof(componentRegistry[0]);
-    for(NkSize i = 0; i < count; i++)
-    {
-        if(componentRegistry[i].id == id)
-        {
-            return &componentRegistry[i];
-        }
-    }
-    return null;
+NkComponent* nkFindComponentById(NkInt32 id){
+    if ((NkUInt32)id >= (NkUInt32)NK_COMPONENT_COUNT) return NULL;
+    return &componentRegistry[id];
 }
+
+// NkComponent componentRegistry[] = {
+//     // -- Internal components
+//     {
+//         NK_AIR,
+//         .name = "Air",
+//         .heatOutput = 0,
+//         .powerOutput = 0,
+//         .durability = -9999,
+//         .flags = 0
+//     },
+//     {
+//         NK_BARRIER,
+//         .name = "Barrier",
+//         .heatOutput = 0,
+//         .powerOutput = 0,
+//         .durability = -9999,
+//         .flags = 0
+//     },
+
+//     // -- Singular Power Cells
+//     {
+//         NK_SINGLE_URANIUM_CELL,
+//         .name = "Uranium Cell",
+//         .heatOutput = 5,
+//         .powerOutput = 10,
+//         .durability = 100,
+//         .upgradeFx = nkUpgradeCellComponent,
+//         .upgradeToId = NK_SINGLE_THORIUM_CELL,
+//         .flags = NK_SINGLE_CELL_FLAGS
+//     },
+//     {
+//         NK_SINGLE_THORIUM_CELL,
+//         .name = "Thorium Cell",
+//         .heatOutput = 8,
+//         .powerOutput = 20,
+//         .durability = 150,
+//         .upgradeFx = nkUpgradeCellComponent,
+//         .upgradeToId = NK_SINGLE_PLUTONIUM_CELL,
+//         .flags = NK_SINGLE_CELL_FLAGS
+//     },
+//     {
+//         NK_SINGLE_PLUTONIUM_CELL,
+//         .name = "Plutonium Cell",
+//         .heatOutput = 15,
+//         .powerOutput = 40,
+//         .durability = 200,
+//         .upgradeFx = nkUpgradeCellComponent,
+//         .upgradeToId = NK_SINGLE_CURIUM_CELL,
+//         .flags = NK_SINGLE_CELL_FLAGS
+//     },
+//     {
+//         NK_SINGLE_CURIUM_CELL,
+//         .name = "Curium Cell",
+//         .heatOutput = 20,
+//         .powerOutput = 55,
+//         .durability = 220,
+//         .upgradeFx = nkUpgradeCellComponent,
+//         .upgradeToId = NK_SINGLE_FERMIUM_CELL,
+//         .flags = NK_SINGLE_CELL_FLAGS
+//     },
+//     {
+//         NK_SINGLE_FERMIUM_CELL,
+//         .name = "Fermium Cell",
+//         .heatOutput = 25,
+//         .powerOutput = 70,
+//         .durability = 240,
+//         .upgradeFx = nkUpgradeCellComponent,
+//         .upgradeToId = NK_SINGLE_QUANTONIUM_CELL,
+//         .flags = NK_SINGLE_CELL_FLAGS
+//     },
+//     {
+//         NK_SINGLE_QUANTONIUM_CELL,
+//         .name = "Quantonium Cell",
+//         .heatOutput = 30,
+//         .powerOutput = 90,
+//         .durability = 260,
+//         .upgradeFx = nkUpgradeCellComponent,
+//         .upgradeToId = NK_SINGLE_THRAXIUM_CELL,
+//         .flags = NK_SINGLE_CELL_FLAGS
+//     },
+//     {
+//         NK_SINGLE_THRAXIUM_CELL,
+//         .name = "Thraxium Cell",
+//         .heatOutput = 35,
+//         .powerOutput = 110,
+//         .durability = 280,
+//         .upgradeFx = nkUpgradeCellComponent,
+//         .upgradeToId = NK_SINGLE_SOLYTRIUM_CELL,
+//         .flags = NK_SINGLE_CELL_FLAGS
+//     },
+//     {
+//         NK_SINGLE_SOLYTRIUM_CELL,
+//         .name = "Solytrium Cell",
+//         .heatOutput = 40,
+//         .powerOutput = 135,
+//         .durability = 300,
+//         .upgradeFx = nkUpgradeCellComponent,
+//         .upgradeToId = NK_SINGLE_CATANIONIUM_CELL,
+//         .flags = NK_SINGLE_CELL_FLAGS
+//     },
+//     {
+//         NK_SINGLE_CATANIONIUM_CELL,
+//         .name = "Catanionium Cell",
+//         .heatOutput = 45,
+//         .powerOutput = 160,
+//         .durability = 320,
+//         .upgradeFx = nkUpgradeCellComponent,
+//         .upgradeToId = NK_SINGLE_NEUTRACITE_CELL,
+//         .flags = NK_SINGLE_CELL_FLAGS
+//     },
+//     {
+//         NK_SINGLE_NEUTRACITE_CELL,
+//         .name = "Neutracite Cell",
+//         .heatOutput = 50,
+//         .powerOutput = 190,
+//         .durability = 340,
+//         .upgradeFx = nkUpgradeCellComponent,
+//         .upgradeToId = NK_SINGLE_TACHYTRIUM_CELL,
+//         .flags = NK_SINGLE_CELL_FLAGS
+//     },
+//     {
+//         NK_SINGLE_TACHYTRIUM_CELL,
+//         .name = "Tachytrium Cell",
+//         .heatOutput = 55,
+//         .powerOutput = 220,
+//         .durability = 360,
+//         .upgradeFx = nkUpgradeCellComponent,
+//         .upgradeToId = NK_SINGLE_PATCHNOTIUM_CELL,
+//         .flags = NK_SINGLE_CELL_FLAGS
+//     },
+//     {
+//         NK_SINGLE_PATCHNOTIUM_CELL,
+//         .name = "Patchnotium Cell",
+//         .heatOutput = 60,
+//         .powerOutput = 250,
+//         .durability = 400,
+//         .upgradeFx = nkUpgradeCellComponent,
+//         .upgradeToId = NK_COMPONENT_LEAF,
+//         .flags = NK_SINGLE_CELL_FLAGS
+//     }
+// };
+
+// NkComponent* nkFindComponentById(NkInt32 id)
+// {
+//     NkSize count = sizeof(componentRegistry) / sizeof(componentRegistry[0]);
+//     for(NkSize i = 0; i < count; i++)
+//     {
+//         if(componentRegistry[i].id == id)
+//         {
+//             return &componentRegistry[i];
+//         }
+//     }
+//     return null;
+// }
 
 NkVoid nkUpgradeCellComponent(NkTile* tile)
 {
