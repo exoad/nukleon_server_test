@@ -3,20 +3,20 @@
 
 NkGame nkGameInstance = { 0 };
 
-static int _height = -1;
-static int _width = -1;
+static NkUInt16 _height = -1;
+static NkUInt16 _width = -1;
 
-NkInt16 nkReactorGetWidth()
+NkUInt16 nkReactorGetWidth()
 {
     return _width;
 }
 
-NkInt16 nkReactorGetHeight()
+NkUInt16 nkReactorGetHeight()
 {
     return _height;
 }
 
-NkVoid nkReactorSet(NkInt16 row, NkInt16 col, NkTile other)
+NkVoid nkReactorSet(NkUInt16 row, NkUInt16 col, NkTile other)
 {
     if(!nkGameInstance.reactor)
     {
@@ -29,7 +29,7 @@ NkVoid nkReactorSet(NkInt16 row, NkInt16 col, NkTile other)
     nkGameInstance.reactor[row][col] = other;
 }
 
-NkTile* nkReactorGet(NkInt16 row, NkInt16 col)
+NkTile* nkReactorGet(NkUInt16 row, NkUInt16 col)
 {
     if(!nkGameInstance.reactor)
     {
@@ -42,7 +42,7 @@ NkTile* nkReactorGet(NkInt16 row, NkInt16 col)
     return &nkGameInstance.reactor[row][col];
 }
 
-NkVoid nkInitNkReactor(NkInt16 width, NkInt16 height)
+NkVoid nkInitNkReactor(NkUInt16 width, NkUInt16 height)
 {
     if(width <= 0 || height <= 0)
     {
@@ -61,7 +61,7 @@ NkVoid nkInitNkReactor(NkInt16 width, NkInt16 height)
         NK_PANICF("%s", "Failed to allocate reactor row pointer array.");
         return;
     }
-    for(NkInt16 y = 0; y < height; y++)
+    for(NkUInt16 y = 0; y < height; y++)
     {
         nkGameInstance.totalHeat = NK_REACTOR_DEFAULT_START_HEAT;
         nkGameInstance.maxHeat = NK_REACTOR_DEFAULT_MAX_HEAT;
@@ -70,14 +70,14 @@ NkVoid nkInitNkReactor(NkInt16 width, NkInt16 height)
         {
             NK_PANICF("Failed to allocate reactor row %d.", y);
             // cleanup previous
-            for(NkInt16 i = 0; i < y; i++)
+            for(NkUInt16 i = 0; i < y; i++)
             {
                 free(nkGameInstance.reactor[i]);
             }
             nkGameInstance = (NkGame) { 0 };
             return;
         }
-        for(NkInt16 x = 0; x < width; x++)
+        for(NkUInt16 x = 0; x < width; x++)
         {
             NkTile* t = &(nkGameInstance.reactor[y][x]);
             t->id = kNkAirComponent->id;
@@ -100,7 +100,7 @@ NkVoid nkUninitNkReactor()
     {
         return;
     }
-    for(NkInt16 y = 0; y < _height; y++)
+    for(NkUInt16 y = 0; y < _height; y++)
     {
         free(nkGameInstance.reactor[y]);
     }

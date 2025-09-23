@@ -1,9 +1,11 @@
+#define _POSIX_C_SOURCE 199309L
+
 #include "nukleon_public.h"
 
-#define REACTOR_WIDTH ((NkInt16) 20)
-#define REACTOR_HEIGHT ((NkInt16) 10)
+#define REACTOR_WIDTH ((NkUInt16) 20)
+#define REACTOR_HEIGHT ((NkUInt16) 10)
 
-NkInt32 main(NkVoid)
+NkInt32 main()
 {
     nkInitTime();
     nkInitItemsDefinition();
@@ -14,7 +16,16 @@ NkInt32 main(NkVoid)
     // nkUpgradeCellComponent(&tile);
     // nkUpgradeCellComponent(&tile);
     nkReactorSet(4, 3, tile);
-    nkGameLoop();
+    // nkGameLoop();
+    for(NkUInt16 i = 0; i < NK_COMPONENT_CATEGORIES_COUNT; i++)
+    {
+        NkComponentCategoryTable cat = gNkComponentCategories[(NkInt16) i];
+        NK_PRINTLN("%d --  %s", i, gNkComponentCategoryNamesTable[i]);
+        for(NkUInt16 j = 0; j < cat.count; j++)
+        {
+            NK_PRINTLN("\t%d = [%s]", cat.array[j].id.id, cat.array[j].name);
+        }
+    }
     nkUninitNkReactor();
     NK_PRINTLN("%s", "Bye bye.");
     return 0;

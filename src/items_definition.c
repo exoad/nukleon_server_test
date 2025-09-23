@@ -5,10 +5,10 @@
 
 /// Used for marking things with a properly defined update function
 #define component_fx(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_) \
-    [id_] = { name_, { cat_, id_ }, heat_, power_, dura_, upgradeFx_, upgrade_, price_, flags_ },
+    [id_] = { name_, NK_CID(cat_, id_), heat_, power_, dura_, upgradeFx_, upgrade_, price_, flags_ },
 /// Used for defining simple items without an upgrade function or one that will be linked internally dynamically
 #define component(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_) \
-    [id_] = { name_, { cat_, id_ }, heat_, power_, dura_, null, upgrade_, price_, flags_ },
+    [id_] = { name_, NK_CID(cat_, id_), heat_, power_, dura_, null, upgrade_, price_, flags_ },
 
 static NkComponent _internalComponents[] = {
 #include "../assets/components/internal.def"
@@ -22,7 +22,7 @@ static NkComponent _singleFuelCellComponents[] = {
 #define _new_cat(cat) { .array = cat, .count = (NkInt32) (sizeof cat / sizeof *cat) }
 #define _todo_cat() { .array = null, .count = (NkInt32) 0 }
 
-/*extern*/ const NkComponentCategoryTables gNkComponentCategories[NK_COMPONENT_CATEGORIES_COUNT] = {
+/*extern*/ const NkComponentCategoryTable gNkComponentCategories[NK_COMPONENT_CATEGORIES_COUNT] = {
     [NK_COMPONENT_INTERNAL] = _new_cat(_internalComponents),
     [NK_COMPONENT_SINGLE_FUEL_CELL] = _new_cat(_singleFuelCellComponents),
     // not yet implemented!!
@@ -34,6 +34,10 @@ static NkComponent _singleFuelCellComponents[] = {
 #undef _todo_cat
 #undef component
 #undef component_fx
+
+/*extern*/ const NkInt8* const gNkComponentCategoryNamesTable[NK_COMPONENT_CATEGORIES_COUNT] = {
+#include "../assets/strings/component_categories.def"
+};
 
 /*extern-late*/ const NkComponent* kNkAirComponent;
 

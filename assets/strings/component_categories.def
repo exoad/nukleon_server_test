@@ -1,0 +1,4 @@
+[NK_COMPONENT_INTERNAL] = "Internal",
+[NK_COMPONENT_SINGLE_FUEL_CELL] = "Single Fuel Cells",
+[NK_COMPONENT_VENTS] = "Vents",
+[NK_COMPONENT_PLATING] = "Reactor Plating"

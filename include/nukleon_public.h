@@ -43,26 +43,26 @@ typedef struct
     NkFloat32 maxPower;
     NkFloat32 totalHeat;
     NkFloat32 maxHeat;
-    NkInt32 rows;
-    NkInt32 cols;
-    NkInt32 capacityRows;
-    NkInt32 capacityCols;
+    NkUInt16 rows;
+    NkUInt16 cols;
+    NkUInt16 capacityRows;
+    NkUInt16 capacityCols;
     NkUInt64 tickIndex;
     NkUInt64 credits;
 } NkGame;
 
 extern NkGame nkGameInstance;
 
-NkInt16 nkReactorGetWidth();
+NkUInt16 nkReactorGetWidth();
 
-NkInt16 nkReactorGetHeight();
+NkUInt16 nkReactorGetHeight();
 
-NkVoid nkInitNkReactor(NkInt16 width, NkInt16 height);
+NkVoid nkInitNkReactor(NkUInt16 width, NkUInt16 height);
 
 NkVoid nkUninitNkReactor();
 
-NkTile* nkReactorGet(NkInt16 row, NkInt16 col);
+NkTile* nkReactorGet(NkUInt16 row, NkUInt16 col);
 
-NkVoid nkReactorSet(NkInt16 row, NkInt16 col, NkTile other);
+NkVoid nkReactorSet(NkUInt16 row, NkUInt16 col, NkTile other);
 
 #endif

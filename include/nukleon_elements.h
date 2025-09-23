@@ -25,7 +25,7 @@ typedef enum
 #undef component
 #undef component_fx
 
-typedef enum
+typedef enum NkComponentCategory
 {
     NK_COMPONENT_INTERNAL = 0,
     NK_COMPONENT_SINGLE_FUEL_CELL,
@@ -36,6 +36,8 @@ typedef enum
     // there is no definition for this item and will probably crash
     NK_COMPONENT_CATEGORIES_COUNT // DO NOT USE FOR GAME COMPONENT REPRESENTATION
 } NkComponentCategory;
+
+extern const NkInt8* const gNkComponentCategoryNamesTable[NK_COMPONENT_CATEGORIES_COUNT];
 
 typedef struct NkComponentIdentifier
 {
@@ -131,9 +133,9 @@ NkVoid nkNoUpGradeFx(NkTile* tile);
 typedef struct {
     NkComponent* array;
     NkInt32 count;
-} NkComponentCategoryTables;
+} NkComponentCategoryTable;
 
-extern const NkComponentCategoryTables gNkComponentCategories[NK_COMPONENT_CATEGORIES_COUNT];
+extern const NkComponentCategoryTable gNkComponentCategories[NK_COMPONENT_CATEGORIES_COUNT];
 extern const NkComponent* kNkAirComponent;
 
 NkVoid nkInitItemsDefinition();
