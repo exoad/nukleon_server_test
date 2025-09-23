@@ -6,7 +6,7 @@
 
 // --- NkTicker
 
-#define NK_STATE_TPS_TARGET 25
+#define NK_STATE_TPS_TARGET 6
 #define NK_STATE_RUN_SECONDS -1.0
 
 NkVoid nkTimeInit();

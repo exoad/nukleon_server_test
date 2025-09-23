@@ -31,10 +31,28 @@ typedef enum
     NK_COMPONENT_FLAG_USER_PLACEABLE = 1u << 1
 } NkComponentFlags;
 
+typedef enum
+{
+    NK_COMPONENT_INTERNAL = 0,
+    NK_COMPONENT_SINGLE_FUEL_CELL,
+    NK_COMPONENT_VENTS,
+    NK_COMPONENT_PLATING,
+
+    // -- DO NOT USE --
+    // there is no definition for this item and will probably crash
+    NK_COMPONENT_CATEGORIES_COUNT // DO NOT USE
+} NkComponentCategory;
+
 typedef struct
 {
-    NkInt32 id;
+    NkComponentCategory category;
+    NkInt16 id;
+} NkComponentIdentifier;
+
+typedef struct
+{
     NkString name;
+    NkComponentIdentifier id;
     NkFloat32 heatOutput;
     NkFloat32 powerOutput;
     NkInt32 durability;
@@ -59,6 +77,7 @@ static inline NkBool nkComponentHasFlag(const NkComponent* c, NkUInt32 flag)
     return (c->flags & flag) != 0;
 }
 
+NkVoid nkNoUpGradeFx(NkTile* tile);
 
 NkVoid nkUpgradeCellComponent(NkTile* tile);
 
@@ -68,23 +87,32 @@ typedef enum
     NK_AIR = 0,
     NK_BARRIER,
     // -- Singular Power Cells
-    NK_SINGLE_URANIUM_CELL,
-    NK_SINGLE_THORIUM_CELL,
-    NK_SINGLE_PLUTONIUM_CELL,
-    NK_SINGLE_CURIUM_CELL,
-    NK_SINGLE_FERMIUM_CELL,
-    NK_SINGLE_QUANTONIUM_CELL,
-    NK_SINGLE_THRAXIUM_CELL,
-    NK_SINGLE_SOLYTRIUM_CELL,
-    NK_SINGLE_CATANIONIUM_CELL,
-    NK_SINGLE_NEUTRACITE_CELL,
-    NK_SINGLE_TACHYTRIUM_CELL,
-    NK_SINGLE_PATCHNOTIUM_CELL
+    NK_SINGLE_FUEL_CELL_URANIUM,
+    NK_SINGLE_FUEL_CELL_THORIUM,
+    NK_SINGLE_FUEL_CELL_PLUTONIUM,
+    NK_SINGLE_FUEL_CELL_CURIUM,
+    NK_SINGLE_FUEL_CELL_FERMIUM,
+    NK_SINGLE_FUEL_CELL_QUANTONIUM,
+    NK_SINGLE_FUEL_CELL_THRAXIUM,
+    NK_SINGLE_FUEL_CELL_SOLYTRIUM,
+    NK_SINGLE_FUEL_CELL_CATANIONIUM,
+    NK_SINGLE_FUEL_CELL_NEUTRACITE,
+    NK_SINGLE_FUEL_CELL_TACHYTRIUM,
+    // -- Vents
+    NK_VENT_BASIC,
+    // -- Platings
+    NK_PLATING_CONCRETE,
+    NK_PLATING_TITANIUM,
+    NK_PLATING_LEAD,
+    NK_PLATING_STEEL,
+    NK_PLATING_TUNGSTEN,
+    NK_PLATING_LIQUID_LEAD,
+    NK_PLATING_LIQUID_LITHIUM   ,
 
 } NkComponentsList;
 #define NK_COMPONENT_LEAF -1
 
-extern NkComponent componentRegistry[];
+extern const NkComponent* const gNkComponentRegistry[NK_COMPONENT_CATEGORIES_COUNT];
 
 NkVoid nkTileToAir(NkTile* tile);
 
