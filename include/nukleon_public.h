@@ -9,7 +9,7 @@
 #define NK_STATE_TPS_TARGET 6
 #define NK_STATE_RUN_SECONDS -1.0
 
-NkVoid nkTimeInit();
+NkVoid nkInitTime();
 
 NkFloat64 nkTimeNowSec();
 
@@ -57,9 +57,9 @@ NkInt16 nkReactorGetWidth();
 
 NkInt16 nkReactorGetHeight();
 
-NkVoid newNkReactor(NkInt16 width, NkInt16 height);
+NkVoid nkInitNkReactor(NkInt16 width, NkInt16 height);
 
-NkVoid freeNkReactor();
+NkVoid nkUninitNkReactor();
 
 NkTile* nkReactorGet(NkInt16 row, NkInt16 col);
 

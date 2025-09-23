@@ -42,7 +42,7 @@ NkTile* nkReactorGet(NkInt16 row, NkInt16 col)
     return &nkGameInstance.reactor[row][col];
 }
 
-NkVoid newNkReactor(NkInt16 width, NkInt16 height)
+NkVoid nkInitNkReactor(NkInt16 width, NkInt16 height)
 {
     if(width <= 0 || height <= 0)
     {
@@ -80,21 +80,21 @@ NkVoid newNkReactor(NkInt16 width, NkInt16 height)
         for(NkInt16 x = 0; x < width; x++)
         {
             NkTile* t = &(nkGameInstance.reactor[y][x]);
-            t->componentId = NK_AIR;
-            t->tier        = 0;
-            t->containedHeat        = 0.0f;
-            t->power       = 0.0f;
-            t->health      = -1.0f;
-            t->active      = false;
-            t->custom1     = 0;
-            t->custom2     = 0;
+            t->id = kNkAirComponent->id;
+            t->tier = 0;
+            t->containedHeat = 0.0f;
+            t->power = 0.0f;
+            t->health = -1.0f;
+            t->active = false;
+            t->custom1 = 0;
+            t->custom2 = 0;
         }
     }
     _height = height;
     _width  = width;
 }
 
-NkVoid freeNkReactor()
+NkVoid nkUninitNkReactor()
 {
     if(!nkGameInstance.reactor)
     {

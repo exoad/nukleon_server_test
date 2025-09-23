@@ -50,7 +50,32 @@ NkVoid nkGameLoop()
     }
 }
 
+#define REACTOR_WIDTH ((NkInt16) 20)
+#define REACTOR_HEIGHT ((NkInt16) 10)
+
+NkVoid printReactor()
+{
+    for(NkInt16 row = 0; row < REACTOR_HEIGHT; row++)
+    {
+        for(NkInt16 col = 0; col < REACTOR_WIDTH; col++)
+        {
+            const NkInt32 v = nkGameInstance.reactor[row][col].id.id;
+            if(v == NK_AIR)
+            {
+                NK_PRINT("%s", "[  ]");
+            }
+            else
+            {
+                NK_PRINT(nkGameInstance.reactor[row][col].active ? "[%dO]" : "[%dY]", v);
+            }
+        }
+        NK_PRINT("%s", "\n");
+    }
+}
+
 NkVoid nkUpdate(NkFloat64 dt)
 {
+    NK_PRINTLN("%s", "====================================");
     NK_PRINTLN("DT = %5.6f", dt);
+    printReactor();
 }

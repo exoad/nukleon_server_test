@@ -5,7 +5,7 @@
 #include <windows.h>
 static LARGE_INTEGER g_freq;
 
-NkVoid nkTimeInit()
+NkVoid nkInitTime()
 {
     QueryPerformanceFrequency(&g_freq);
 }
@@ -36,7 +36,7 @@ NkVoid nkYield()
 #include <time.h>
 #include <unistd.h>
 #include <sched.h>
-NkVoid nkTimeInit() {}
+NkVoid nkInitTime() {}
 
 NkFloat64 nkTimeNowSec()
 {

@@ -3,18 +3,52 @@
 
 #define NK_SINGLE_FUEL_CELL_FLAGS (NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE)
 
-NkComponent componentRegistry[NK_COMPONENT_COUNT] = {
-#define component(cat, sym, name, heat, power, dura, price, flags, upgrade) \
-    { .id = sym, .cat = cat, .name = name, .heatOutput = (heat), .powerOutput = (power), \
-      .durability = (dura), .upgradeFx = NULL, .upgradeToId = (upgrade), \
-      .basePrice = (price), .flags = (flags) },
-#include "../assets/components.def"
-#undef component
+/// Used for marking things with a properly defined update function
+#define component_fx(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_) \
+    [id_] = { name_, { cat_, id_ }, heat_, power_, dura_, upgradeFx_, upgrade_, price_, flags_ },
+/// Used for defining simple items without an upgrade function or one that will be linked internally dynamically
+#define component(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_) \
+    [id_] = { name_, { cat_, id_ }, heat_, power_, dura_, null, upgrade_, price_, flags_ },
+
+static NkComponent _internalComponents[] = {
+#include "../assets/components/internal.def"
 };
 
-NkComponent* nkFindComponentById(NkInt32 id){
-    if ((NkUInt32)id >= (NkUInt32)NK_COMPONENT_COUNT) return NULL;
-    return &componentRegistry[id];
+static NkComponent _singleFuelCellComponents[] = {
+#include "../assets/components/single_fuel_cell.def"
+};
+
+/// Master lookup table that defines and allocates all necessary resources for each category of component
+#define _new_cat(cat) { .array = cat, .count = (NkInt32) (sizeof cat / sizeof *cat) }
+#define _todo_cat() { .array = null, .count = (NkInt32) 0 }
+
+/*extern*/ const NkComponentCategoryTables gNkComponentCategories[NK_COMPONENT_CATEGORIES_COUNT] = {
+    [NK_COMPONENT_INTERNAL] = _new_cat(_internalComponents),
+    [NK_COMPONENT_SINGLE_FUEL_CELL] = _new_cat(_singleFuelCellComponents),
+    // not yet implemented!!
+    [NK_COMPONENT_VENTS]  = _todo_cat(),
+    [NK_COMPONENT_PLATING] = _todo_cat()
+};
+
+#undef _new_cat
+#undef _todo_cat
+#undef component
+#undef component_fx
+
+/*extern-late*/ const NkComponent* kNkAirComponent;
+
+NkVoid nkInitItemsDefinition()
+{
+    kNkAirComponent = &_internalComponents[0]; // we can gurantee for internal items
+}
+
+NkComponent* nkFindComponentById(NkComponentIdentifier id)
+{
+    if((NkUInt32) id.category >= (NkUInt32) NK_COMPONENT_CATEGORIES_COUNT || id.id > gNkComponentCategories[id.category].count)
+    {
+        return null;
+    }
+    return &gNkComponentCategories[id.category].array[id.id];
 }
 
 // NkComponent componentRegistry[] = {

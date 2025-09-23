@@ -17,7 +17,7 @@ OBJ_FILES = $(patsubst %.c,$(OBJDIR)/%.o,$(notdir $(C_FILES)))
 
 DEF_FILES = $(wildcard $(ASSETDIR)/*.def)
 
-CFLAGS = -Wall -Wextra -Wpedantic -Wunused -Wcast-align -Wno-unused-function -Wshadow -O3 \
+CFLAGS = -std=c17 -D_GNU_SOURCE -Wall -Wextra -Wpedantic -Wunused -Wcast-align -Wno-unused-function -Wshadow -O3 \
          $(ASAN_FLAGS) -I$(INCDIR) -I$(ASSETDIR)
 LDFLAGS = $(ASAN_FLAGS) -lrt
 
