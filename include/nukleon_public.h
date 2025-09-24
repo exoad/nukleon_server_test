@@ -21,6 +21,12 @@ NkVoid nkGameLoop();
 
 NkVoid nkUpdate(NkFloat64 dt);
 
+typedef struct
+{
+    NkUInt16 row;
+    NkUInt16 col;
+} NkLocation;
+
 // --- NkTickStats
 
 typedef struct
@@ -39,10 +45,10 @@ typedef struct
 typedef struct
 {
     NkTile** reactor;
-    NkFloat32 totalPower;
-    NkFloat32 maxPower;
-    NkFloat32 totalHeat;
-    NkFloat32 maxHeat;
+    NkFloat64 totalPower;
+    NkFloat64 maxPower;
+    NkFloat64 totalHeat;
+    NkFloat64 maxHeat;
     NkUInt16 rows;
     NkUInt16 cols;
     NkUInt16 capacityRows;
@@ -51,7 +57,7 @@ typedef struct
     NkUInt64 credits;
 } NkGame;
 
-extern NkGame nkGameInstance;
+extern NkGame gNkGameInstance;
 
 NkUInt16 nkReactorGetWidth();
 
@@ -59,10 +65,19 @@ NkUInt16 nkReactorGetHeight();
 
 NkVoid nkInitNkReactor(NkUInt16 width, NkUInt16 height);
 
+/// @brief Get the number of all (including diagonal) neighbors of a cell
+NkUInt16 nkReactorGetFullNeighborsOf(NkLocation loc);
+
+/// @brief Get the number of orthogonal (up, down, left, right) neighbors of a cell
+NkUInt16 nkReactorGetOrthoNeighborsOf(NkLocation loc);
+
+/// @brief Free all allocated memory for the reactor grid
 NkVoid nkUninitNkReactor();
 
-NkTile* nkReactorGet(NkUInt16 row, NkUInt16 col);
+/// @brief Request a pointer to the tile at the given row and column
+NkTile* nkReactorGet(NkLocation loc);
 
-NkVoid nkReactorSet(NkUInt16 row, NkUInt16 col, NkTile other);
+/// @brief Copies the data of the given tile into the reactor grid at the given row and column
+NkVoid nkReactorSet(NkLocation loc, NkTile other);
 
 #endif

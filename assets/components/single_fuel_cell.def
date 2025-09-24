@@ -1,36 +1,120 @@
 component(
-    0,
-    NK_COMPONENT_SINGLE_FUEL_CELL,
-    NK_SINGLE_URANIUM_CELL,
-    "Uranium Cell",
-    10,
-    100,
-    500,
-    200.0f,
-    NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
-    NK_SINGLE_THORIUM_CELL
+    nkparam_id 0,
+    nkparam_category NK_COMPONENT_SINGLE_FUEL_CELL,
+    nkparam_symbol NK_SINGLE_URANIUM_CELL,
+    nkparam_name "Uranium Cell",
+    nkparam_base_heat 10,
+    nkparam_base_power 100,
+    nkparam_durability 500,
+    nkparam_base_price 200.0f,
+    nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
+    nkparam_upgrade_to NK_SINGLE_THORIUM_CELL
 )
 component(
-    1,
-    NK_COMPONENT_SINGLE_FUEL_CELL,
-    NK_SINGLE_THORIUM_CELL,
-    "Thorium Cell",
-    8,
-    20,
-    150,
-    500.0f,
-    NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
-    NK_SINGLE_PLUTONIUM_CELL
+    nkparam_id 1,
+    nkparam_category NK_COMPONENT_SINGLE_FUEL_CELL,
+    nkparam_symbol NK_SINGLE_THORIUM_CELL,
+    nkparam_name "Thorium Cell",
+    nkparam_base_heat 8,
+    nkparam_base_power 20,
+    nkparam_durability 150,
+    nkparam_base_price 500.0f,
+    nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
+    nkparam_upgrade_to NK_SINGLE_PLUTONIUM_CELL
 )
 component(
-    2,
-    NK_COMPONENT_SINGLE_FUEL_CELL,
-    NK_SINGLE_PLUTONIUM_CELL,
-    "Plutonium Cell",
-    15,
-    40,
-    200,
-    1200.0f,
-    NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
-    NK_COMPONENT_LEAF
+    nkparam_id 2,
+    nkparam_category NK_COMPONENT_SINGLE_FUEL_CELL,
+    nkparam_symbol NK_SINGLE_PLUTONIUM_CELL,
+    nkparam_name "Plutonium Cell",
+    nkparam_base_heat 15,
+    nkparam_base_power 40,
+    nkparam_durability 200,
+    nkparam_base_price 1200.0f,
+    nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
+    nkparam_upgrade_to NK_SINGLE_CURIUM_CELL
+)
+component(
+    nkparam_id 3,
+    nkparam_category NK_COMPONENT_SINGLE_FUEL_CELL,
+    nkparam_symbol NK_SINGLE_CURIUM_CELL,
+    nkparam_name "Curium Cell",
+    nkparam_base_heat 20,
+    nkparam_base_power 60,
+    nkparam_durability 300,
+    nkparam_base_price 2000.0f,
+    nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
+    nkparam_upgrade_to NK_SINGLE_FERMIUM_CELL
+)
+component(
+    nkparam_id 4,
+    nkparam_category NK_COMPONENT_SINGLE_FUEL_CELL,
+    nkparam_symbol NK_SINGLE_FERMIUM_CELL,
+    nkparam_name "Fermium Cell",
+    nkparam_base_heat 25,
+    nkparam_base_power 80,
+    nkparam_durability 400,
+    nkparam_base_price 3000.0f,
+    nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
+    nkparam_upgrade_to NK_SINGLE_QUANTONIUM_CELL
+)
+component(
+    nkparam_id 5,
+    nkparam_category NK_COMPONENT_SINGLE_FUEL_CELL,
+    nkparam_symbol NK_SINGLE_QUANTONIUM_CELL,
+    nkparam_name "Quantonium Cell",
+    nkparam_base_heat 50,
+    nkparam_base_power 200,
+    nkparam_durability 1000,
+    nkparam_base_price 10000.0f,
+    nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
+    nkparam_upgrade_to NK_SINGLE_THRAXIUM_CELL
+)
+component(
+    nkparam_id 6,
+    nkparam_category NK_COMPONENT_SINGLE_FUEL_CELL,
+    nkparam_symbol NK_SINGLE_THRAXIUM_CELL,
+    nkparam_name "Thraxium Cell",
+    nkparam_base_heat 100,
+    nkparam_base_power 500,
+    nkparam_durability 2000,
+    nkparam_base_price 20000.0f,
+    nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
+    nkparam_upgrade_to NK_SINGLE_SOLYTRIUM_CELL
+)
+component(
+    nkparam_id 7,
+    nkparam_category NK_COMPONENT_SINGLE_FUEL_CELL,
+    nkparam_symbol NK_SINGLE_SOLYTRIUM_CELL,
+    nkparam_name "Solytrium Cell",
+    nkparam_base_heat 200,
+    nkparam_base_power 1000,
+    nkparam_durability 5000,
+    nkparam_base_price 50000.0f,
+    nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
+    nkparam_upgrade_to NK_SINGLE_CATANONIUM_CELL
+)
+component(
+    nkparam_id 8,
+    nkparam_category NK_COMPONENT_SINGLE_FUEL_CELL,
+    nkparam_symbol NK_SINGLE_CATANONIUM_CELL,
+    nkparam_name "Catanonium Cell",
+    nkparam_base_heat 500,
+    nkparam_base_power 2000,
+    nkparam_durability 10000,
+    nkparam_base_price 100000.0f,
+    nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
+    nkparam_upgrade_to NK_SINGLE_TACHYTRIUM_CELL
+)
+component(
+    nkparam_id 9,
+    nkparam_category NK_COMPONENT_SINGLE_FUEL_CELL,
+    nkparam_symbol NK_SINGLE_TACHYTRIUM_CELL,
+    nkparam_name "Tachytrium Cell",
+    nkparam_base_heat 1000,
+    nkparam_base_power 5000,
+    nkparam_durability 20000,
+    nkparam_base_price 200000.0f,
+    nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
+    nkparam_upgrade_to NK_COMPONENT_LEAF
 )

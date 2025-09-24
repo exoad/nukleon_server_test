@@ -6,20 +6,28 @@ else ifeq ($(filter asan,$(MAKECMDGOALS)),asan)
     ASAN_FLAGS = -fsanitize=address -fsanitize=undefined -fsanitize-trap=all
 endif
 
-SRCDIR   = src
-INCDIR   = include
+SRCDIR = src
+INCDIR = include
 ASSETDIR = assets/components
-OBJDIR   = obj
-BIN      = nukleon_server
-
+OBJDIR = obj
+BIN = nukleon_server
+DEFINES ?=
 C_FILES = $(wildcard *.c) $(wildcard $(SRCDIR)/*.c)
 OBJ_FILES = $(patsubst %.c,$(OBJDIR)/%.o,$(notdir $(C_FILES)))
 
 DEF_FILES = $(wildcard $(ASSETDIR)/*.def)
 
 CFLAGS = -std=c17 -D_GNU_SOURCE -Wall -Wextra -Wpedantic -Wunused -Wcast-align -Wno-unused-function -Wshadow -O3 \
-         $(ASAN_FLAGS) -I$(INCDIR) -I$(ASSETDIR)
-LDFLAGS = $(ASAN_FLAGS) -lrt
+         $(ASAN_FLAGS) $(DEFINES) -I$(INCDIR) -I$(ASSETDIR)
+
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+    PLATFORM_LDFLAGS = -lrt
+else
+    PLATFORM_LDFLAGS =
+endif
+
+LDFLAGS = $(ASAN_FLAGS) $(PLATFORM_LDFLAGS)
 
 all: $(BIN)
 

@@ -11,6 +11,18 @@ typedef enum
     NK_COMPONENT_FLAG_USER_PLACEABLE = 1u << 1
 } NkComponentFlags;
 
+#define NK_COMPONENT_INFINITE_HEALTH -1
+#define nkparam_durability
+#define nkparam_base_heat
+#define nkparam_base_power
+#define nkparam_base_price
+#define nkparam_upgrade_to
+#define nkparam_upgrade_fx
+#define nkparam_name
+#define nkparam_flags
+#define nkparam_id
+#define nkparam_category
+#define nkparam_symbol
 #define component(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_) sym_,
 #define component_fx(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_) sym_,
 
@@ -18,12 +30,25 @@ NkVoid nkUpgradeCellComponent(NkTile* tile);
 
 typedef enum
 {
-    #include "../assets/components/internal.def"
-    #include "../assets/components/single_fuel_cell.def"
+#include "../assets/components.def"
+    // -- DO NOT USE --
+    // there is no definition for this item and will probably crash
+    NK_COMPONENTS_COUNT // DO NOT USE FOR GAME COMPONENT REPRESENTATION
 } NkComponentsList;
 
 #undef component
 #undef component_fx
+#undef nkparam_durability
+#undef nkparam_base_heat
+#undef nkparam_base_power
+#undef nkparam_base_price
+#undef nkparam_upgrade_to
+#undef nkparam_upgrade_fx
+#undef nkparam_name
+#undef flags
+#undef nkparam_id
+#undef nkparam_category
+#undef nkparam_symbol
 
 typedef enum NkComponentCategory
 {
@@ -99,35 +124,6 @@ static inline NkBool nkComponentHasFlag(const NkComponent* c, NkUInt32 flag)
 
 NkVoid nkNoUpGradeFx(NkTile* tile);
 
-// typedef enum
-// {
-//     // -- Internal Components
-//     NK_AIR = 0,
-//     NK_BARRIER,
-//     // -- Singular Power Cells
-//     NK_SINGLE_FUEL_CELL_URANIUM,
-//     NK_SINGLE_FUEL_CELL_THORIUM,
-//     NK_SINGLE_FUEL_CELL_PLUTONIUM,
-//     NK_SINGLE_FUEL_CELL_CURIUM,
-//     NK_SINGLE_FUEL_CELL_FERMIUM,
-//     NK_SINGLE_FUEL_CELL_QUANTONIUM,
-//     NK_SINGLE_FUEL_CELL_THRAXIUM,
-//     NK_SINGLE_FUEL_CELL_SOLYTRIUM,
-//     NK_SINGLE_FUEL_CELL_CATANIONIUM,
-//     NK_SINGLE_FUEL_CELL_NEUTRACITE,
-//     NK_SINGLE_FUEL_CELL_TACHYTRIUM,
-//     // -- Vents
-//     NK_VENT_BASIC,
-//     // -- Platings
-//     NK_PLATING_CONCRETE,
-//     NK_PLATING_TITANIUM,
-//     NK_PLATING_LEAD,
-//     NK_PLATING_STEEL,
-//     NK_PLATING_TUNGSTEN,
-//     NK_PLATING_LIQUID_LEAD,
-//     NK_PLATING_LIQUID_LITHIUM   ,
-
-// } NkComponentsList;
 #define NK_COMPONENT_LEAF -1
 
 typedef struct {

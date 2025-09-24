@@ -1,7 +1,7 @@
 #include "nukleon_public.h"
 #include <stdlib.h>
 
-NkGame nkGameInstance = { 0 };
+NkGame gNkGameInstance = { 0 };
 
 static NkUInt16 _height = -1;
 static NkUInt16 _width = -1;
@@ -16,30 +16,30 @@ NkUInt16 nkReactorGetHeight()
     return _height;
 }
 
-NkVoid nkReactorSet(NkUInt16 row, NkUInt16 col, NkTile other)
+NkVoid nkReactorSet(NkLocation loc, NkTile other)
 {
-    if(!nkGameInstance.reactor)
+    if(!gNkGameInstance.reactor)
     {
         NK_PANIC("Reactor pointer not initialized!");
     }
-    if(row <= 0 || col <= 0 || row > _height || col > _width)
+    if(loc.row <= 0 || loc.col <= 0 || loc.row > _height || loc.col > _width)
     {
-        NK_PANICF("The given row and column are out of bounds for %d, %d. Got: %d %d", _width, _height, row, col);
+        NK_PANICF("The given row and column are out of bounds for %d, %d. Got: %d %d", _width, _height, loc.row, loc.col);
     }
-    nkGameInstance.reactor[row][col] = other;
+    gNkGameInstance.reactor[loc.row][loc.col] = other;
 }
 
-NkTile* nkReactorGet(NkUInt16 row, NkUInt16 col)
+NkTile* nkReactorGet(NkLocation loc)
 {
-    if(!nkGameInstance.reactor)
+    if(!gNkGameInstance.reactor)
     {
         NK_PANIC("Reactor pointer not initialized!");
     }
-    if(row <= 0 || col <= 0 || row > _height || col > _width)
+    if(loc.row <= 0 || loc.col <= 0 || loc.row > _height || loc.col > _width)
     {
-        NK_PANICF("The given row and column are out of bounds for %d, %d. Got: %d %d", _width, _height, row, col);
+        NK_PANICF("The given row and column are out of bounds for %d, %d. Got: %d %d", _width, _height, loc.row, loc.col);
     }
-    return &nkGameInstance.reactor[row][col];
+    return &gNkGameInstance.reactor[loc.row][loc.col];
 }
 
 NkVoid nkInitNkReactor(NkUInt16 width, NkUInt16 height)
@@ -49,37 +49,37 @@ NkVoid nkInitNkReactor(NkUInt16 width, NkUInt16 height)
         NK_PANICF("The width and height parameters cannot be <= 0. [%d, %d]", width, height);
         return;
     }
-    if (nkGameInstance.reactor)
+    if (gNkGameInstance.reactor)
     {
         return; // already created
     }
     NkSize H = (NkSize) height;
     NkSize W = (NkSize) width;
-    nkGameInstance.reactor = (NkTile**) malloc(H * sizeof *(nkGameInstance.reactor));
-    if(!nkGameInstance.reactor)
+    gNkGameInstance.reactor = (NkTile**) malloc(H * sizeof *(gNkGameInstance.reactor));
+    if(!gNkGameInstance.reactor)
     {
         NK_PANICF("%s", "Failed to allocate reactor row pointer array.");
         return;
     }
     for(NkUInt16 y = 0; y < height; y++)
     {
-        nkGameInstance.totalHeat = NK_REACTOR_DEFAULT_START_HEAT;
-        nkGameInstance.maxHeat = NK_REACTOR_DEFAULT_MAX_HEAT;
-        nkGameInstance. reactor[y] = (NkTile*) malloc(W * sizeof *(nkGameInstance.reactor[y]));
-        if(!nkGameInstance.reactor[y])
+        gNkGameInstance.totalHeat = NK_REACTOR_DEFAULT_START_HEAT;
+        gNkGameInstance.maxHeat = NK_REACTOR_DEFAULT_MAX_HEAT;
+        gNkGameInstance. reactor[y] = (NkTile*) malloc(W * sizeof *(gNkGameInstance.reactor[y]));
+        if(!gNkGameInstance.reactor[y])
         {
             NK_PANICF("Failed to allocate reactor row %d.", y);
             // cleanup previous
             for(NkUInt16 i = 0; i < y; i++)
             {
-                free(nkGameInstance.reactor[i]);
+                free(gNkGameInstance.reactor[i]);
             }
-            nkGameInstance = (NkGame) { 0 };
+            gNkGameInstance = (NkGame) { 0 };
             return;
         }
         for(NkUInt16 x = 0; x < width; x++)
         {
-            NkTile* t = &(nkGameInstance.reactor[y][x]);
+            NkTile* t = &(gNkGameInstance.reactor[y][x]);
             t->id = kNkAirComponent->id;
             t->tier = 0;
             t->containedHeat = 0.0f;
@@ -96,14 +96,85 @@ NkVoid nkInitNkReactor(NkUInt16 width, NkUInt16 height)
 
 NkVoid nkUninitNkReactor()
 {
-    if(!nkGameInstance.reactor)
+    if(!gNkGameInstance.reactor)
     {
         return;
     }
     for(NkUInt16 y = 0; y < _height; y++)
     {
-        free(nkGameInstance.reactor[y]);
+        free(gNkGameInstance.reactor[y]);
     }
-    nkGameInstance = (NkGame) { 0 };
+    gNkGameInstance = (NkGame) { 0 };
     _width = _height = 0;
+}
+
+NkUInt16 nkReactorGetFullNeighborsOf(NkLocation loc)
+{
+    if(!gNkGameInstance.reactor)
+    {
+        NK_PANIC("Reactor pointer not initialized!");
+        return 0;
+    }
+    if(loc.row <= 0 || loc.col <= 0 || loc.row > _height || loc.col > _width)
+    {
+        NK_PANICF("The given row and column are out of bounds for %d, %d. Got: %d %d", _width, _height, loc.row, loc.col);
+        return 0;
+    }
+    NkUInt16 count = 0;
+    for(NkInt16 dy = -1; dy <= 1; dy++)
+    {
+        for(NkInt16 dx = -1; dx <= 1; dx++)
+        {
+            if(dy == 0 && dx == 0)
+            {
+                continue;
+            }
+            NkInt16 ny = (NkInt16) loc.row + dy;
+            NkInt16 nx = (NkInt16) loc.col + dx;
+            if(ny > 0 && ny <= _height && nx > 0 && nx <= _width)
+            {
+                const NkTile* t = &gNkGameInstance.reactor[ny][nx];
+                if(t->id.id != NK_AIR)
+                {
+                    count++;
+                }
+            }
+        }
+    }
+    return count;
+}
+
+static const NkInt16 _directions[4][2] = {
+    { -1, 0 }, // up
+    { 1, 0 },  // down
+    { 0, -1 }, // left
+    { 0, 1 }   // right
+};
+NkUInt16 nkReactorGetOrthoNeighborsOf(NkLocation loc)
+{
+    if(!gNkGameInstance.reactor)
+    {
+        NK_PANIC("Reactor pointer not initialized!");
+        return 0;
+    }
+    if(loc.row <= 0 || loc.col <= 0 || loc.row > _height || loc.col > _width)
+    {
+        NK_PANICF("The given row and column are out of bounds for %d, %d. Got: %d %d", _width, _height, loc.row, loc.col);
+        return 0;
+    }
+    NkUInt16 count = 0;
+    for(NkInt16 i = 0; i < 4; i++)
+    {
+        NkInt16 ny = (NkInt16) loc.row + _directions[i][0];
+        NkInt16 nx = (NkInt16) loc.col + _directions[i][1];
+        if(ny > 0 && ny <= _height && nx > 0 && nx <= _width)
+        {
+            const NkTile* t = &gNkGameInstance.reactor[ny][nx];
+            if(t->id.id != NK_AIR)
+            {
+                count++;
+            }
+        }
+    }
+    return count;
 }
