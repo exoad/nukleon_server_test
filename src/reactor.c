@@ -42,6 +42,7 @@ NkTile* nkReactorGet(NkLocation loc)
     return &gNkGameInstance.reactor[loc.row][loc.col];
 }
 
+
 NkVoid nkInitNkReactor(NkUInt16 width, NkUInt16 height)
 {
     if(width <= 0 || height <= 0)
@@ -177,4 +178,21 @@ NkUInt16 nkReactorGetOrthoNeighborsOf(NkLocation loc)
         }
     }
     return count;
+}
+
+NkVoid nkResetReactor()
+{
+    // not necessarily required to reset
+    for(NkInt16 row = 0; row < _height; row++)
+    {
+        for(NkInt16 col = 0; col < _width; col++)
+        {
+            if(gNkGameInstance.reactor[row][col].id.category != NK_COMPONENT_INTERNAL)
+            {
+                nkTileToAir(&gNkGameInstance.reactor[row][col]);
+            }
+        }
+    }
+    gNkGameInstance.totalPower = 0.0f;
+    gNkGameInstance.totalHeat = 0.0f;
 }

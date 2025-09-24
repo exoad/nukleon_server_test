@@ -79,7 +79,7 @@ typedef struct NkTile
     NkFloat32 containedHeat; // or stored heat
     NkFloat32 maxHeat; // capacity (max heat that can be stored)
     NkFloat32 power;
-    NkFloat32 health;
+    NkFloat32 health; // out of /100 for direct percentage value
     NkBool active; // whether something is working (that is actually counted in the game logic)
                    // activity of a tile is attributed to the followign parameters:
                    //   1. the health is <= 0
@@ -91,6 +91,8 @@ typedef struct NkTile
     NkInt32 custom1;
     NkInt32 custom2;
 } NkTile;
+
+NkTile newNkTileWithDefaultsFromId(NkComponentIdentifier id);
 
 #define NK_CID(cat, itemid) { .category = cat, .id = itemid }
 
@@ -135,6 +137,8 @@ extern const NkComponentCategoryTable gNkComponentCategories[NK_COMPONENT_CATEGO
 extern const NkComponent* kNkAirComponent;
 
 NkVoid nkInitItemsDefinition();
+
+NkBool nkIsCellId(NkComponentIdentifier id);
 
 NkVoid nkTileToAir(NkTile* tile);
 

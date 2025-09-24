@@ -141,3 +141,25 @@ NkVoid nkTileToAir(NkTile* tile)
     tile->custom1 = 0;
     tile->custom2 = 0;
 }
+
+NkBool nkIsCellId(NkComponentIdentifier id)
+{
+    return id.category == NK_COMPONENT_SINGLE_FUEL_CELL; // add for compacted fuel cells
+}
+
+NkTile newNkTileWithDefaultsFromId(NkComponentIdentifier id)
+{
+    return (NkTile) {
+        .id = id,
+        .tier = 0,
+        .generatedHeat = 0,
+        .generatedPower = 0,
+        .containedHeat = 0,
+        .maxHeat = 0,
+        .power = 0,
+        .health = 100.0f, // we start with 100% health
+        .active = true,
+        .custom1 = 0,
+        .custom2 = 0
+    };
+}

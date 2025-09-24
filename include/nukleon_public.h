@@ -3,10 +3,13 @@
 
 #include "nukleon_elements.h"
 #include <stdint.h>
+// --  Hollistic Game Rules
+
+#define NK_RULE_STATE_FPS_TARGET 3
+#define NK_RULE_TOTAL_TICKS_FOR_MELTDOWN_WIPE 5
 
 // --- NkTicker
 
-#define NK_STATE_TPS_TARGET 6
 #define NK_STATE_RUN_SECONDS -1.0
 
 NkVoid nkInitTime();
@@ -60,6 +63,9 @@ typedef struct
 extern NkGame gNkGameInstance;
 
 NkUInt16 nkReactorGetWidth();
+
+/// @brief For meltdown purposes
+NkVoid nkResetReactor();
 
 NkUInt16 nkReactorGetHeight();
 

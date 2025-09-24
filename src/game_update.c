@@ -2,7 +2,7 @@
 
 NkVoid nkGameLoop()
 {
-    const NkFloat64 dt = 1.0 / NK_STATE_TPS_TARGET;
+    const NkFloat64 dt = 1.0 / NK_RULE_STATE_FPS_TARGET;
     NkUInt64 tickCount = 0;
     NkFloat64 startTime = nkTimeNowSec();
     NkFloat64 nextTime = startTime;
@@ -53,30 +53,55 @@ NkVoid nkGameLoop()
 #define REACTOR_WIDTH ((NkInt16) 20)
 #define REACTOR_HEIGHT ((NkInt16) 10)
 
-NkVoid printReactor()
+static NkInt32 _meltdownTicker = 0;
+
+NkVoid nkUpdate(NkFloat64 dt)
 {
+    if(_meltdownTicker == NK_RULE_TOTAL_TICKS_FOR_MELTDOWN_WIPE + 1)
+    {
+        nkResetReactor();
+    }
+    NK_PRINTLN("%s", "====================================");
+    NK_PRINTLN("DT = %5.6f", dt);
+    NkFloat64 heatAdd = 0.0f;
+    NkFloat64 powerAdd = 0.0f;
+    NkBool willMeltdown = false;
     for(NkInt16 row = 0; row < REACTOR_HEIGHT; row++)
     {
         for(NkInt16 col = 0; col < REACTOR_WIDTH; col++)
         {
-            const NkInt32 v = gNkGameInstance.reactor[row][col].id.id;
-            if(v == NK_AIR)
+            const NkTile tile = gNkGameInstance.reactor[row][col];
+            if(!tile.active)
             {
-                NK_PRINT("%s", "[  ]");
+                continue; // dont auto flip non active cells for now
             }
-            else
+            if(nkIsCellId(tile.id))
             {
-                NK_PRINT(gNkGameInstance.reactor[row][col].active ? "[%dO]" : "[%dY]", v);
+                NkComponent* component = nkFindComponentById(tile.id);
+                heatAdd += component->heatOutput;
+                NK_PRINTLN("XX %5.4f with %5.4f (%s)", heatAdd, component->heatOutput, component->name);
+                powerAdd += component->powerOutput;
             }
         }
-        NK_PRINT("%s", "\n");
     }
-}
+    gNkGameInstance.totalHeat += heatAdd;
+    gNkGameInstance.totalPower += powerAdd;
+    willMeltdown = gNkGameInstance.totalHeat > gNkGameInstance.maxHeat;
+    if(willMeltdown)
+    {
+        _meltdownTicker++;
+    }
+    else
+    {
+        _meltdownTicker = 0;
+    }
 
-NkVoid nkUpdate(NkFloat64 dt)
-{
-    NK_PRINTLN("%s", "====================================");
-    NK_PRINTLN("DT = %5.6f", dt);
+    // -- temporary rendering solution
+    if(willMeltdown)
+        NK_PRINTLN("Melting Down! (%5.4f)", gNkGameInstance.maxHeat);
+    NK_PRINTLN("Total Heat = %5.4f", gNkGameInstance.totalHeat);
+    NK_PRINTLN("Total Power = %5.4f", gNkGameInstance.totalPower);
+    NK_PRINTLN("Meltdown Ticker: %d", _meltdownTicker);
     for(NkInt16 row = 0; row < REACTOR_HEIGHT; row++)
     {
         for(NkInt16 col = 0; col < REACTOR_WIDTH; col++)
