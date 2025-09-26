@@ -1,0 +1,20 @@
+reactor_set(
+    4,
+    3,
+    new_tile(
+        new_cmp(
+            NK_COMPONENT_SINGLE_FUEL_CELL,
+            NK_SINGLE_URANIUM_CELL
+        )
+    )
+)
+reactor_set(
+    4,
+    4,
+    new_tile(
+        new_cmp(
+            NK_COMPONENT_INTERNAL,
+            NK_BARRIER
+        )
+    )
+)

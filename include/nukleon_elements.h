@@ -23,8 +23,10 @@ typedef enum
 #define nkparam_id
 #define nkparam_category
 #define nkparam_symbol
-#define component(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_) sym_,
-#define component_fx(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_) sym_,
+#define component(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_) sym_ = id_,
+#define component_fx(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_) sym_ = id_,
+#define mod_component(cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_) sym_,
+#define mod_component_fx(cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_) sym_,
 
 NkVoid nkUpgradeCellComponent(NkTile* tile);
 
@@ -45,8 +47,10 @@ typedef enum
 #undef nkparam_upgrade_to
 #undef nkparam_upgrade_fx
 #undef nkparam_name
-#undef flags
+#undef nkparam_flags
 #undef nkparam_id
+#undef mod_component
+#undef mod_component_fx
 #undef nkparam_category
 #undef nkparam_symbol
 
@@ -93,8 +97,6 @@ typedef struct NkTile
 } NkTile;
 
 NkTile newNkTileWithDefaultsFromId(NkComponentIdentifier id);
-
-#define NK_CID(cat, itemid) { .category = cat, .id = itemid }
 
 typedef struct
 {

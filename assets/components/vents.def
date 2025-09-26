@@ -1,5 +1,4 @@
-component(
-    nkparam_id 0,
+mod_component(
     nkparam_category NK_COMPONENT_VENTS,
     nkparam_symbol NK_VENT_BASIC,
     nkparam_name "Basic Vent",
@@ -10,8 +9,7 @@ component(
     nkparam_flags 0,
     nkparam_upgrade_to NK_VENT_ADVANCED
 )
-component(
-    nkparam_id 1,
+mod_component(
     nkparam_category NK_COMPONENT_VENTS,
     nkparam_symbol NK_VENT_ADVANCED,
     nkparam_name "Advanced Vent",

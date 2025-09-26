@@ -16,32 +16,23 @@ NkUInt16 nkReactorGetHeight()
     return _height;
 }
 
-NkVoid nkReactorSet(NkLocation loc, NkTile other)
+NkVoid nkReactorSet(NkUInt16 row, NkUInt16 col, NkTile other)
 {
     if(!gNkGameInstance.reactor)
     {
         NK_PANIC("Reactor pointer not initialized!");
     }
-    if(loc.row <= 0 || loc.col <= 0 || loc.row > _height || loc.col > _width)
+    if(row <= 0 || col <= 0 || row > _height || col > _width)
     {
-        NK_PANICF("The given row and column are out of bounds for %d, %d. Got: %d %d", _width, _height, loc.row, loc.col);
+        NK_PANICF("The given row and column are out of bounds for %d, %d. Got: %d %d", _width, _height, row, col);
     }
-    gNkGameInstance.reactor[loc.row][loc.col] = other;
+    gNkGameInstance.reactor[row][col] = other;
 }
 
-NkTile* nkReactorGet(NkLocation loc)
+NkBool nkIsValidLocInReactor(NkUInt16 row, NkUInt16 col)
 {
-    if(!gNkGameInstance.reactor)
-    {
-        NK_PANIC("Reactor pointer not initialized!");
-    }
-    if(loc.row <= 0 || loc.col <= 0 || loc.row > _height || loc.col > _width)
-    {
-        NK_PANICF("The given row and column are out of bounds for %d, %d. Got: %d %d", _width, _height, loc.row, loc.col);
-    }
-    return &gNkGameInstance.reactor[loc.row][loc.col];
+    return col < nkReactorGetWidth() && row < nkReactorGetHeight();
 }
-
 
 NkVoid nkInitNkReactor(NkUInt16 width, NkUInt16 height)
 {
@@ -109,16 +100,16 @@ NkVoid nkUninitNkReactor()
     _width = _height = 0;
 }
 
-NkUInt16 nkReactorGetFullNeighborsOf(NkLocation loc)
+NkUInt16 nkReactorGetFullNeighborsOf(NkUInt16 row, NkUInt16 col)
 {
     if(!gNkGameInstance.reactor)
     {
         NK_PANIC("Reactor pointer not initialized!");
         return 0;
     }
-    if(loc.row <= 0 || loc.col <= 0 || loc.row > _height || loc.col > _width)
+    if(row <= 0 || col <= 0 || row > _height || col > _width)
     {
-        NK_PANICF("The given row and column are out of bounds for %d, %d. Got: %d %d", _width, _height, loc.row, loc.col);
+        NK_PANICF("The given row and column are out of bounds for %d, %d. Got: %d %d", _width, _height, row, col);
         return 0;
     }
     NkUInt16 count = 0;
@@ -130,8 +121,8 @@ NkUInt16 nkReactorGetFullNeighborsOf(NkLocation loc)
             {
                 continue;
             }
-            NkInt16 ny = (NkInt16) loc.row + dy;
-            NkInt16 nx = (NkInt16) loc.col + dx;
+            NkInt16 ny = (NkInt16) row + dy;
+            NkInt16 nx = (NkInt16) col + dx;
             if(ny > 0 && ny <= _height && nx > 0 && nx <= _width)
             {
                 const NkTile* t = &gNkGameInstance.reactor[ny][nx];
@@ -151,23 +142,23 @@ static const NkInt16 _directions[4][2] = {
     { 0, -1 }, // left
     { 0, 1 }   // right
 };
-NkUInt16 nkReactorGetOrthoNeighborsOf(NkLocation loc)
+NkUInt16 nkReactorGetOrthoNeighborsOf(NkUInt16 row, NkUInt16 col)
 {
     if(!gNkGameInstance.reactor)
     {
         NK_PANIC("Reactor pointer not initialized!");
         return 0;
     }
-    if(loc.row <= 0 || loc.col <= 0 || loc.row > _height || loc.col > _width)
+    if(row <= 0 || col <= 0 || row > _height || col > _width)
     {
-        NK_PANICF("The given row and column are out of bounds for %d, %d. Got: %d %d", _width, _height, loc.row, loc.col);
+        NK_PANICF("The given row and column are out of bounds for %d, %d. Got: %d %d", _width, _height, row, col);
         return 0;
     }
     NkUInt16 count = 0;
     for(NkInt16 i = 0; i < 4; i++)
     {
-        NkInt16 ny = (NkInt16) loc.row + _directions[i][0];
-        NkInt16 nx = (NkInt16) loc.col + _directions[i][1];
+        NkInt16 ny = (NkInt16) row + _directions[i][0];
+        NkInt16 nx = (NkInt16) col + _directions[i][1];
         if(ny > 0 && ny <= _height && nx > 0 && nx <= _width)
         {
             const NkTile* t = &gNkGameInstance.reactor[ny][nx];

@@ -2,10 +2,11 @@
 #define NUKLEON_PUBLIC_H
 
 #include "nukleon_elements.h"
+#include "nukleon_sampler.h"
 #include <stdint.h>
 // --  Hollistic Game Rules
 
-#define NK_RULE_STATE_FPS_TARGET 3
+#define NK_RULE_STATE_FPS_TARGET 18
 #define NK_RULE_TOTAL_TICKS_FOR_MELTDOWN_WIPE 5
 
 // --- NkTicker
@@ -22,13 +23,9 @@ NkVoid nkYield();
 
 NkVoid nkGameLoop();
 
-NkVoid nkUpdate(NkFloat64 dt);
+NkUInt64 nkGetCurrentTickIndex();
 
-typedef struct
-{
-    NkUInt16 row;
-    NkUInt16 col;
-} NkLocation;
+NkVoid nkUpdate(NkFloat64 dt);
 
 // --- NkTickStats
 
@@ -72,18 +69,18 @@ NkUInt16 nkReactorGetHeight();
 NkVoid nkInitNkReactor(NkUInt16 width, NkUInt16 height);
 
 /// @brief Get the number of all (including diagonal) neighbors of a cell
-NkUInt16 nkReactorGetFullNeighborsOf(NkLocation loc);
+NkUInt16 nkReactorGetFullNeighborsOf(NkUInt16 row, NkUInt16 col);
 
 /// @brief Get the number of orthogonal (up, down, left, right) neighbors of a cell
-NkUInt16 nkReactorGetOrthoNeighborsOf(NkLocation loc);
+NkUInt16 nkReactorGetOrthoNeighborsOf(NkUInt16 row, NkUInt16 col);
 
 /// @brief Free all allocated memory for the reactor grid
 NkVoid nkUninitNkReactor();
 
-/// @brief Request a pointer to the tile at the given row and column
-NkTile* nkReactorGet(NkLocation loc);
+/// @brief Checks if the locations [row] and [col] are within the bounds.
+NkBool nkIsValidLocInReactor(NkUInt16 row, NkUInt16 col);
 
 /// @brief Copies the data of the given tile into the reactor grid at the given row and column
-NkVoid nkReactorSet(NkLocation loc, NkTile other);
+NkVoid nkReactorSet(NkUInt16 row, NkUInt16 col, NkTile other);
 
 #endif

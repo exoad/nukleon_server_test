@@ -1,0 +1,7 @@
+#define reactor_width nkReactorGetWidth()
+#define reactor_height nkReactorGetHeight()
+#define reactor_set(row, col, tile) nkReactorSet(row, col, tile);
+#define new_tile(id) newNkTileWithDefaultsFromId(id)
+#define new_cmp(cat, id) ((NkComponentIdentifier) { cat, id })
+#define for_each_cell_in_reactor(row, col) for(NkInt16 row = 0; row < reactor_height; row++) for(NkInt16 col = 0; col < reactor_width; col++)
+#define reactor_get(row, col) nkReactorGet(row, col)

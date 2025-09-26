@@ -4,10 +4,14 @@
 #define NK_SINGLE_FUEL_CELL_FLAGS (NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE)
 /// Used for marking things with a properly defined update function
 #define component_fx(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_) \
-    [id_] = { name_, NK_CID(cat_, id_), heat_, power_, dura_, upgradeFx_, upgrade_, price_, flags_ },
+    [id_] = { name_, { cat_, id_ }, heat_, power_, dura_, upgradeFx_, upgrade_, price_, flags_ },
 /// Used for defining simple items without an upgrade function or one that will be linked internally dynamically
 #define component(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_) \
-    [id_] = { name_, NK_CID(cat_, id_), heat_, power_, dura_, null, upgrade_, price_, flags_ },
+    [id_] = { name_, { cat_, id_ }, heat_, power_, dura_, null, upgrade_, price_, flags_ },
+#define mod_component(cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_) \
+    component(sym_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_)
+#define mod_component_fx(cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_) \
+    component_fx(sym_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_)
 #define nkparam_durability
 #define nkparam_base_heat
 #define nkparam_base_power
@@ -59,10 +63,12 @@ static NkComponent _ventComponents[] = {
 #undef nkparam_upgrade_to
 #undef nkparam_upgrade_fx
 #undef nkparam_name
-#undef flags
+#undef nkparam_flags
 #undef nkparam_id
 #undef nkparam_category
 #undef nkparam_symbol
+#undef mod_component
+#undef mod_component_fx
 
 /*extern*/ const NkInt8* const gNkComponentCategoryNamesTable[NK_COMPONENT_CATEGORIES_COUNT] = {
 #include "../assets/strings/component_categories.def"

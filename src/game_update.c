@@ -1,9 +1,15 @@
 #include "nukleon_public.h"
 
+static NkUInt64 _gTickIndex = 0;
+
+NkUInt64 nkGetCurrentTickIndex()
+{
+    return _gTickIndex;
+}
+
 NkVoid nkGameLoop()
 {
     const NkFloat64 dt = 1.0 / NK_RULE_STATE_FPS_TARGET;
-    NkUInt64 tickCount = 0;
     NkFloat64 startTime = nkTimeNowSec();
     NkFloat64 nextTime = startTime;
     NkFloat64 endTime = NK_STATE_RUN_SECONDS > 0 ? startTime + NK_STATE_RUN_SECONDS : -1.0;
@@ -20,12 +26,15 @@ NkVoid nkGameLoop()
             do // catching up! falling behind is scary D:
             {
                 nkUpdate(dt);
-                tickCount++;
-                nextTime = startTime + tickCount * dt;
+#ifdef NK_ENABLE_UI_SAMPLER
+                nkSample(dt);
+#endif
+                _gTickIndex++;
+                nextTime = startTime + _gTickIndex * dt;
                 if(++safety > 10000) // make sure it isnt catching up to an infinite bound
                 {
                     NK_PRINTLN("WARNING: Runaway catch up, stopping... (behind by: %f)", time - nextTime);
-                    tickCount = (NkUInt64) ((time - startTime) / dt) + 1;
+                    _gTickIndex = (NkUInt64) ((time - startTime) / dt) + 1;
                     nextTime = time + dt;
                     break;
                 }
@@ -53,34 +62,34 @@ NkVoid nkGameLoop()
 #define REACTOR_WIDTH ((NkInt16) 20)
 #define REACTOR_HEIGHT ((NkInt16) 10)
 
-static NkInt32 _meltdownTicker = 0;
-
 NkVoid nkUpdate(NkFloat64 dt)
 {
+    static NkInt32 _meltdownTicker = 0;
+    NkBool willMeltdown = false;
     if(_meltdownTicker == NK_RULE_TOTAL_TICKS_FOR_MELTDOWN_WIPE + 1)
     {
         nkResetReactor();
+        _meltdownTicker = 0;
     }
-    NK_PRINTLN("%s", "====================================");
-    NK_PRINTLN("DT = %5.6f", dt);
     NkFloat64 heatAdd = 0.0f;
     NkFloat64 powerAdd = 0.0f;
-    NkBool willMeltdown = false;
     for(NkInt16 row = 0; row < REACTOR_HEIGHT; row++)
     {
         for(NkInt16 col = 0; col < REACTOR_WIDTH; col++)
         {
-            const NkTile tile = gNkGameInstance.reactor[row][col];
-            if(!tile.active)
+            const NkTile* tile = &gNkGameInstance.reactor[row][col];
+            if(!tile->active)
             {
                 continue; // dont auto flip non active cells for now
             }
-            if(nkIsCellId(tile.id))
+            if(nkIsCellId(tile->id))
             {
-                NkComponent* component = nkFindComponentById(tile.id);
+                NkComponent* component = nkFindComponentById(tile->id);
                 heatAdd += component->heatOutput;
-                NK_PRINTLN("XX %5.4f with %5.4f (%s)", heatAdd, component->heatOutput, component->name);
                 powerAdd += component->powerOutput;
+                if(tile->health <= 0)
+                {
+                }
             }
         }
     }
@@ -97,25 +106,21 @@ NkVoid nkUpdate(NkFloat64 dt)
     }
 
     // -- temporary rendering solution
+#ifndef NK_ENABLE_UI_SAMPLER
     if(willMeltdown)
         NK_PRINTLN("Melting Down! (%5.4f)", gNkGameInstance.maxHeat);
-    NK_PRINTLN("Total Heat = %5.4f", gNkGameInstance.totalHeat);
-    NK_PRINTLN("Total Power = %5.4f", gNkGameInstance.totalPower);
+    NK_PRINTLN("Total Heat = %5.4f (%5.4f%c)", gNkGameInstance.totalHeat, gNkGameInstance.totalHeat / gNkGameInstance.maxHeat, '%');
+    NK_PRINTLN("Total Power = %5.4f (%5.4f%c)", gNkGameInstance.totalPower, gNkGameInstance.totalPower / gNkGameInstance.maxPower, '%');
     NK_PRINTLN("Meltdown Ticker: %d", _meltdownTicker);
     for(NkInt16 row = 0; row < REACTOR_HEIGHT; row++)
     {
         for(NkInt16 col = 0; col < REACTOR_WIDTH; col++)
         {
-            const NkInt32 v = gNkGameInstance.reactor[row][col].id.id;
-            if(v == NK_AIR)
-            {
-                NK_PRINT("%s", "[  ]");
-            }
-            else
-            {
-                NK_PRINT(gNkGameInstance.reactor[row][col].active ? "[%dO]" : "[%dY]", v);
-            }
+            const NkComponentIdentifier v = gNkGameInstance.reactor[row][col].id;
+            NK_PRINT(gNkGameInstance.reactor[row][col].active ? "[%d_%dO]" : "[%dY]", v.category, v.id);
+
         }
         NK_PRINT("%s", "\n");
     }
+#endif
 }

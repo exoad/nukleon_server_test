@@ -1,0 +1,7 @@
+#undef reactor_width
+#undef reactor_height
+#undef reactor_set
+#undef new_tile
+#undef new_cmp
+#undef for_each_cell_in_reactor
+#undef reactor_get

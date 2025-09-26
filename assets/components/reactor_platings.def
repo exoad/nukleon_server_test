@@ -1,5 +1,4 @@
-component(
-    nkparam_id 0,
+mod_component(
     nkparam_category NK_COMPONENT_PLATING,
     nkparam_symbol NK_PLATING_CONCRETE,
     nkparam_name "Concrete Plating",
@@ -10,8 +9,7 @@ component(
     nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
     nkparam_upgrade_to NK_PLATING_STEEL
 )
-component(
-    nkparam_id 1,
+mod_component(
     nkparam_category NK_COMPONENT_PLATING,
     nkparam_symbol NK_PLATING_STEEL,
     nkparam_name "Steel Plating",
@@ -22,8 +20,7 @@ component(
     nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
     nkparam_upgrade_to NK_PLATING_TITANIUM
 )
-component(
-    nkparam_id 2,
+mod_component(
     nkparam_category NK_COMPONENT_PLATING,
     nkparam_symbol NK_PLATING_TITANIUM,
     nkparam_name "Titanium Plating",
@@ -34,8 +31,7 @@ component(
     nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
     nkparam_upgrade_to NK_PLATING_LEAD
 )
-component(
-    nkparam_id 3,
+mod_component(
     nkparam_category NK_COMPONENT_PLATING,
     nkparam_symbol NK_PLATING_LEAD,
     nkparam_name "Lead Plating",
@@ -46,8 +42,7 @@ component(
     nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
     nkparam_upgrade_to NK_PLATING_TUNGSTEN
 )
-component(
-    nkparam_id 4,
+mod_component(
     nkparam_category NK_COMPONENT_PLATING,
     nkparam_symbol NK_PLATING_TUNGSTEN,
     nkparam_name "Tungsten Plating",
@@ -58,8 +53,7 @@ component(
     nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
     nkparam_upgrade_to NK_PLATING_LIQUID_LEAD
 )
-component(
-    nkparam_id 5,
+mod_component(
     nkparam_category NK_COMPONENT_PLATING,
     nkparam_symbol NK_PLATING_LIQUID_LEAD,
     nkparam_name "Liquid Lead Plating",
@@ -70,8 +64,7 @@ component(
     nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
     nkparam_upgrade_to NK_PLATING_LIQUID_LITHIUM
 )
-component(
-    nkparam_id 6,
+mod_component(
     nkparam_category NK_COMPONENT_PLATING,
     nkparam_symbol NK_PLATING_LIQUID_LITHIUM,
     nkparam_name "Liquid Lithium Plating",
