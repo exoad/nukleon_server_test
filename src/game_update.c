@@ -73,6 +73,7 @@ NkVoid nkUpdate(NkFloat64 dt)
     }
     NkFloat64 heatAdd = 0.0f;
     NkFloat64 powerAdd = 0.0f;
+    NkInt64 platingAddHeatCapacity = 0;
     for(NkInt16 row = 0; row < REACTOR_HEIGHT; row++)
     {
         for(NkInt16 col = 0; col < REACTOR_WIDTH; col++)
@@ -90,6 +91,15 @@ NkVoid nkUpdate(NkFloat64 dt)
                 if(tile->health <= 0)
                 {
                 }
+            }
+            else if(nkIsPlatingId(tile->id))
+            {
+                NkComponent* component = nkFindComponentById(tile->id);
+                platingAddHeatCapacity += component->custom2;
+            }
+            else
+            {
+                // unknown component, do nothing
             }
         }
     }

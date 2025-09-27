@@ -23,10 +23,16 @@ typedef enum
 #define nkparam_id
 #define nkparam_category
 #define nkparam_symbol
+#define nkparam_custom1
+#define nkparam_custom2
 #define component(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_) sym_ = id_,
 #define component_fx(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_) sym_ = id_,
+#define component_custom(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, custom1_, custom2_) sym_ = id_,
+#define component_fx_custom(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_, custom1_, custom2_) sym_ = id_,
 #define mod_component(cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_) sym_,
 #define mod_component_fx(cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_) sym_,
+#define mod_component_custom(cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, custom1_, custom2_) sym_,
+#define mod_component_fx_custom(cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_, custom1_, custom2_) sym_,
 
 NkVoid nkUpgradeCellComponent(NkTile* tile);
 
@@ -53,6 +59,12 @@ typedef enum
 #undef mod_component_fx
 #undef nkparam_category
 #undef nkparam_symbol
+#undef mod_component_custom
+#undef nkparam_custom1
+#undef nkparam_custom2
+#undef mod_component_fx_custom
+#undef component_custom
+#undef component_fx_custom
 
 typedef enum NkComponentCategory
 {
@@ -91,9 +103,6 @@ typedef struct NkTile
                    //   3. the power is == 0
                    //   4. this tile becomes out of bounds
                    //   5. arbitrary reason (manually or automatically set for reason)
-    // flexible fields
-    NkInt32 custom1;
-    NkInt32 custom2;
 } NkTile;
 
 NkTile newNkTileWithDefaultsFromId(NkComponentIdentifier id);
@@ -109,6 +118,9 @@ typedef struct
     NkInt32 upgradeToId;
     NkFloat32 basePrice;
     NkInt32 flags;
+    // flexible fields; define accordingly (see each component's definition page)
+    NkInt64 custom1;
+    NkFloat32 custom2;
 } NkComponent;
 
 static inline void nkComponentSetFlag(NkComponent* c, NkUInt32 flag)
@@ -141,6 +153,8 @@ extern const NkComponent* kNkAirComponent;
 NkVoid nkInitItemsDefinition();
 
 NkBool nkIsCellId(NkComponentIdentifier id);
+
+NkBool nkIsPlatingId(NkComponentIdentifier id);
 
 NkVoid nkTileToAir(NkTile* tile);
 

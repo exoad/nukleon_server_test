@@ -55,8 +55,8 @@ NkVoid nkInitNkReactor(NkUInt16 width, NkUInt16 height)
     }
     for(NkUInt16 y = 0; y < height; y++)
     {
-        gNkGameInstance.totalHeat = NK_REACTOR_DEFAULT_START_HEAT;
-        gNkGameInstance.maxHeat = NK_REACTOR_DEFAULT_MAX_HEAT;
+        gNkGameInstance.totalHeat = 0.0f;
+        gNkGameInstance.maxHeat = NK_RULE_GAME_REACTOR_STARTING_MAX_HEAT;
         gNkGameInstance. reactor[y] = (NkTile*) malloc(W * sizeof *(gNkGameInstance.reactor[y]));
         if(!gNkGameInstance.reactor[y])
         {
@@ -78,8 +78,6 @@ NkVoid nkInitNkReactor(NkUInt16 width, NkUInt16 height)
             t->power = 0.0f;
             t->health = -1.0f;
             t->active = false;
-            t->custom1 = 0;
-            t->custom2 = 0;
         }
     }
     _height = height;

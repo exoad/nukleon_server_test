@@ -8,6 +8,7 @@
 
 #define NK_RULE_STATE_FPS_TARGET 18
 #define NK_RULE_TOTAL_TICKS_FOR_MELTDOWN_WIPE 5
+#define NK_RULE_GAME_REACTOR_STARTING_MAX_HEAT 1000.0
 
 // --- NkTicker
 
@@ -39,8 +40,6 @@ typedef struct
 
 // --- NkGame
 
-#define NK_REACTOR_DEFAULT_START_HEAT 0.0
-#define NK_REACTOR_DEFAULT_MAX_HEAT 1000.0
 
 typedef struct
 {
