@@ -12,7 +12,7 @@ mod_component_custom(
     nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
     nkparam_upgrade_to NK_PLATING_STEEL,
     nkparam_added_heat_capacity 100,
-    nkparam_custom2 0
+    nkparam_custom2 0.0f
 )
 mod_component_custom(
     nkparam_category NK_COMPONENT_PLATING,
@@ -25,7 +25,7 @@ mod_component_custom(
     nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
     nkparam_upgrade_to NK_PLATING_TITANIUM,
     nkparam_added_heat_capacity 2700,
-    nkparam_custom2 0
+    nkparam_custom2 0.0f
 )
 mod_component_custom(
     nkparam_category NK_COMPONENT_PLATING,
@@ -38,7 +38,7 @@ mod_component_custom(
     nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
     nkparam_upgrade_to NK_PLATING_LEAD,
     nkparam_added_heat_capacity 15200,
-    nkparam_custom2 0
+    nkparam_custom2 0.0f
 )
 mod_component_custom(
     nkparam_category NK_COMPONENT_PLATING,
@@ -51,7 +51,7 @@ mod_component_custom(
     nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
     nkparam_upgrade_to NK_PLATING_TUNGSTEN,
     nkparam_added_heat_capacity 75000,
-    nkparam_custom2 0
+    nkparam_custom2 0.0f
 )
 mod_component_custom(
     nkparam_category NK_COMPONENT_PLATING,
@@ -64,7 +64,7 @@ mod_component_custom(
     nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
     nkparam_upgrade_to NK_PLATING_LIQUID_LEAD,
     nkparam_added_heat_capacity 346700,
-    nkparam_custom2 0
+    nkparam_custom2 0.0f
 )
 mod_component_custom(
     nkparam_category NK_COMPONENT_PLATING,
@@ -77,7 +77,7 @@ mod_component_custom(
     nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
     nkparam_upgrade_to NK_PLATING_LIQUID_LITHIUM,
     nkparam_added_heat_capacity 1539400,
-    nkparam_custom2 0
+    nkparam_custom2 0.0f
 )
 mod_component_custom(
     nkparam_category NK_COMPONENT_PLATING,
@@ -90,5 +90,5 @@ mod_component_custom(
     nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
     nkparam_upgrade_to NK_COMPONENT_LEAF,
     nkparam_added_heat_capacity 6645200,
-    nkparam_custom2 0
+    nkparam_custom2 0.0f
 )

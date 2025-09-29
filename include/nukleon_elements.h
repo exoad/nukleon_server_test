@@ -25,6 +25,9 @@ typedef enum
 #define nkparam_symbol
 #define nkparam_custom1
 #define nkparam_custom2
+
+// TODO: introduce only 1 or 2 macros instead of the previous four. implicit/unused fields should not be hidden.
+
 #define component(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_) sym_ = id_,
 #define component_fx(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_) sym_ = id_,
 #define component_custom(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, custom1_, custom2_) sym_ = id_,

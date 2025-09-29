@@ -3,23 +3,131 @@
 
 #define NK_SINGLE_FUEL_CELL_FLAGS (NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE)
 /// Used for marking things with a properly defined update function
-#define component_fx(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_) \
-    [id_] = { name_, { cat_, id_ }, heat_, power_, dura_, upgradeFx_, upgrade_, price_, flags_, 0, 0 },
-/// Used for defining simple items without an upgrade function or one that will be linked internally dynamically
-#define component(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_) \
-    [id_] = { name_, { cat_, id_ }, heat_, power_, dura_, null, upgrade_, price_, flags_, 0, 0 },
-#define mod_component(cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_) \
-    component(sym_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_)
-#define mod_component_fx(cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_) \
-    component_fx(sym_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_)
-#define mod_component_custom(cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, custom1_, custom2_) \
-    [sym_] = { name_, { cat_, sym_ }, heat_, power_, dura_, null, upgrade_, price_, flags_ , custom1_, custom2_},
-#define mod_component_fx_custom(cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_, custom1_, custom2_) \
-    [sym_] = { name_, { cat_, sym_ }, heat_, power_, dura_, upgradeFx_, upgrade_, price_, flags_ , custom1_,  },
-#define component_custom(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, custom1_, custom2_) \
-    [id_] = { name_, { cat_, id_ }, heat_, power_, dura_, null, upgrade_, price_, flags_ , custom1_, custom2_ },
-#define component_fx_custom(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_, custom1_, custom2_) \
-    [id_] = { name_, { cat_, id_ }, heat_, power_, dura_, upgradeFx_, upgrade_, price_, flags_ , custom1_, custom2_ },
+#define component_fx( \
+    id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_ \
+) \
+    [id_] = { \
+        name_, \
+        { cat_, id_ }, \
+        heat_, \
+        power_, \
+        dura_, \
+        upgradeFx_, \
+        upgrade_, \
+        price_, \
+        flags_, \
+        0, \
+        0.0f \
+    },
+
+#define component( \
+    id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_ \
+) \
+    [id_] = { \
+        name_, \
+        { cat_, id_ }, \
+        heat_, \
+        power_, \
+        dura_, \
+        null, \
+        upgrade_, \
+        price_, \
+        flags_, \
+        0, \
+        0.0f \
+    },
+
+#define mod_component( \
+    cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_ \
+) \
+    { \
+        name_, \
+        { cat_, sym_ }, \
+        heat_, \
+        power_, \
+        dura_, \
+        null, \
+        upgrade_, \
+        price_, \
+        flags_, \
+        0, \
+        0.0f \
+    },
+
+#define mod_component_fx( \
+    cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_ \
+) \
+    component_fx( \
+        sym_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_ \
+    )
+
+#define mod_component_custom( \
+    cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, custom1_, custom2_ \
+) \
+    { \
+        name_, \
+        { cat_, sym_ }, \
+        heat_, \
+        power_, \
+        dura_, \
+        null, \
+        upgrade_, \
+        price_, \
+        flags_, \
+        custom1_, \
+        custom2_ \
+    },
+
+#define mod_component_fx_custom( \
+    cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_, custom1_, custom2_ \
+) \
+    { \
+        name_, \
+        { cat_, sym_ }, \
+        heat_, \
+        power_, \
+        dura_, \
+        upgradeFx_, \
+        upgrade_, \
+        price_, \
+        flags_, \
+        custom1_, \
+        custom2_ \
+    },
+
+#define component_custom( \
+    id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, custom1_, custom2_ \
+) \
+    [id_] = { \
+        name_, \
+        { cat_, id_ }, \
+        heat_, \
+        power_, \
+        dura_, \
+        null, \
+        upgrade_, \
+        price_, \
+        flags_, \
+        custom1_, \
+        custom2_ \
+    },
+
+#define component_fx_custom( \
+    id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_, custom1_, custom2_ \
+) \
+    [id_] = { \
+        name_, \
+        { cat_, id_ }, \
+        heat_, \
+        power_, \
+        dura_, \
+        upgradeFx_, \
+        upgrade_, \
+        price_, \
+        flags_, \
+        custom1_, \
+        custom2_ \
+    },
 #define nkparam_durability
 #define nkparam_base_heat
 #define nkparam_base_power
