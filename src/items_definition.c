@@ -3,131 +3,23 @@
 
 #define NK_SINGLE_FUEL_CELL_FLAGS (NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE)
 /// Used for marking things with a properly defined update function
-#define component_fx( \
-    id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_ \
-) \
-    [id_] = { \
-        name_, \
-        { cat_, id_ }, \
-        heat_, \
-        power_, \
-        dura_, \
-        upgradeFx_, \
-        upgrade_, \
-        price_, \
-        flags_, \
-        0, \
-        0.0f \
-    },
 
-#define component( \
-    id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_ \
-) \
-    [id_] = { \
-        name_, \
-        { cat_, id_ }, \
-        heat_, \
-        power_, \
-        dura_, \
-        null, \
-        upgrade_, \
-        price_, \
-        flags_, \
-        0, \
-        0.0f \
-    },
+#define define_base_component(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_, custom1_, custom2_) { \
+    .name = name_, \
+    .id = (NkComponentIdentifier) { .category = cat_, .id = id_ }, \
+    .heatOutput = heat_, \
+    .powerOutput = power_, \
+    .durability = dura_, \
+    .upgradeFx = upgradeFx_, \
+    .upgradeToId = upgrade_, \
+    .basePrice = price_, \
+    .flags = flags_, \
+    .custom1 = custom1_, \
+    .custom2 = custom2_  \
+}
 
-#define mod_component( \
-    cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_ \
-) \
-    { \
-        name_, \
-        { cat_, sym_ }, \
-        heat_, \
-        power_, \
-        dura_, \
-        null, \
-        upgrade_, \
-        price_, \
-        flags_, \
-        0, \
-        0.0f \
-    },
+#define define_component(cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_, custom1_, custom2_) define_base_component(sym_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_, custom1_, custom2_)
 
-#define mod_component_fx( \
-    cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_ \
-) \
-    component_fx( \
-        sym_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_ \
-    )
-
-#define mod_component_custom( \
-    cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, custom1_, custom2_ \
-) \
-    { \
-        name_, \
-        { cat_, sym_ }, \
-        heat_, \
-        power_, \
-        dura_, \
-        null, \
-        upgrade_, \
-        price_, \
-        flags_, \
-        custom1_, \
-        custom2_ \
-    },
-
-#define mod_component_fx_custom( \
-    cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_, custom1_, custom2_ \
-) \
-    { \
-        name_, \
-        { cat_, sym_ }, \
-        heat_, \
-        power_, \
-        dura_, \
-        upgradeFx_, \
-        upgrade_, \
-        price_, \
-        flags_, \
-        custom1_, \
-        custom2_ \
-    },
-
-#define component_custom( \
-    id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, custom1_, custom2_ \
-) \
-    [id_] = { \
-        name_, \
-        { cat_, id_ }, \
-        heat_, \
-        power_, \
-        dura_, \
-        null, \
-        upgrade_, \
-        price_, \
-        flags_, \
-        custom1_, \
-        custom2_ \
-    },
-
-#define component_fx_custom( \
-    id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_, custom1_, custom2_ \
-) \
-    [id_] = { \
-        name_, \
-        { cat_, id_ }, \
-        heat_, \
-        power_, \
-        dura_, \
-        upgradeFx_, \
-        upgrade_, \
-        price_, \
-        flags_, \
-        custom1_, \
-        custom2_ \
-    },
 #define nkparam_durability
 #define nkparam_base_heat
 #define nkparam_base_power
@@ -172,8 +64,6 @@ static NkComponent _ventComponents[] = {
 
 #undef _new_cat
 #undef _todo_cat
-#undef component
-#undef component_fx
 #undef nkparam_durability
 #undef nkparam_base_heat
 #undef nkparam_base_power
@@ -185,14 +75,10 @@ static NkComponent _ventComponents[] = {
 #undef nkparam_id
 #undef nkparam_category
 #undef nkparam_symbol
-#undef mod_component
-#undef mod_component_fx
-#undef mod_component_custom
 #undef nkparam_custom1
 #undef nkparam_custom2
-#undef mod_component_fx_custom
-#undef component_custom
-#undef component_fx_custom
+#undef define_component
+#undef define_base_component
 
 /*extern*/ const NkInt8* const gNkComponentCategoryNamesTable[NK_COMPONENT_CATEGORIES_COUNT] = {
 #include "../assets/strings/component_categories.def"

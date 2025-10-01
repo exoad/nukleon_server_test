@@ -26,29 +26,48 @@ typedef enum
 #define nkparam_custom1
 #define nkparam_custom2
 
-// TODO: introduce only 1 or 2 macros instead of the previous four. implicit/unused fields should not be hidden.
-
-#define component(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_) sym_ = id_,
-#define component_fx(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_) sym_ = id_,
-#define component_custom(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, custom1_, custom2_) sym_ = id_,
-#define component_fx_custom(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_, custom1_, custom2_) sym_ = id_,
-#define mod_component(cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_) sym_,
-#define mod_component_fx(cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_) sym_,
-#define mod_component_custom(cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, custom1_, custom2_) sym_,
-#define mod_component_fx_custom(cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_, custom1_, custom2_) sym_,
-
 NkVoid nkUpgradeCellComponent(NkTile* tile);
+NkVoid nkNoUpGradeFx(NkTile* tile);
+
+// TODO: introduce only 1 or 2 macros instead of the previous four. implicit/unused fields should not be hidden.
+#define define_base_component(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_, custom1_, custom2_) sym_,
+
+#define define_component(cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_, custom1_, custom2_) define_base_component(sym_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_, custom1_, custom2_)
 
 typedef enum
 {
-#include "../assets/components.def"
+#include "../assets/components/internal.def"
     // -- DO NOT USE --
     // there is no definition for this item and will probably crash
-    NK_COMPONENTS_COUNT // DO NOT USE FOR GAME COMPONENT REPRESENTATION
-} NkComponentsList;
+    NK_INTERNAL_COMPONENT_COUNT // DO NOT USE FOR GAME COMPONENT REPRESENTATION
+} NkInternalComponentSymbol;
 
-#undef component
-#undef component_fx
+typedef enum
+{
+#include "../assets/components/vents.def"
+    // -- DO NOT USE --
+    // there is no definition for this item and will probably crash
+    NK_VENT_COUNT // DO NOT USE FOR GAME COMPONENT REPRESENTATION
+} NkVentSymbol;
+
+typedef enum
+{
+#include "../assets/components/reactor_platings.def"
+    // -- DO NOT USE --
+    // there is no definition for this item and will probably crash
+    NK_REACTOR_PLATING_COUNT // DO NOT USE FOR GAME COMPONENT REPRESENTATION
+} NkReactorPlatingSymbol;
+
+typedef enum
+{
+#include "../assets/components/single_fuel_cell.def"
+    // -- DO NOT USE --
+    // there is no definition for this item and will probably crash
+    NK_SINGLE_FUEL_CELL_COUNT // DO NOT USE FOR GAME COMPONENT REPRESENTATION
+} NkSingleFuelCellSymbol;
+#undef define_component
+#undef define_base_component
+
 #undef nkparam_durability
 #undef nkparam_base_heat
 #undef nkparam_base_power
@@ -58,16 +77,10 @@ typedef enum
 #undef nkparam_name
 #undef nkparam_flags
 #undef nkparam_id
-#undef mod_component
-#undef mod_component_fx
-#undef nkparam_category
-#undef nkparam_symbol
-#undef mod_component_custom
 #undef nkparam_custom1
 #undef nkparam_custom2
-#undef mod_component_fx_custom
-#undef component_custom
-#undef component_fx_custom
+#undef nkparam_category
+#undef nkparam_symbol
 
 typedef enum NkComponentCategory
 {
@@ -141,7 +154,6 @@ static inline NkBool nkComponentHasFlag(const NkComponent* c, NkUInt32 flag)
     return (c->flags & flag) != 0;
 }
 
-NkVoid nkNoUpGradeFx(NkTile* tile);
 
 #define NK_COMPONENT_LEAF -1
 

@@ -1,4 +1,4 @@
-component(
+define_component(
     nkparam_id 0,
     nkparam_category NK_COMPONENT_INTERNAL,
     nkparam_symbol NK_AIR,
@@ -8,9 +8,12 @@ component(
     nkparam_durability NK_COMPONENT_INFINITE_HEALTH,
     nkparam_base_price 0.0f,
     nkparam_flags 0,
-    nkparam_upgrade_to NK_COMPONENT_LEAF
+    nkparam_upgrade_to NK_COMPONENT_LEAF,
+    nkparam_upgrade_fx null,
+    nkparam_custom1 0,
+    nkparam_custom2 0
 )
-component(
+define_component(
     nkparam_id 1,
     nkparam_category NK_COMPONENT_INTERNAL,
     nkparam_symbol NK_BARRIER,
@@ -20,5 +23,8 @@ component(
     nkparam_durability NK_COMPONENT_INFINITE_HEALTH,
     nkparam_base_price 0.0f,
     nkparam_flags 0,
-    nkparam_upgrade_to NK_COMPONENT_LEAF
+    nkparam_upgrade_to NK_COMPONENT_LEAF,
+    nkparam_upgrade_fx null,
+    nkparam_custom1 0,
+    nkparam_custom2 0
 )

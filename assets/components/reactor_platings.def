@@ -1,94 +1,94 @@
 // tuning: https://www.desmos.com/calculator/mjoi9cjlcm
 // custom: additional heat capacity to the reactor's max heat capacity
-#define nkparam_added_heat_capacity nkparam_custom1
-mod_component_custom(
-    nkparam_category NK_COMPONENT_PLATING,
-    nkparam_symbol NK_PLATING_CONCRETE,
-    nkparam_name "Concrete Plating",
-    nkparam_base_heat 0,
-    nkparam_base_power 0,
-    nkparam_durability NK_COMPONENT_INFINITE_HEALTH,
-    nkparam_base_price 1000.0f,
-    nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
-    nkparam_upgrade_to NK_PLATING_STEEL,
-    nkparam_added_heat_capacity 100,
-    nkparam_custom2 0.0f
-)
-mod_component_custom(
-    nkparam_category NK_COMPONENT_PLATING,
-    nkparam_symbol NK_PLATING_STEEL,
-    nkparam_name "Steel Plating",
-    nkparam_base_heat 0,
-    nkparam_base_power 0,
-    nkparam_durability NK_COMPONENT_INFINITE_HEALTH,
-    nkparam_base_price 18100.0f,
-    nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
-    nkparam_upgrade_to NK_PLATING_TITANIUM,
-    nkparam_added_heat_capacity 2700,
-    nkparam_custom2 0.0f
-)
-mod_component_custom(
-    nkparam_category NK_COMPONENT_PLATING,
-    nkparam_symbol NK_PLATING_TITANIUM,
-    nkparam_name "Titanium Plating",
-    nkparam_base_heat 0,
-    nkparam_base_power 0,
-    nkparam_durability NK_COMPONENT_INFINITE_HEALTH,
-    nkparam_base_price 241300.0f,
-    nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
-    nkparam_upgrade_to NK_PLATING_LEAD,
-    nkparam_added_heat_capacity 15200,
-    nkparam_custom2 0.0f
-)
-mod_component_custom(
-    nkparam_category NK_COMPONENT_PLATING,
-    nkparam_symbol NK_PLATING_LEAD,
-    nkparam_name "Lead Plating",
-    nkparam_base_heat 0,
-    nkparam_base_power 0,
-    nkparam_durability NK_COMPONENT_INFINITE_HEALTH,
-    nkparam_base_price 2785600.0f,
-    nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
-    nkparam_upgrade_to NK_PLATING_TUNGSTEN,
-    nkparam_added_heat_capacity 75000,
-    nkparam_custom2 0.0f
-)
-mod_component_custom(
-    nkparam_category NK_COMPONENT_PLATING,
-    nkparam_symbol NK_PLATING_TUNGSTEN,
-    nkparam_name "Tungsten Plating",
-    nkparam_base_heat 0,
-    nkparam_base_power 0,
-    nkparam_durability NK_COMPONENT_INFINITE_HEALTH,
-    nkparam_base_price 29574600.0f,
-    nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
-    nkparam_upgrade_to NK_PLATING_LIQUID_LEAD,
-    nkparam_added_heat_capacity 346700,
-    nkparam_custom2 0.0f
-)
-mod_component_custom(
-    nkparam_category NK_COMPONENT_PLATING,
-    nkparam_symbol NK_PLATING_LIQUID_LEAD,
-    nkparam_name "Liquid Lead Plating",
-    nkparam_base_heat 0,
-    nkparam_base_power 0,
-    nkparam_durability NK_COMPONENT_INFINITE_HEALTH,
-    nkparam_base_price 326885600.0f,
-    nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
-    nkparam_upgrade_to NK_PLATING_LIQUID_LITHIUM,
-    nkparam_added_heat_capacity 1539400,
-    nkparam_custom2 0.0f
-)
-mod_component_custom(
-    nkparam_category NK_COMPONENT_PLATING,
-    nkparam_symbol NK_PLATING_LIQUID_LITHIUM,
-    nkparam_name "Liquid Lithium Plating",
-    nkparam_base_heat 0,
-    nkparam_base_power 0,
-    nkparam_durability NK_COMPONENT_INFINITE_HEALTH,
-    nkparam_base_price 3159198600.0f,
-    nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
-    nkparam_upgrade_to NK_COMPONENT_LEAF,
-    nkparam_added_heat_capacity 6645200,
-    nkparam_custom2 0.0f
-)
+// #define nkparam_added_heat_capacity nkparam_custom1
+// mod_component_custom(
+//     nkparam_category NK_COMPONENT_PLATING,
+//     nkparam_symbol NK_PLATING_CONCRETE,
+//     nkparam_name "Concrete Plating",
+//     nkparam_base_heat 0,
+//     nkparam_base_power 0,
+//     nkparam_durability NK_COMPONENT_INFINITE_HEALTH,
+//     nkparam_base_price 1000.0f,
+//     nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
+//     nkparam_upgrade_to NK_PLATING_STEEL,
+//     nkparam_added_heat_capacity 100,
+//     nkparam_custom2 0.0f
+// )
+// mod_component_custom(
+//     nkparam_category NK_COMPONENT_PLATING,
+//     nkparam_symbol NK_PLATING_STEEL,
+//     nkparam_name "Steel Plating",
+//     nkparam_base_heat 0,
+//     nkparam_base_power 0,
+//     nkparam_durability NK_COMPONENT_INFINITE_HEALTH,
+//     nkparam_base_price 18100.0f,
+//     nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
+//     nkparam_upgrade_to NK_PLATING_TITANIUM,
+//     nkparam_added_heat_capacity 2700,
+//     nkparam_custom2 0.0f
+// )
+// mod_component_custom(
+//     nkparam_category NK_COMPONENT_PLATING,
+//     nkparam_symbol NK_PLATING_TITANIUM,
+//     nkparam_name "Titanium Plating",
+//     nkparam_base_heat 0,
+//     nkparam_base_power 0,
+//     nkparam_durability NK_COMPONENT_INFINITE_HEALTH,
+//     nkparam_base_price 241300.0f,
+//     nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
+//     nkparam_upgrade_to NK_PLATING_LEAD,
+//     nkparam_added_heat_capacity 15200,
+//     nkparam_custom2 0.0f
+// )
+// mod_component_custom(
+//     nkparam_category NK_COMPONENT_PLATING,
+//     nkparam_symbol NK_PLATING_LEAD,
+//     nkparam_name "Lead Plating",
+//     nkparam_base_heat 0,
+//     nkparam_base_power 0,
+//     nkparam_durability NK_COMPONENT_INFINITE_HEALTH,
+//     nkparam_base_price 2785600.0f,
+//     nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
+//     nkparam_upgrade_to NK_PLATING_TUNGSTEN,
+//     nkparam_added_heat_capacity 75000,
+//     nkparam_custom2 0.0f
+// )
+// mod_component_custom(
+//     nkparam_category NK_COMPONENT_PLATING,
+//     nkparam_symbol NK_PLATING_TUNGSTEN,
+//     nkparam_name "Tungsten Plating",
+//     nkparam_base_heat 0,
+//     nkparam_base_power 0,
+//     nkparam_durability NK_COMPONENT_INFINITE_HEALTH,
+//     nkparam_base_price 29574600.0f,
+//     nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
+//     nkparam_upgrade_to NK_PLATING_LIQUID_LEAD,
+//     nkparam_added_heat_capacity 346700,
+//     nkparam_custom2 0.0f
+// )
+// mod_component_custom(
+//     nkparam_category NK_COMPONENT_PLATING,
+//     nkparam_symbol NK_PLATING_LIQUID_LEAD,
+//     nkparam_name "Liquid Lead Plating",
+//     nkparam_base_heat 0,
+//     nkparam_base_power 0,
+//     nkparam_durability NK_COMPONENT_INFINITE_HEALTH,
+//     nkparam_base_price 326885600.0f,
+//     nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
+//     nkparam_upgrade_to NK_PLATING_LIQUID_LITHIUM,
+//     nkparam_added_heat_capacity 1539400,
+//     nkparam_custom2 0.0f
+// )
+// mod_component_custom(
+//     nkparam_category NK_COMPONENT_PLATING,
+//     nkparam_symbol NK_PLATING_LIQUID_LITHIUM,
+//     nkparam_name "Liquid Lithium Plating",
+//     nkparam_base_heat 0,
+//     nkparam_base_power 0,
+//     nkparam_durability NK_COMPONENT_INFINITE_HEALTH,
+//     nkparam_base_price 3159198600.0f,
+//     nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
+//     nkparam_upgrade_to NK_COMPONENT_LEAF,
+//     nkparam_added_heat_capacity 6645200,
+//     nkparam_custom2 0.0f
+// )
