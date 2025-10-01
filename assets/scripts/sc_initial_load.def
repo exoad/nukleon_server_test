@@ -8,13 +8,13 @@ reactor_set(
         )
     )
 )
-reactor_set(
-    4,
-    4,
-    new_tile(
-        new_cmp(
-            NK_COMPONENT_INTERNAL,
-            NK_BARRIER
-        )
-    )
-)
+// reactor_set(
+//     4,
+//     4,
+//     new_tile(
+//         new_cmp(
+//             NK_COMPONENT_INTERNAL,
+//             NK_BARRIER
+//         )
+//     )
+// )
