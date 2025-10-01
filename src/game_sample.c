@@ -41,6 +41,7 @@ NkVoid nkSample(NkFloat64 dt)
             for(NkUInt16 col = 0; col < nkReactorGetWidth(); col++, ix += CELL_SIZE + CELL_SPACING)
             {
                 const NkTile* tile = &gNkGameInstance.reactor[row][col];
+                const NkComponent* component = nkFindComponentById(tile->id);
                 if(tile->id.id == NK_AIR)
                 {
                     tigrRect(_window, ix, iy, CELL_SIZE, CELL_SIZE, COLOR_WHITE);
@@ -58,6 +59,7 @@ NkVoid nkSample(NkFloat64 dt)
                 {
                     tigrPrint(_window, tfont, ix + 2, iy + 2, COLOR_MAGENTA, "?");
                 }
+                tigrFillRect(_window, ix, iy, 4, (NkInt32) CELL_SIZE * (component->durability <= 0 ? 0.f : (tile->health / component->durability)), COLOR_GREEN);
             }
         }
         // -- END
