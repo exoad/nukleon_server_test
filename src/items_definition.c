@@ -4,11 +4,11 @@
 #define NK_SINGLE_FUEL_CELL_FLAGS (NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE)
 /// Used for marking things with a properly defined update function
 
-#define define_base_component(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_, custom1_, custom2_) { .name = name_, .id = { .category = cat_, .id = id_ }, .heatOutput = heat_, .powerOutput = power_,  .durability = dura_, .upgradeFx = upgradeFx_, .upgradeToId = upgrade_, .basePrice = price_, .flags = flags_, .custom1 = custom1_, .custom2 = custom2_ },
+#define define_base_component(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_, custom1_, custom2_) { .name = name_, .id = { .category = cat_, .id = id_ }, .heatOutput = heat_, .powerOutput = power_,  .health = dura_, .upgradeFx = upgradeFx_, .upgradeToId = upgrade_, .basePrice = price_, .flags = flags_, .custom1 = custom1_, .custom2 = custom2_ },
 
 #define define_component(cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_, custom1_, custom2_) define_base_component(sym_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_, custom1_, custom2_)
 
-#define nkparam_durability
+#define nkparam_health
 #define nkparam_base_heat
 #define nkparam_base_power
 #define nkparam_base_price
@@ -52,7 +52,7 @@ static NkComponent _ventComponents[] = {
 
 #undef _new_cat
 #undef _todo_cat
-#undef nkparam_durability
+#undef nkparam_health
 #undef nkparam_base_heat
 #undef nkparam_base_power
 #undef nkparam_base_price
@@ -111,7 +111,7 @@ NkVoid nkUpgradeCellComponent(NkTile* tile)
     tile->id = upgraded->id;
     tile->containedHeat = upgraded->heatOutput;
     tile->power = upgraded->powerOutput;
-    tile->health = (NkFloat32)upgraded->durability;
+    tile->health = (NkFloat32)upgraded->health;
     tile->tier += 1;
     // no auto chain upgrades for now
     // if(upgraded->upgradeFx)
@@ -162,7 +162,7 @@ NkTile newNkTileWithDefaultsFromId(NkComponentIdentifier id)
         .containedHeat = 0,
         .maxHeat = 0,
         .power = 0,
-        .health = 100.0f, // we start with 100% health
+        .health = nkFindComponentById(id)->health, // start by using the health or health
         .active = true,
     };
 }

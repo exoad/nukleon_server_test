@@ -8,8 +8,10 @@ reactor_set(
         )
     )
 )
-__C__
-{
+if(!is_active(4,3)) {
+    print("wtf")
+}
+__C__ {
     for(NkUInt16 i = 0; i < NK_COMPONENT_CATEGORIES_COUNT; i++)
     {
         NkComponentCategoryTable cat = gNkComponentCategories[(NkInt16) i];

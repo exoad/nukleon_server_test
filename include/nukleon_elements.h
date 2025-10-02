@@ -12,7 +12,7 @@ typedef enum
 } NkComponentFlags;
 
 #define NK_COMPONENT_INFINITE_HEALTH -1
-#define nkparam_durability
+#define nkparam_health
 #define nkparam_base_heat
 #define nkparam_base_power
 #define nkparam_base_price
@@ -68,7 +68,7 @@ typedef enum
 #undef define_component
 #undef define_base_component
 
-#undef nkparam_durability
+#undef nkparam_health
 #undef nkparam_base_heat
 #undef nkparam_base_power
 #undef nkparam_base_price
@@ -111,7 +111,7 @@ typedef struct NkTile
     NkFloat32 containedHeat; // or stored heat
     NkFloat32 maxHeat; // capacity (max heat that can be stored)
     NkFloat32 power;
-    NkFloat32 health; // out of /100 for direct percentage value
+    NkInt32 health;
     NkBool active; // whether something is working (that is actually counted in the game logic)
                    // activity of a tile is attributed to the followign parameters:
                    //   1. the health is <= 0
@@ -129,7 +129,7 @@ typedef struct
     NkComponentIdentifier id;
     NkFloat32 heatOutput;
     NkFloat32 powerOutput;
-    NkInt32 durability;
+    NkInt32 health;
     NkVoid (*upgradeFx)(NkTile*);
     NkInt32 upgradeToId;
     NkFloat32 basePrice;

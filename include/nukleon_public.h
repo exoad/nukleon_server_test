@@ -3,6 +3,7 @@
 
 #include "nukleon_elements.h"
 #include "nukleon_sampler.h"
+#include "nukleon_utils.h"
 #include <stdint.h>
 // --  Hollistic Game Rules
 

@@ -88,7 +88,7 @@ NkVoid nkUpdate(NkFloat64 dt)
     {
         for(NkInt16 col = 0; col < nkReactorGetWidth(); col++)
         {
-            const NkTile* tile = &gNkGameInstance.reactor[row][col];
+            NkTile* tile = &gNkGameInstance.reactor[row][col];
             if(!tile->active)
             {
                 continue; // dont auto flip non active cells for now
@@ -98,6 +98,12 @@ NkVoid nkUpdate(NkFloat64 dt)
                 NkComponent* component = nkFindComponentById(tile->id);
                 heatAdd += component->heatOutput;
                 powerAdd += component->powerOutput;
+                tile->health--;
+                if(tile->health <= 0)
+                {
+                    tile->health = 0;
+                    tile->active = false;
+                }
             }
             else if(nkIsPlatingId(tile->id))
             {

@@ -31,39 +31,70 @@ NkVoid nkSample(NkFloat64 dt)
     {
         tigrClear(_window, COLOR_BLACK);
         // -- BEGIN
+        NkInt32 mx, my, _ignorebuttons;
+        tigrMouse(_window, &mx, &my, &_ignorebuttons);
+        NkBool showPopup = false;
+        NkInt32 popupX, popupY;
+        NkTile* popupTile = null;
+        NkComponent* popupComponent = null;
         NkInt32 iy = TOTAL_INSET;
         for(NkUInt16 row = 0; row < nkReactorGetHeight(); row++, iy += CELL_SIZE + CELL_SPACING)
         {
             NkInt32 ix = TOTAL_INSET;
             for(NkUInt16 col = 0; col < nkReactorGetWidth(); col++, ix += CELL_SIZE + CELL_SPACING)
             {
-                const NkTile* tile = &gNkGameInstance.reactor[row][col];
-                const NkComponent* component = nkFindComponentById(tile->id);
+                NkTile* tile = &gNkGameInstance.reactor[row][col];
+                NkComponent* component = nkFindComponentById(tile->id);
                 if(!tile->active)
                 {
                     tigrFillRect(_window, ix, iy, CELL_SIZE, CELL_SIZE, COLOR_GRAY);
                     continue;
                 }
-                 if(tile->id.id == NK_AIR)
+                if(component->id.category == NK_COMPONENT_INTERNAL)
                 {
-                    tigrRect(_window, ix, iy, CELL_SIZE, CELL_SIZE, COLOR_WHITE);
+                    if(component->id.id == NK_AIR)
+                    {
+                        tigrRect(_window, ix, iy, CELL_SIZE, CELL_SIZE, COLOR_WHITE);
+                    }
+                    else if(component->id.id == NK_BARRIER)
+                    {
+                        tigrLine(_window, ix, iy, ix + CELL_SIZE, iy + CELL_SIZE, COLOR_RED);
+                        tigrLine(_window, ix + CELL_SIZE, iy, ix, iy + CELL_SIZE, COLOR_RED);
+                    }
                 }
-                else if(tile->id.id == NK_BARRIER)
+                else if(component->id.category == NK_COMPONENT_SINGLE_FUEL_CELL)
                 {
-                    tigrLine(_window, ix, iy, ix + CELL_SIZE, iy + CELL_SIZE, COLOR_RED);
-                    tigrLine(_window, ix + CELL_SIZE, iy, ix, iy + CELL_SIZE, COLOR_RED);
-                }
-                else if(nkIsCellId(tile->id))
-                {
-                    NK_PRINTLN("CELL!!!");
                     tigrFillRect(_window, ix, iy, CELL_SIZE, CELL_SIZE, COLOR_YELLOW);
+                    if( nkGPointInRect(
+                        &(NkPoint2D) { mx, my },
+                        &(NkRect2D) { .topLeft = { ix, iy }, .size = { CELL_SIZE, CELL_SIZE } }
+                    ))
+                    {
+                        showPopup = true;
+                        popupX = ix + CELL_SIZE;
+                        popupY = iy;
+                        popupTile = tile;
+                        popupComponent = component;
+                    }
                 }
                 else
                 {
                     tigrPrint(_window, tfont, ix + 2, iy + 2, COLOR_MAGENTA, "?");
                 }
-                tigrFillRect(_window, ix, iy, 4, (NkInt32) CELL_SIZE * (component->durability <= 0 ? 0.f : (tile->health / component->durability)), COLOR_GREEN);
+                tigrFillRect(_window, ix, iy, 4, (NkInt32) CELL_SIZE * (component->health <= 0 ? 0.f : (tile->health / component->health)), COLOR_GREEN);
             }
+        }
+        if(showPopup && popupTile && popupComponent)
+        {
+#define POPUP_PADDING 2
+            tigrFillRect(_window, popupX, popupY, 120, 70, COLOR_BLACK);
+            tigrRect(_window, popupX, popupY, 120, 70, COLOR_WHITE);
+            tigrPrint(_window, tfont, popupX + POPUP_PADDING, popupY + POPUP_PADDING, COLOR_RED, "%s", popupComponent->name);
+            tigrPrint(_window, tfont, popupX + POPUP_PADDING, popupY + 10 + POPUP_PADDING, COLOR_WHITE, "ID: %d,%d", popupTile->id.category, popupTile->id.id);
+            tigrPrint(_window, tfont, popupX + POPUP_PADDING, popupY + 20 + POPUP_PADDING, COLOR_WHITE, "Tier: %d", popupTile->tier);
+            tigrPrint(_window, tfont, popupX + POPUP_PADDING, popupY + 30 + POPUP_PADDING, COLOR_WHITE, "HP: %.2f (%d)", popupTile->health, popupComponent->health);
+            tigrPrint(_window, tfont, popupX + POPUP_PADDING, popupY + 40 + POPUP_PADDING, COLOR_WHITE, "Pwr: %5.2f", popupComponent->powerOutput);
+            tigrPrint(_window, tfont, popupX + POPUP_PADDING, popupY + 50 + POPUP_PADDING, COLOR_WHITE, "Heat: %5.2f", popupComponent->heatOutput);
         }
         tigrPrint(_window, tfont, 10, 10, COLOR_WHITE, "Delta Time: %5.4f", dt);
         tigrPrint(_window, tfont, 10, 20, COLOR_WHITE, "Tick Index: %llu", nkGetCurrentTickIndex());
