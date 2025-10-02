@@ -5,3 +5,6 @@
 #undef new_cmp
 #undef for_each_cell_in_reactor
 #undef reactor_get
+#undef print
+#undef component_get
+#undef __C__

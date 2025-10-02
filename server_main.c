@@ -30,24 +30,7 @@ NkInt32 main()
 #include "../assets/sc_start.def"
 #include "../assets/scripts/sc_initial_load.def"
 #include "../assets/sc_end.def"
-    for(NkUInt16 i = 0; i < NK_COMPONENT_CATEGORIES_COUNT; i++)
-    {
-        NkComponentCategoryTable cat = gNkComponentCategories[(NkInt16) i];
-        NK_PRINTLN("%d --  %s", i, gNkComponentCategoryNamesTable[i]);
-        for(NkUInt16 j = 0; j < cat.count; j++)
-        {
-            NK_PRINTLN("\t%d = [%s]", cat.array[j].id.id, cat.array[j].name);
-            NK_PRINTLN("\t\tHeat Out: %5.4f", cat.array[j].heatOutput);
-            NK_PRINTLN("\t\tPower Out: %5.4f", cat.array[j].powerOutput);
-        }
-    }
-    // Tigr* screen = tigrWindow(320, 240, "nukleon_server_test ", TIGR_AUTO);
-    // while(!tigrClosed(screen))
-    // {
-    //     tigrClear(screen, tigrRGB(0x80, 0x90, 0xa0));
-    //     tigrPrint(screen, tfont, 120, 110, tigrRGB(0xff, 0xff, 0xff), "Hello, world.");
-    //     tigrUpdate(screen);
-    // }
+
     nkGameLoop();
     nkUninitNkReactor();
     nkUninitSampler();

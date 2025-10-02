@@ -4,19 +4,7 @@
 #define NK_SINGLE_FUEL_CELL_FLAGS (NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE)
 /// Used for marking things with a properly defined update function
 
-#define define_base_component(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_, custom1_, custom2_) { \
-    .name = name_, \
-    .id = (NkComponentIdentifier) { .category = cat_, .id = id_ }, \
-    .heatOutput = heat_, \
-    .powerOutput = power_, \
-    .durability = dura_, \
-    .upgradeFx = upgradeFx_, \
-    .upgradeToId = upgrade_, \
-    .basePrice = price_, \
-    .flags = flags_, \
-    .custom1 = custom1_, \
-    .custom2 = custom2_  \
-}
+#define define_base_component(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_, custom1_, custom2_) { .name = name_, .id = { .category = cat_, .id = id_ }, .heatOutput = heat_, .powerOutput = power_,  .durability = dura_, .upgradeFx = upgradeFx_, .upgradeToId = upgrade_, .basePrice = price_, .flags = flags_, .custom1 = custom1_, .custom2 = custom2_ },
 
 #define define_component(cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_, custom1_, custom2_) define_base_component(sym_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_, custom1_, custom2_)
 

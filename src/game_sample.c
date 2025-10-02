@@ -12,6 +12,7 @@ static Tigr* _window = null;
 #define COLOR_YELLOW tigrRGB(0xFF, 0xFF, 0x0)
 #define COLOR_CYAN tigrRGB(0x0, 0xFF, 0xFF)
 #define COLOR_MAGENTA tigrRGB(0xFF, 0x0, 0xFF)
+#define COLOR_GRAY tigrRGB(0x80, 0x80, 0x80)
 
 static inline NkVoid _pushChanges()
 {
@@ -30,10 +31,6 @@ NkVoid nkSample(NkFloat64 dt)
     {
         tigrClear(_window, COLOR_BLACK);
         // -- BEGIN
-        tigrPrint(_window, tfont, 10, 10, tigrRGB(0xFF, 0xFF, 0xFF), "Delta Time: %5.4f", dt);
-        tigrPrint(_window, tfont, 10, 20, tigrRGB(0xFF, 0xFF, 0xFF), "Tick Index: %llu", nkGetCurrentTickIndex());
-        tigrPrint(_window, tfont, 10, 30, COLOR_RED, "Total Heat: %5.4f / %5.4f", gNkGameInstance.totalHeat, gNkGameInstance.maxHeat);
-        tigrPrint(_window, tfont, 10, 40, COLOR_GREEN, "Total Power: %5.4f / %5.4f", gNkGameInstance.totalPower, gNkGameInstance.maxPower);
         NkInt32 iy = TOTAL_INSET;
         for(NkUInt16 row = 0; row < nkReactorGetHeight(); row++, iy += CELL_SIZE + CELL_SPACING)
         {
@@ -42,7 +39,12 @@ NkVoid nkSample(NkFloat64 dt)
             {
                 const NkTile* tile = &gNkGameInstance.reactor[row][col];
                 const NkComponent* component = nkFindComponentById(tile->id);
-                if(tile->id.id == NK_AIR)
+                if(!tile->active)
+                {
+                    tigrFillRect(_window, ix, iy, CELL_SIZE, CELL_SIZE, COLOR_GRAY);
+                    continue;
+                }
+                 if(tile->id.id == NK_AIR)
                 {
                     tigrRect(_window, ix, iy, CELL_SIZE, CELL_SIZE, COLOR_WHITE);
                 }
@@ -51,8 +53,9 @@ NkVoid nkSample(NkFloat64 dt)
                     tigrLine(_window, ix, iy, ix + CELL_SIZE, iy + CELL_SIZE, COLOR_RED);
                     tigrLine(_window, ix + CELL_SIZE, iy, ix, iy + CELL_SIZE, COLOR_RED);
                 }
-                else if(tile->id.category == NK_COMPONENT_SINGLE_FUEL_CELL)
+                else if(nkIsCellId(tile->id))
                 {
+                    NK_PRINTLN("CELL!!!");
                     tigrFillRect(_window, ix, iy, CELL_SIZE, CELL_SIZE, COLOR_YELLOW);
                 }
                 else
@@ -62,6 +65,15 @@ NkVoid nkSample(NkFloat64 dt)
                 tigrFillRect(_window, ix, iy, 4, (NkInt32) CELL_SIZE * (component->durability <= 0 ? 0.f : (tile->health / component->durability)), COLOR_GREEN);
             }
         }
+        tigrPrint(_window, tfont, 10, 10, COLOR_WHITE, "Delta Time: %5.4f", dt);
+        tigrPrint(_window, tfont, 10, 20, COLOR_WHITE, "Tick Index: %llu", nkGetCurrentTickIndex());
+        tigrPrint(_window, tfont, 10, 30, COLOR_RED, "Total Heat: %5.4f / %5.4f", gNkGameInstance.totalHeat, gNkGameInstance.maxHeat);
+        tigrPrint(_window, tfont, 10, 40, COLOR_GREEN, "Total Power: %5.4f / %5.4f", gNkGameInstance.totalPower, gNkGameInstance.maxPower);
+        tigrPrint(_window, tfont, 10, 50, COLOR_WHITE, "Reactor Size: %dx%d", nkReactorGetWidth(), nkReactorGetHeight());
+        tigrPrint(_window, tfont, 10, 60, COLOR_WHITE, "Last Tick Took: %5.4fms", (NkFloat64) nkGetLastGameTick()->tickDurationMs);
+        tigrPrint(_window, tfont, 10, 70, COLOR_WHITE, "Last Tick Heat: %5.4f", nkGetLastGameTick()->producedHeat);
+        tigrPrint(_window, tfont, 10, 80, COLOR_WHITE, "Last Tick Power: %5.4f", nkGetLastGameTick()->producedPower);
+        tigrPrint(_window, tfont, 10, 90, COLOR_WHITE, "Meltdown Ticker: %d", nkGetLastGameTick()->meltdownTicker);
         // -- END
         tigrUpdate(_window);
     }

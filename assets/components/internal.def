@@ -1,4 +1,4 @@
-define_component(
+define_base_component(
     nkparam_id 0,
     nkparam_category NK_COMPONENT_INTERNAL,
     nkparam_symbol NK_AIR,
@@ -13,7 +13,7 @@ define_component(
     nkparam_custom1 0,
     nkparam_custom2 0
 )
-define_component(
+define_base_component(
     nkparam_id 1,
     nkparam_category NK_COMPONENT_INTERNAL,
     nkparam_symbol NK_BARRIER,

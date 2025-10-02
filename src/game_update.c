@@ -1,5 +1,12 @@
 #include "nukleon_public.h"
 
+static NkGameTick _gLastTick = { 0 };
+
+NkGameTick* nkGetLastGameTick()
+{
+    return &_gLastTick;
+}
+
 static NkUInt64 _gTickIndex = 0;
 
 NkUInt64 nkGetCurrentTickIndex()
@@ -29,6 +36,12 @@ NkVoid nkGameLoop()
 #ifdef NK_ENABLE_UI_SAMPLER
                 nkSample(dt);
 #endif
+                _gLastTick = (NkGameTick) {
+                    .tickIndex = _gTickIndex,
+                    .tickDurationMs = (NkUInt32) (dt * 1000.0),
+                    .producedHeat = (NkFloat32) gNkGameInstance.totalHeat,
+                    .producedPower = (NkFloat32) gNkGameInstance.totalPower,
+                };
                 _gTickIndex++;
                 nextTime = startTime + _gTickIndex * dt;
                 if(++safety > 10000) // make sure it isnt catching up to an infinite bound
@@ -59,9 +72,6 @@ NkVoid nkGameLoop()
     }
 }
 
-#define REACTOR_WIDTH ((NkInt16) 20)
-#define REACTOR_HEIGHT ((NkInt16) 10)
-
 NkVoid nkUpdate(NkFloat64 dt)
 {
     static NkInt32 _meltdownTicker = 0;
@@ -74,9 +84,9 @@ NkVoid nkUpdate(NkFloat64 dt)
     NkFloat64 heatAdd = 0.0f;
     NkFloat64 powerAdd = 0.0f;
     NkInt64 platingAddHeatCapacity = 0;
-    for(NkInt16 row = 0; row < REACTOR_HEIGHT; row++)
+    for(NkInt16 row = 0; row < nkReactorGetHeight(); row++)
     {
-        for(NkInt16 col = 0; col < REACTOR_WIDTH; col++)
+        for(NkInt16 col = 0; col < nkReactorGetWidth(); col++)
         {
             const NkTile* tile = &gNkGameInstance.reactor[row][col];
             if(!tile->active)
@@ -88,14 +98,11 @@ NkVoid nkUpdate(NkFloat64 dt)
                 NkComponent* component = nkFindComponentById(tile->id);
                 heatAdd += component->heatOutput;
                 powerAdd += component->powerOutput;
-                if(tile->health <= 0)
-                {
-                }
             }
             else if(nkIsPlatingId(tile->id))
             {
                 NkComponent* component = nkFindComponentById(tile->id);
-                platingAddHeatCapacity += component->custom2;
+                // platingAddHeatCapacity += component->custom2;
             }
             else
             {
@@ -104,8 +111,17 @@ NkVoid nkUpdate(NkFloat64 dt)
         }
     }
     gNkGameInstance.totalHeat += heatAdd;
-    gNkGameInstance.totalPower += powerAdd;
+    // clamp the produced heat
+    if(gNkGameInstance.totalPower + powerAdd >= gNkGameInstance.maxPower)
+    {
+        gNkGameInstance.totalPower = gNkGameInstance.maxPower;
+    }
+    else
+    {
+        gNkGameInstance.totalPower += powerAdd;
+    }
     willMeltdown = gNkGameInstance.totalHeat > gNkGameInstance.maxHeat;
+    _gLastTick.meltdownTicker = _meltdownTicker;
     if(willMeltdown)
     {
         _meltdownTicker++;
