@@ -1,6 +1,6 @@
 #include "nukleon.h"
 
-NkBool nkGPointInRect(const NkPoint2D* point, const NkRect2D* rect)
+__nk_hot __nk_pure NkBool nkGPointInRect(const NkPoint2D* point, const NkRect2D* rect)
 {
     if(!point || !rect)
     {

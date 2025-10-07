@@ -21,14 +21,12 @@ NkPoint2D gNkSMouseLocation = { 0, 0 };
 #define CELL_SPACING 2
 #define TOTAL_INSET 100
 
-NkVoid nkSample(NkFloat64 dt)
+__nk_hot NkVoid nkSample(__nk_unused NkFloat64 dt)
 {
-    (NkVoid) dt;
     if(!tigrClosed(_window))
     {
         tigrClear(_window, COLOR_BLACK);
         // -- BEGIN
-
         NkInt32 _ignorebuttons;
         tigrMouse(_window, &gNkSMouseLocation.x, &gNkSMouseLocation.y, &_ignorebuttons);
         NkBool showPopup = false;
@@ -63,6 +61,10 @@ NkVoid nkSample(NkFloat64 dt)
                 else if(component->id.category == NK_COMPONENT_SINGLE_FUEL_CELL)
                 {
                     tigrFillRect(_window, ix, iy, CELL_SIZE, CELL_SIZE, COLOR_YELLOW);
+                }
+                else if(component->id.category == NK_COMPONENT_PLATING)
+                {
+                    tigrFillRect(_window, ix, iy, CELL_SIZE, CELL_SIZE, COLOR_GREEN);
                 }
                 else
                 {

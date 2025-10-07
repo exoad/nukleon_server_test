@@ -8,6 +8,16 @@ reactor_set(
         )
     )
 )
+reactor_set(
+    10,
+    10,
+    new_tile(
+        new_cmp(
+            NK_COMPONENT_PLATING,
+            NK_PLATING_CONCRETE
+        )
+    )
+)
 if(!is_active(4,3)) {
     print("wtf")
 }

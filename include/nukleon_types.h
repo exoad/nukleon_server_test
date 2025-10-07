@@ -34,8 +34,18 @@ typedef NkVoid* NkAny;
 
 #ifdef __GNUC__
 #define __nk_unused __attribute__((unused))
+#define __nk_pure __attribute__((pure))
+#define __nk_const __attribute__((const))
+#define __nk_hot __attribute__((hot))
+#define __nk_flatten __attribute((flatten))
+#define __nk_always_inline __attribute__((always_inline))
 #else
 #define __nk_unused
+#define __nk_pure
+#define __nk_const
+#define __nk_hot
+#define __nk_flatten
+#define __nk_always_inline
 #endif
 
 #define NK_PRINT(format, ...) printf(format, ##__VA_ARGS__)

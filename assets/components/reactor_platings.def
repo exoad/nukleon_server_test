@@ -1,6 +1,6 @@
 // tuning: https://www.desmos.com/calculator/mjoi9cjlcm
 // custom: additional heat capacity to the reactor's max heat capacity
-// #define nkparam_added_heat_capacity nkparam_custom1
+// #define nkparam_added_heat_capacity nkparam_custom2
 define_base_component(
     nkparam_id 0,
     nkparam_category NK_COMPONENT_PLATING,
@@ -13,8 +13,8 @@ define_base_component(
     nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
     nkparam_upgrade_to 0,
     nkparam_upgrade_fx null,
-    nkparam_custom1 100, // amount of health to add to the reactor
-    nkparam_custom2 0.0f
+    nkparam_custom1 0,
+    nkparam_custom2 100.0f
 
 )
 // mod_component_custom(

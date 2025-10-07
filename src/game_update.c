@@ -82,9 +82,11 @@ NkVoid nkUpdate(__nk_unused NkFloat64 dt)
         nkResetReactor();
         _meltdownTicker = 0;
     }
+    // the way to modify global mutable state seems very jank and very scary but this works
+    // just recalculating everytime
+    NkInt64 platingAddHeatCapacity = NK_RULE_GAME_REACTOR_STARTING_MAX_HEAT;
     NkFloat64 heatAdd = 0.0f;
     NkFloat64 powerAdd = 0.0f;
-    __nk_unused NkInt64 platingAddHeatCapacity = 0;
     for(NkInt16 row = 0; row < nkReactorGetHeight(); row++)
     {
         for(NkInt16 col = 0; col < nkReactorGetWidth(); col++)
@@ -108,8 +110,8 @@ NkVoid nkUpdate(__nk_unused NkFloat64 dt)
             }
             else if(nkIsPlatingId(tile->id))
             {
-                __nk_unused NkComponent* component = nkFindComponentById(tile->id);
-                // platingAddHeatCapacity += component->custom2;
+                NkComponent* component = nkFindComponentById(tile->id);
+                platingAddHeatCapacity += component->custom2;
             }
             else
             {
@@ -117,8 +119,8 @@ NkVoid nkUpdate(__nk_unused NkFloat64 dt)
             }
         }
     }
-    gNkGameInstance.totalHeat += heatAdd;
-    gNkGameInstance.totalHeat = nkClampFloat32(gNkGameInstance.totalHeat - gNkGameInstance.naturalHeatRemoval, FLT_MAX, 0);
+    gNkGameInstance.totalHeat = nkClampFloat32((gNkGameInstance.totalHeat + heatAdd) - gNkGameInstance.naturalHeatRemoval, FLT_MAX, 0);
+    gNkGameInstance.maxHeat = platingAddHeatCapacity;
     // clamp the produced heat
     if(gNkGameInstance.totalPower + powerAdd >= gNkGameInstance.maxPower)
     {

@@ -18,7 +18,7 @@ OBJ_FILES = $(patsubst %.c,$(OBJDIR)/%.o,$(notdir $(C_FILES)))
 
 DEF_FILES = $(wildcard $(ASSETDIR)/*.def)
 
-CFLAGS = -std=c17 -D_GNU_SOURCE -Wall -Wextra -Wpedantic -Wunused -Wcast-align -Wno-unused-function -Wshadow -O3 \
+CFLAGS = -std=c17 -D_GNU_SOURCE -Wall -Wextra -Wpedantic -Wunused -Wcast-align -Wno-unused-function -Wshadow -Ofast \
          $(ASAN_FLAGS) $(DEFINES) -I$(INCDIR) -I$(ASSETDIR)
 
 UNAME_S := $(shell uname -s)
