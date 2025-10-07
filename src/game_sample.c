@@ -1,4 +1,4 @@
-#include "nukleon_public.h"
+#include "nukleon.h"
 #ifdef NK_ENABLE_UI_SAMPLER
 #include "../tigr.h"
 
@@ -14,7 +14,7 @@ static Tigr* _window = null;
 #define COLOR_MAGENTA tigrRGB(0xFF, 0x0, 0xFF)
 #define COLOR_GRAY tigrRGB(0x80, 0x80, 0x80)
 
-NkPoint2D gNkSMouseLocation = (NkPoint2D) { 0, 0 };
+NkPoint2D gNkSMouseLocation = { 0, 0 };
 
 // defined in physical pixels
 #define CELL_SIZE 14
@@ -46,7 +46,7 @@ NkVoid nkSample(NkFloat64 dt)
                 if(!tile->active)
                 {
                     tigrFillRect(_window, ix, iy, CELL_SIZE, CELL_SIZE, COLOR_GRAY);
-                    continue;
+                    goto skip_render;
                 }
                 if(component->id.category == NK_COMPONENT_INTERNAL)
                 {
@@ -68,6 +68,7 @@ NkVoid nkSample(NkFloat64 dt)
                 {
                     tigrPrint(_window, tfont, ix + 2, iy + 2, COLOR_MAGENTA, "?");
                 }
+                skip_render:
                 if(nkSIsMouseIn(&(NkRect2D) { { ix, iy }, { CELL_SIZE, CELL_SIZE } }))
                 {
                     showPopup = true;

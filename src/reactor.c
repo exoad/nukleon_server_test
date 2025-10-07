@@ -1,4 +1,4 @@
-#include "nukleon_public.h"
+#include "nukleon.h"
 #include <stdlib.h>
 
 NkGame gNkGameInstance = { 0 };

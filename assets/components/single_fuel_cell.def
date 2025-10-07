@@ -6,26 +6,43 @@ define_base_component(
     nkparam_base_heat 1,
     nkparam_base_power 1,
     nkparam_health 150,
-    nkparam_base_price 200.0f,
+    nkparam_base_price 200.0,
+    nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
+    nkparam_upgrade_to NK_SINGLE_THORIUM_CELL,
+    nkparam_upgrade_fx null,
+    nkparam_custom1 0,
+    nkparam_custom2 0.0f
+)
+define_base_component(
+    nkparam_id 1,
+    nkparam_category NK_COMPONENT_SINGLE_FUEL_CELL,
+    nkparam_symbol NK_SINGLE_THORIUM_CELL,
+    nkparam_name "Thorium Cell",
+    nkparam_base_heat 5,
+    nkparam_base_power 8,
+    nkparam_health 320,
+    nkparam_base_price 1000,
+    nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
+    nkparam_upgrade_to NK_SINGLE_PLUTONIUM_CELL,
+    nkparam_upgrade_fx null,
+    nkparam_custom1 0,
+    nkparam_custom2 0.0f
+)
+define_base_component(
+    nkparam_id 2,
+    nkparam_category NK_COMPONENT_SINGLE_FUEL_CELL,
+    nkparam_symbol NK_SINGLE_PLUTONIUM_CELL,
+    nkparam_name "Plutonium Cell",
+    nkparam_base_heat 20,
+    nkparam_base_power 32,
+    nkparam_health 640,
+    nkparam_base_price 12000,
     nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
     nkparam_upgrade_to 0,
     nkparam_upgrade_fx null,
     nkparam_custom1 0,
     nkparam_custom2 0.0f
 )
-// mod_component(
-// )
-// mod_component(
-//     nkparam_category NK_COMPONENT_SINGLE_FUEL_CELL,
-//     nkparam_symbol NK_SINGLE_THORIUM_CELL,
-//     nkparam_name "Thorium Cell",
-//     nkparam_base_heat 5,
-//     nkparam_base_power 8,
-//     nkparam_health 150,
-//     nkparam_base_price 500.0f,
-//     nkparam_flags NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE,
-//     nkparam_upgrade_to NK_SINGLE_PLUTONIUM_CELL
-// )
 // mod_component(
 //     nkparam_category NK_COMPONENT_SINGLE_FUEL_CELL,
 //     nkparam_symbol NK_SINGLE_PLUTONIUM_CELL,

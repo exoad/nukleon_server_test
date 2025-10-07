@@ -1,4 +1,4 @@
-#include "nukleon_public.h"
+#include "nukleon.h"
 #include "tigr.h"
 
 #define REACTOR_WIDTH ((NkUInt16) 32)

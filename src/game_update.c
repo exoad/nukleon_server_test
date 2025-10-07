@@ -1,5 +1,5 @@
+#include "nukleon.h"
 #include <float.h>
-#include "nukleon_public.h"
 
 static NkGameTick _gLastTick = { 0 };
 
@@ -73,7 +73,7 @@ NkVoid nkGameLoop()
     }
 }
 
-NkVoid nkUpdate(NkFloat64 dt)
+NkVoid nkUpdate(__nk_unused NkFloat64 dt)
 {
     static NkInt32 _meltdownTicker = 0;
     NkBool willMeltdown = false;
@@ -84,7 +84,7 @@ NkVoid nkUpdate(NkFloat64 dt)
     }
     NkFloat64 heatAdd = 0.0f;
     NkFloat64 powerAdd = 0.0f;
-    NkInt64 platingAddHeatCapacity = 0;
+    __nk_unused NkInt64 platingAddHeatCapacity = 0;
     for(NkInt16 row = 0; row < nkReactorGetHeight(); row++)
     {
         for(NkInt16 col = 0; col < nkReactorGetWidth(); col++)
@@ -108,7 +108,7 @@ NkVoid nkUpdate(NkFloat64 dt)
             }
             else if(nkIsPlatingId(tile->id))
             {
-                NkComponent* component = nkFindComponentById(tile->id);
+                __nk_unused NkComponent* component = nkFindComponentById(tile->id);
                 // platingAddHeatCapacity += component->custom2;
             }
             else

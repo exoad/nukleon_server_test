@@ -1,4 +1,4 @@
-#include "nukleon_public.h"
+#include "nukleon.h"
 
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN

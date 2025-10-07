@@ -1,7 +1,7 @@
 #ifndef NUKLEON_SAMPLER_H
 #define NUKLEON_SAMPLER_H
 
-#include "nukleon_shared.h"
+#include "nukleon_types.h"
 #include "nukleon_utils.h"
 
 NkVoid nkSample(NkFloat64 dt);

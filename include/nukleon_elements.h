@@ -1,7 +1,7 @@
 #ifndef NUKLEON_ELEMENTS_H
 #define NUKLEON_ELEMENTS_H
 
-#include "nukleon_shared.h"
+#include "nukleon_types.h"
 
 typedef struct NkTile NkTile;
 
@@ -139,17 +139,17 @@ typedef struct
     NkFloat32 custom2;
 } NkComponent;
 
-__nk_inline__ void nkComponentSetFlag(NkComponent* c, NkUInt32 flag)
+__nk_inline void nkComponentSetFlag(NkComponent* c, NkUInt32 flag)
 {
     c->flags |= flag;
 }
 
-__nk_inline__ void nkComponentClearFlag(NkComponent* c, NkUInt32 flag)
+__nk_inline void nkComponentClearFlag(NkComponent* c, NkUInt32 flag)
 {
     c->flags &= ~flag;
 }
 
-__nk_inline__ NkBool nkComponentHasFlag(const NkComponent* c, NkUInt32 flag)
+__nk_inline NkBool nkComponentHasFlag(const NkComponent* c, NkUInt32 flag)
 {
     return (c->flags & flag) != 0;
 }

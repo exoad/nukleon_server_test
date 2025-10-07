@@ -1,4 +1,4 @@
-#include "nukleon_elements.h"
+#include "nukleon.h"
 #include <string.h>
 
 #define NK_SINGLE_FUEL_CELL_FLAGS (NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE)

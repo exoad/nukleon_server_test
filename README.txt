@@ -11,6 +11,9 @@ Currently supporting: Linux, Windows, OSX*
 To build the server and test it, run it with the bundled
 commands in `run.sh` or directly compiling with `make -re`
 
+Note: You may need to make `run.sh` executable on certain
+systems using: `chmod +x run.sh`
+
 ---- Enabling GUI ----
 
 This bundles a GUI for directly seeing what is happening

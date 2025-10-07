@@ -1,47 +1,8 @@
-#ifndef NUKLEON_PUBLIC_H
-#define NUKLEON_PUBLIC_H
+#ifndef NUKLEON_GAME_H
+#define NUKLEON_GAME_H
 
+#include "nukleon_types.h"
 #include "nukleon_elements.h"
-#include "nukleon_sampler.h"
-#include "nukleon_utils.h"
-#include <stdint.h>
-// --  Hollistic Game Rules
-
-#define NK_RULE_STATE_FPS_TARGET 18
-#define NK_RULE_TOTAL_TICKS_FOR_MELTDOWN_WIPE 5
-#define NK_RULE_GAME_REACTOR_STARTING_MAX_HEAT 1000.0
-#define NK_RULE_GAME_REACTOR_STARTING_MAX_POWER 100.0
-#define NK_RULE_GAME_REACTOR_STARTING_SELF_DISSIPATION_HEAT_RATE 0.2
-
-// --- NkTicker
-
-#define NK_STATE_RUN_SECONDS -1.0
-
-NkVoid nkInitTime();
-
-NkFloat64 nkTimeNowSec();
-
-NkVoid nkSleepMs(NkInt32 ms);
-
-NkVoid nkYield();
-
-NkVoid nkGameLoop();
-
-NkUInt64 nkGetCurrentTickIndex();
-
-NkVoid nkUpdate(NkFloat64 dt);
-
-typedef struct {
-    // -- tick life cycle information
-    NkUInt64 tickIndex;
-    NkUInt32 tickDurationMs;
-    // -- actual game stats
-    NkFloat32 producedHeat;
-    NkFloat32 producedPower;
-    NkInt32 meltdownTicker;
-} NkGameTick;
-
-NkGameTick* nkGetLastGameTick();
 
 // --- NkGame
 

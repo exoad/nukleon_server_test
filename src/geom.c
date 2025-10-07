@@ -1,4 +1,4 @@
-#include "nukleon_public.h"
+#include "nukleon.h"
 
 NkBool nkGPointInRect(const NkPoint2D* point, const NkRect2D* rect)
 {

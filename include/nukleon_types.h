@@ -1,5 +1,5 @@
-#ifndef NUKLEON_SHARED_H
-#define NUKLEON_SHARED_H
+#ifndef NUKLEON_TYPE_H
+#define NUKLEON_TYPE_H
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -27,11 +27,16 @@ typedef NkVoid* NkAny;
 #define null NULL
 
 #ifdef _MSC_VER
-#define __nk_inline__ static __forceinline
+#define __nk_inline static __forceinline
 #else
-#define __nk_inline__ static inline
+#define __nk_inline static inline
 #endif
 
+#ifdef __GNUC__
+#define __nk_unused __attribute__((unused))
+#else
+#define __nk_unused
+#endif
 
 #define NK_PRINT(format, ...) printf(format, ##__VA_ARGS__)
 

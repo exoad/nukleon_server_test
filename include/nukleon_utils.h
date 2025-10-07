@@ -1,7 +1,7 @@
 #ifndef NUKLEON_UTILS_H
 #define NUKLEON_UTILS_H
 
-#include "nukleon_shared.h"
+#include "nukleon.h"
 
 // -- geometry
 typedef struct NkPoint2D
