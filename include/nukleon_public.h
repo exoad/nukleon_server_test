@@ -11,6 +11,7 @@
 #define NK_RULE_TOTAL_TICKS_FOR_MELTDOWN_WIPE 5
 #define NK_RULE_GAME_REACTOR_STARTING_MAX_HEAT 1000.0
 #define NK_RULE_GAME_REACTOR_STARTING_MAX_POWER 100.0
+#define NK_RULE_GAME_REACTOR_STARTING_SELF_DISSIPATION_HEAT_RATE 0.2
 
 // --- NkTicker
 
@@ -57,6 +58,7 @@ typedef struct
     NkUInt16 capacityCols;
     NkUInt64 tickIndex;
     NkUInt64 credits;
+    NkFloat32 naturalHeatRemoval; // per tick how much heat to remove
 } NkGame;
 
 extern NkGame gNkGameInstance;

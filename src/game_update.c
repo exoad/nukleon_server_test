@@ -1,3 +1,4 @@
+#include <float.h>
 #include "nukleon_public.h"
 
 static NkGameTick _gLastTick = { 0 };
@@ -98,11 +99,11 @@ NkVoid nkUpdate(NkFloat64 dt)
                 NkComponent* component = nkFindComponentById(tile->id);
                 heatAdd += component->heatOutput;
                 powerAdd += component->powerOutput;
-                tile->health--;
+                tile->health -= 1;
                 if(tile->health <= 0)
                 {
                     tile->health = 0;
-                    tile->active = false;
+                    nkTileToAir(tile);
                 }
             }
             else if(nkIsPlatingId(tile->id))
@@ -117,6 +118,7 @@ NkVoid nkUpdate(NkFloat64 dt)
         }
     }
     gNkGameInstance.totalHeat += heatAdd;
+    gNkGameInstance.totalHeat = nkClampFloat32(gNkGameInstance.totalHeat - gNkGameInstance.naturalHeatRemoval, FLT_MAX, 0);
     // clamp the produced heat
     if(gNkGameInstance.totalPower + powerAdd >= gNkGameInstance.maxPower)
     {
@@ -144,13 +146,12 @@ NkVoid nkUpdate(NkFloat64 dt)
     NK_PRINTLN("Total Heat = %5.4f (%5.4f%c)", gNkGameInstance.totalHeat, gNkGameInstance.totalHeat / gNkGameInstance.maxHeat, '%');
     NK_PRINTLN("Total Power = %5.4f (%5.4f%c)", gNkGameInstance.totalPower, gNkGameInstance.totalPower / gNkGameInstance.maxPower, '%');
     NK_PRINTLN("Meltdown Ticker: %d", _meltdownTicker);
-    for(NkInt16 row = 0; row < REACTOR_HEIGHT; row++)
+    for(NkInt16 row = 0; row < nkReactorGetHeight(); row++)
     {
-        for(NkInt16 col = 0; col < REACTOR_WIDTH; col++)
+        for(NkInt16 col = 0; col < nkReactorGetWidth(); col++)
         {
             const NkComponentIdentifier v = gNkGameInstance.reactor[row][col].id;
             NK_PRINT(gNkGameInstance.reactor[row][col].active ? "[%d_%dO]" : "[%dY]", v.category, v.id);
-
         }
         NK_PRINT("%s", "\n");
     }

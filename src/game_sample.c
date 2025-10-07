@@ -14,10 +14,7 @@ static Tigr* _window = null;
 #define COLOR_MAGENTA tigrRGB(0xFF, 0x0, 0xFF)
 #define COLOR_GRAY tigrRGB(0x80, 0x80, 0x80)
 
-static inline NkVoid _pushChanges()
-{
-    tigrUpdate(_window);
-}
+NkPoint2D gNkSMouseLocation = (NkPoint2D) { 0, 0 };
 
 // defined in physical pixels
 #define CELL_SIZE 14
@@ -31,8 +28,9 @@ NkVoid nkSample(NkFloat64 dt)
     {
         tigrClear(_window, COLOR_BLACK);
         // -- BEGIN
-        NkInt32 mx, my, _ignorebuttons;
-        tigrMouse(_window, &mx, &my, &_ignorebuttons);
+
+        NkInt32 _ignorebuttons;
+        tigrMouse(_window, &gNkSMouseLocation.x, &gNkSMouseLocation.y, &_ignorebuttons);
         NkBool showPopup = false;
         NkInt32 popupX, popupY;
         NkTile* popupTile = null;
@@ -65,21 +63,18 @@ NkVoid nkSample(NkFloat64 dt)
                 else if(component->id.category == NK_COMPONENT_SINGLE_FUEL_CELL)
                 {
                     tigrFillRect(_window, ix, iy, CELL_SIZE, CELL_SIZE, COLOR_YELLOW);
-                    if( nkGPointInRect(
-                        &(NkPoint2D) { mx, my },
-                        &(NkRect2D) { .topLeft = { ix, iy }, .size = { CELL_SIZE, CELL_SIZE } }
-                    ))
-                    {
-                        showPopup = true;
-                        popupX = ix + CELL_SIZE;
-                        popupY = iy;
-                        popupTile = tile;
-                        popupComponent = component;
-                    }
                 }
                 else
                 {
                     tigrPrint(_window, tfont, ix + 2, iy + 2, COLOR_MAGENTA, "?");
+                }
+                if(nkSIsMouseIn(&(NkRect2D) { { ix, iy }, { CELL_SIZE, CELL_SIZE } }))
+                {
+                    showPopup = true;
+                    popupX = ix + CELL_SIZE;
+                    popupY = iy;
+                    popupTile = tile;
+                    popupComponent = component;
                 }
                 tigrFillRect(_window, ix, iy, 4, (NkInt32) CELL_SIZE * (component->health <= 0 ? 0.f : (tile->health / component->health)), COLOR_GREEN);
             }
@@ -92,10 +87,11 @@ NkVoid nkSample(NkFloat64 dt)
             tigrPrint(_window, tfont, popupX + POPUP_PADDING, popupY + POPUP_PADDING, COLOR_RED, "%s", popupComponent->name);
             tigrPrint(_window, tfont, popupX + POPUP_PADDING, popupY + 10 + POPUP_PADDING, COLOR_WHITE, "ID: %d,%d", popupTile->id.category, popupTile->id.id);
             tigrPrint(_window, tfont, popupX + POPUP_PADDING, popupY + 20 + POPUP_PADDING, COLOR_WHITE, "Tier: %d", popupTile->tier);
-            tigrPrint(_window, tfont, popupX + POPUP_PADDING, popupY + 30 + POPUP_PADDING, COLOR_WHITE, "HP: %.2f (%d)", popupTile->health, popupComponent->health);
+            tigrPrint(_window, tfont, popupX + POPUP_PADDING, popupY + 30 + POPUP_PADDING, COLOR_WHITE, "HP: %d (%d)", popupTile->health, popupComponent->health);
             tigrPrint(_window, tfont, popupX + POPUP_PADDING, popupY + 40 + POPUP_PADDING, COLOR_WHITE, "Pwr: %5.2f", popupComponent->powerOutput);
             tigrPrint(_window, tfont, popupX + POPUP_PADDING, popupY + 50 + POPUP_PADDING, COLOR_WHITE, "Heat: %5.2f", popupComponent->heatOutput);
         }
+        // debug information
         tigrPrint(_window, tfont, 10, 10, COLOR_WHITE, "Delta Time: %5.4f", dt);
         tigrPrint(_window, tfont, 10, 20, COLOR_WHITE, "Tick Index: %llu", nkGetCurrentTickIndex());
         tigrPrint(_window, tfont, 10, 30, COLOR_RED, "Total Heat: %5.4f / %5.4f", gNkGameInstance.totalHeat, gNkGameInstance.maxHeat);
@@ -105,6 +101,7 @@ NkVoid nkSample(NkFloat64 dt)
         tigrPrint(_window, tfont, 10, 70, COLOR_WHITE, "Last Tick Heat: %5.4f", nkGetLastGameTick()->producedHeat);
         tigrPrint(_window, tfont, 10, 80, COLOR_WHITE, "Last Tick Power: %5.4f", nkGetLastGameTick()->producedPower);
         tigrPrint(_window, tfont, 10, 90, COLOR_WHITE, "Meltdown Ticker: %d", nkGetLastGameTick()->meltdownTicker);
+        tigrPrint(_window, tfont, 10, 100, COLOR_CYAN, "Self Dissipation Rate: %5.4f", gNkGameInstance.naturalHeatRemoval);
         // -- END
         tigrUpdate(_window);
     }

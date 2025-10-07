@@ -139,17 +139,17 @@ typedef struct
     NkFloat32 custom2;
 } NkComponent;
 
-static inline void nkComponentSetFlag(NkComponent* c, NkUInt32 flag)
+__nk_inline__ void nkComponentSetFlag(NkComponent* c, NkUInt32 flag)
 {
     c->flags |= flag;
 }
 
-static inline void nkComponentClearFlag(NkComponent* c, NkUInt32 flag)
+__nk_inline__ void nkComponentClearFlag(NkComponent* c, NkUInt32 flag)
 {
     c->flags &= ~flag;
 }
 
-static inline NkBool nkComponentHasFlag(const NkComponent* c, NkUInt32 flag)
+__nk_inline__ NkBool nkComponentHasFlag(const NkComponent* c, NkUInt32 flag)
 {
     return (c->flags & flag) != 0;
 }

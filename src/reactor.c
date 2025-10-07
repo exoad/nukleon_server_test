@@ -58,6 +58,7 @@ NkVoid nkInitNkReactor(NkUInt16 width, NkUInt16 height)
         gNkGameInstance.totalHeat = 0.0f;
         gNkGameInstance.maxHeat = NK_RULE_GAME_REACTOR_STARTING_MAX_HEAT;
         gNkGameInstance.maxPower = NK_RULE_GAME_REACTOR_STARTING_MAX_POWER;
+        gNkGameInstance.naturalHeatRemoval = NK_RULE_GAME_REACTOR_STARTING_SELF_DISSIPATION_HEAT_RATE;
         gNkGameInstance.reactor[y] = (NkTile*) malloc(W * sizeof *(gNkGameInstance.reactor[y]));
         if(!gNkGameInstance.reactor[y])
         {

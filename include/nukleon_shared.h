@@ -26,6 +26,13 @@ typedef NkVoid* NkAny;
 
 #define null NULL
 
+#ifdef _MSC_VER
+#define __nk_inline__ static __forceinline
+#else
+#define __nk_inline__ static inline
+#endif
+
+
 #define NK_PRINT(format, ...) printf(format, ##__VA_ARGS__)
 
 #define NK_PRINTLN(format, ...) printf(format "\n", ##__VA_ARGS__)
