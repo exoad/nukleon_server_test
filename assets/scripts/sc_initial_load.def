@@ -1,3 +1,4 @@
+
 reactor_set(
     4,
     3,
@@ -18,8 +19,18 @@ reactor_set(
         )
     )
 )
+reactor_set(
+    5,
+    5,
+    new_tile(
+        new_cmp(
+            NK_COMPONENT_SINGLE_FUEL_CELL,
+            NK_SINGLE_PLUTONIUM_CELL
+        )
+    )
+)
 if(!is_active(4,3)) {
-    print("wtf")
+    print("%s", "wtf")
 }
 __C__ {
     for(NkUInt16 i = 0; i < NK_COMPONENT_CATEGORIES_COUNT; i++)

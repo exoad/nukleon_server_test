@@ -34,6 +34,10 @@ __nk_hot NkVoid nkSample(__nk_unused NkFloat64 dt)
         NkTile* popupTile = null;
         NkComponent* popupComponent = null;
         NkInt32 iy = TOTAL_INSET;
+        if(NK_RULE_GAME_REACTOR_DISPLAY_VISUAL_HEAT_THRESHOLD >= (gNkGameInstance.maxHeat - gNkGameInstance.totalHeat) / gNkGameInstance.maxHeat)
+        {
+            tigrFillRect(_window, 0, 0, _window->w, _window->h, tigrRGB(0xFF * (gNkGameInstance.totalHeat / gNkGameInstance.maxHeat), 0, 0));
+        }
         for(NkUInt16 row = 0; row < nkReactorGetHeight(); row++, iy += CELL_SIZE + CELL_SPACING)
         {
             NkInt32 ix = TOTAL_INSET;
@@ -79,7 +83,7 @@ __nk_hot NkVoid nkSample(__nk_unused NkFloat64 dt)
                     popupTile = tile;
                     popupComponent = component;
                 }
-                tigrFillRect(_window, ix, iy, 4, (NkInt32) CELL_SIZE * (component->health <= 0 ? 0.f : (tile->health / component->health)), COLOR_GREEN);
+                // tigrFillRect(_window, ix, iy, 4, (NkInt32) CELL_SIZE * (component->health <= 0 ? 0.f : (tile->health / component->health)), COLOR_GREEN);
             }
         }
         if(showPopup && popupTile && popupComponent)

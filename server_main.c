@@ -36,7 +36,10 @@ NkInt32 main()
 #define print(...) NK_PRINTLN(__VA_ARGS__);
 #define component_get(id) nkFindComponentById(id)
 #define __C__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wvariadic-macros"
 #include "../assets/scripts/sc_initial_load.def"
+#pragma GCC diagnostic pop
 #undef reactor_width
 #undef reactor_height
 #undef reactor_set

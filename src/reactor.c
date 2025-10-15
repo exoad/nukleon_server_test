@@ -22,7 +22,7 @@ NkVoid nkReactorSet(NkUInt16 row, NkUInt16 col, NkTile other)
     {
         NK_PANIC("Reactor pointer not initialized!");
     }
-    if(row < 0 || col < 0 || row > _height || col > _width)
+    if(row > _height || col > _width)
     {
         NK_PANICF("The given row and column are out of bounds for %d, %d. Got: %d %d", _width, _height, row, col);
     }

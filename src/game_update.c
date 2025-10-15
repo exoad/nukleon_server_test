@@ -15,7 +15,7 @@ NkUInt64 nkGetCurrentTickIndex()
     return _gTickIndex;
 }
 
-NkVoid nkGameLoop()
+__nk_hot NkVoid nkGameLoop()
 {
     const NkFloat64 dt = 1.0 / NK_RULE_STATE_FPS_TARGET;
     NkFloat64 startTime = nkTimeNowSec();
@@ -73,7 +73,7 @@ NkVoid nkGameLoop()
     }
 }
 
-NkVoid nkUpdate(__nk_unused NkFloat64 dt)
+__nk_hot __attribute__((optimize("-ffast-math"))) NkVoid nkUpdate(__nk_unused NkFloat64 dt)
 {
     static NkInt32 _meltdownTicker = 0;
     NkBool willMeltdown = false;
