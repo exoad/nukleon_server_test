@@ -1,4 +1,4 @@
 #include "components/internal.def"
 #include "components/reactor_platings.def"
-#include "components/single_fuel_cell.def"
+#include "components/fuel_cell.def"
 #include "components/vents.def"

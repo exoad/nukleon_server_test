@@ -6,6 +6,24 @@ NkGame gNkGameInstance = { 0 };
 static NkUInt16 _height = -1;
 static NkUInt16 _width = -1;
 
+__nk_always_inline __nk_inline NkVoid _ensureReactorInitialized()
+{
+    if(!gNkGameInstance.reactor)
+    {
+        NK_PANIC("Game Instance's reactor is null!");
+        return;
+    }
+}
+
+__nk_always_inline __nk_hot __nk_inline NkVoid _checkReactorPos(NkUInt16 row, NkUInt16 col)
+{
+    if(row <= 0 || col <= 0 || row > _height || col > _width)
+    {
+        NK_PANICF("The given row and column are out of bounds for %d, %d. Got: %d %d", _width, _height, row, col);
+        return;
+    }
+}
+
 NkUInt16 nkReactorGetWidth()
 {
     return _width;
@@ -18,10 +36,7 @@ NkUInt16 nkReactorGetHeight()
 
 NkVoid nkReactorSet(NkUInt16 row, NkUInt16 col, NkTile other)
 {
-    if(!gNkGameInstance.reactor)
-    {
-        NK_PANIC("Reactor pointer not initialized!");
-    }
+    _ensureReactorInitialized();
     if(row > _height || col > _width)
     {
         NK_PANICF("The given row and column are out of bounds for %d, %d. Got: %d %d", _width, _height, row, col);
@@ -100,18 +115,10 @@ NkVoid nkUninitNkReactor()
     _width = _height = 0;
 }
 
-NkUInt16 nkReactorGetFullNeighborsOf(NkUInt16 row, NkUInt16 col)
+NkUInt16 nkReactorGetFullNeighborsOfCat(NkComponentCategory cat, NkUInt16 row, NkUInt16 col)
 {
-    if(!gNkGameInstance.reactor)
-    {
-        NK_PANIC("Reactor pointer not initialized!");
-        return 0;
-    }
-    if(row <= 0 || col <= 0 || row > _height || col > _width)
-    {
-        NK_PANICF("The given row and column are out of bounds for %d, %d. Got: %d %d", _width, _height, row, col);
-        return 0;
-    }
+    _ensureReactorInitialized();
+    _checkReactorPos(row, col);
     NkUInt16 count = 0;
     for(NkInt16 dy = -1; dy <= 1; dy++)
     {
@@ -125,8 +132,7 @@ NkUInt16 nkReactorGetFullNeighborsOf(NkUInt16 row, NkUInt16 col)
             NkInt16 nx = (NkInt16) col + dx;
             if(ny > 0 && ny <= _height && nx > 0 && nx <= _width)
             {
-                const NkTile* t = &gNkGameInstance.reactor[ny][nx];
-                if(t->id.id != NK_AIR)
+                if(gNkGameInstance.reactor[ny][nx].id.category == cat)
                 {
                     count++;
                 }
@@ -142,27 +148,18 @@ static const NkInt16 _directions[4][2] = {
     { 0, -1 }, // left
     { 0, 1 }   // right
 };
-NkUInt16 nkReactorGetOrthoNeighborsOf(NkUInt16 row, NkUInt16 col)
+NkUInt16 nkReactorGetOrthoNeighborsOf(NkComponentIdentifier id, NkUInt16 row, NkUInt16 col)
 {
-    if(!gNkGameInstance.reactor)
-    {
-        NK_PANIC("Reactor pointer not initialized!");
-        return 0;
-    }
-    if(row <= 0 || col <= 0 || row > _height || col > _width)
-    {
-        NK_PANICF("The given row and column are out of bounds for %d, %d. Got: %d %d", _width, _height, row, col);
-        return 0;
-    }
+    _ensureReactorInitialized();
+    _checkReactorPos(row, col);
     NkUInt16 count = 0;
     for(NkInt16 i = 0; i < 4; i++)
     {
-        NkInt16 ny = (NkInt16) row + _directions[i][0];
-        NkInt16 nx = (NkInt16) col + _directions[i][1];
+        const NkInt16 ny = (NkInt16) row + _directions[i][0];
+        const NkInt16 nx = (NkInt16) col + _directions[i][1];
         if(ny > 0 && ny <= _height && nx > 0 && nx <= _width)
         {
-            const NkTile* t = &gNkGameInstance.reactor[ny][nx];
-            if(t->id.id != NK_AIR)
+            if(nkComponentIdentifierEquals(&gNkGameInstance.reactor[ny][nx].id, &id))
             {
                 count++;
             }
@@ -171,8 +168,51 @@ NkUInt16 nkReactorGetOrthoNeighborsOf(NkUInt16 row, NkUInt16 col)
     return count;
 }
 
+NkUInt16 nkReactorGetOrthoNeighborsOfCat(NkComponentCategory cat, NkUInt16 row, NkUInt16 col)
+{
+    _ensureReactorInitialized();
+    NkUInt16 count = 0;
+    for(NkInt16 i = 0; i < 4; i++)
+    {
+        NkInt16 ny = (NkInt16) row + _directions[i][0];
+        NkInt16 nx = (NkInt16) col + _directions[i][1];
+        if(ny > 0 && ny <= _height && nx > 0 && nx <= _width)
+        {
+            if(gNkGameInstance.reactor[ny][nx].id.category == cat)
+            {
+                count++;
+            }
+        }
+    }
+    return count;
+}
+
+NkOrthoNeighborTiles nkReactorFindOrthoNeighborsOfCat(NkComponentCategory cat, NkUInt16 row, NkUInt16 col)
+{
+    _ensureReactorInitialized();
+    return (NkOrthoNeighborTiles) {
+        .north = row - 1 < 0 || gNkGameInstance.reactor[row - 1][col].id.category != cat
+            ? null
+            : &gNkGameInstance.reactor[row - 1][col],
+        .south = row + 1 > _height || gNkGameInstance.reactor[row + 1][col].id.category != cat
+            ? null
+            : &gNkGameInstance.reactor[row + 1][col],
+        .west = col - 1 < 0 || gNkGameInstance.reactor[row][col - 1].id.category != cat
+            ? null
+            : &gNkGameInstance.reactor[row][col - 1],
+        .east = col + 1 > _width || gNkGameInstance.reactor[row][col + 1].id.category != cat
+            ? null
+            : &gNkGameInstance.reactor[row][col + 1]
+    };
+}
+
+// soft
 NkVoid nkResetReactor()
 {
+    if(!gNkGameInstance.reactor)
+    {
+        return;
+    }
     // not necessarily required to reset
     for(NkInt16 row = 0; row < _height; row++)
     {

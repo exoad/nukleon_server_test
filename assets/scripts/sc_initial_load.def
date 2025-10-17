@@ -1,15 +1,5 @@
 
 reactor_set(
-    4,
-    3,
-    new_tile(
-        new_cmp(
-            NK_COMPONENT_SINGLE_FUEL_CELL,
-            NK_SINGLE_URANIUM_CELL
-        )
-    )
-)
-reactor_set(
     10,
     10,
     new_tile(
@@ -20,12 +10,42 @@ reactor_set(
     )
 )
 reactor_set(
-    5,
-    5,
+    11,
+    10,
     new_tile(
         new_cmp(
-            NK_COMPONENT_SINGLE_FUEL_CELL,
-            NK_SINGLE_PLUTONIUM_CELL
+            NK_COMPONENT_VENTS,
+            NK_VENT_BASIC
+        )
+    )
+)
+reactor_set(
+    12,
+    10,
+    new_tile(
+        new_cmp(
+            NK_COMPONENT_FUEL_CELL,
+            NK_FUEL_CELL_URANIUM
+        )
+    )
+)
+reactor_set(
+    12,
+    11,
+    new_tile(
+        new_cmp(
+            NK_COMPONENT_FUEL_CELL,
+            NK_FUEL_CELL_THORIUM
+        )
+    )
+)
+reactor_set(
+    13,
+    10,
+    new_tile(
+        new_cmp(
+            NK_COMPONENT_VENTS,
+            NK_VENT_BASIC
         )
     )
 )

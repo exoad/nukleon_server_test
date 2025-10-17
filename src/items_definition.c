@@ -1,7 +1,7 @@
 #include "nukleon.h"
 #include <string.h>
 
-#define NK_SINGLE_FUEL_CELL_FLAGS (NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE)
+#define NK_FUEL_CELL_FUEL_CELL_FLAGS (NK_COMPONENT_FLAG_USER_PLACEABLE | NK_COMPONENT_FLAG_USER_REMOVABLE)
 /// Used for marking things with a properly defined update function
 
 #define define_base_component(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_, custom1_, custom2_) { .name = name_, .id = { .category = cat_, .id = id_ }, .heatOutput = heat_, .powerOutput = power_,  .health = dura_, .upgradeFx = upgradeFx_, .upgradeToId = upgrade_, .basePrice = price_, .flags = flags_, .custom1 = custom1_, .custom2 = custom2_ },
@@ -27,7 +27,7 @@ static NkComponent _internalComponents[] = {
 };
 
 static NkComponent _singleFuelCellComponents[] = {
-#include "../assets/components/single_fuel_cell.def"
+#include "../assets/components/fuel_cell.def"
 };
 
 static NkComponent _reactorPlatingComponents[] = {
@@ -44,7 +44,7 @@ static NkComponent _ventComponents[] = {
 
 /*extern*/ const NkComponentCategoryTable gNkComponentCategories[NK_COMPONENT_CATEGORIES_COUNT] = {
     [NK_COMPONENT_INTERNAL] = _new_cat(_internalComponents),
-    [NK_COMPONENT_SINGLE_FUEL_CELL] = _new_cat(_singleFuelCellComponents),
+    [NK_COMPONENT_FUEL_CELL] = _new_cat(_singleFuelCellComponents),
     // not yet implemented!!
     [NK_COMPONENT_VENTS]  = _new_cat(_ventComponents),
     [NK_COMPONENT_PLATING] = _new_cat(_reactorPlatingComponents),
@@ -140,17 +140,11 @@ NkVoid nkTileToAir(NkTile* tile)
     tile->power = 0.0f;
     tile->health = -1.0f;
     tile->active = false;
+    tile->lastTickHeat = 0.0f;
+    tile->lastTickPower = 0.0f;
+    tile->tickHeat = 0.0f;
 }
 
-NkBool nkIsCellId(NkComponentIdentifier id)
-{
-    return id.category == NK_COMPONENT_SINGLE_FUEL_CELL; // add for compacted fuel cells
-}
-
-NkBool nkIsPlatingId(NkComponentIdentifier id)
-{
-    return id.category == NK_COMPONENT_PLATING;
-}
 
 NkTile newNkTileWithDefaultsFromId(NkComponentIdentifier id)
 {
@@ -164,5 +158,8 @@ NkTile newNkTileWithDefaultsFromId(NkComponentIdentifier id)
         .power = 0,
         .health = nkFindComponentById(id)->health, // start by using the health or health
         .active = true,
+        .lastTickHeat = 0.0f,
+        .lastTickPower = 0.0f,
+        .tickHeat = 0.0f
     };
 }

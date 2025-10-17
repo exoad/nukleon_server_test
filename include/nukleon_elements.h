@@ -60,10 +60,10 @@ typedef enum
 
 typedef enum
 {
-#include "../assets/components/single_fuel_cell.def"
+#include "../assets/components/fuel_cell.def"
     // -- DO NOT USE --
     // there is no definition for this item and will probably crash
-    NK_SINGLE_FUEL_CELL_COUNT // DO NOT USE FOR GAME COMPONENT REPRESENTATION
+    NK_FUEL_CELL_FUEL_CELL_COUNT // DO NOT USE FOR GAME COMPONENT REPRESENTATION
 } NkSingleFuelCellSymbol;
 #undef define_component
 #undef define_base_component
@@ -85,7 +85,7 @@ typedef enum
 typedef enum NkComponentCategory
 {
     NK_COMPONENT_INTERNAL = 0,
-    NK_COMPONENT_SINGLE_FUEL_CELL,
+    NK_COMPONENT_FUEL_CELL,
     NK_COMPONENT_VENTS,
     NK_COMPONENT_PLATING,
 
@@ -101,6 +101,12 @@ typedef struct NkComponentIdentifier
     NkComponentCategory category;
     NkUInt16 id;
 } NkComponentIdentifier;
+
+/// @brief Checks if the two component identifiers are the same
+__nk_inline NkBool nkComponentIdentifierEquals(NkComponentIdentifier* a, NkComponentIdentifier* b)
+{
+    return a->id == b->id && a->category == b->category;
+}
 
 typedef struct NkTile
 {
@@ -119,6 +125,9 @@ typedef struct NkTile
                    //   3. the power is == 0
                    //   4. this tile becomes out of bounds
                    //   5. arbitrary reason (manually or automatically set for reason)
+    NkFloat32 lastTickHeat;
+    NkFloat32 lastTickPower;
+    NkFloat32 tickHeat; // current working heat var
 } NkTile;
 
 NkTile newNkTileWithDefaultsFromId(NkComponentIdentifier id);
@@ -154,7 +163,6 @@ __nk_inline NkBool nkComponentHasFlag(const NkComponent* c, NkUInt32 flag)
     return (c->flags & flag) != 0;
 }
 
-
 #define NK_COMPONENT_LEAF -1
 
 typedef struct {
@@ -167,9 +175,25 @@ extern const NkComponent* kNkAirComponent;
 
 NkVoid nkInitItemsDefinition();
 
-NkBool nkIsCellId(NkComponentIdentifier id);
+__nk_always_inline __nk_inline NkBool nkIsCellId(NkComponentIdentifier id)
+{
+    return id.category == NK_COMPONENT_FUEL_CELL; // add for compacted fuel cells
+}
 
-NkBool nkIsPlatingId(NkComponentIdentifier id);
+__nk_always_inline __nk_inline NkBool nkIsPlatingId(NkComponentIdentifier id)
+{
+    return id.category == NK_COMPONENT_PLATING;
+}
+
+__nk_always_inline __nk_inline NkBool nkIsVentId(NkComponentIdentifier id)
+{
+    return id.category == NK_COMPONENT_VENTS;
+}
+
+__nk_always_inline __nk_inline NkBool nkIsHotTile(NkTile* tile)
+{
+    return tile->active && tile->tickHeat > 0.f;
+}
 
 NkVoid nkTileToAir(NkTile* tile);
 

@@ -1,7 +1,7 @@
 #ifndef NUKLEON_RULES_H
 #define NUKLEON_RULES_H
 
-#define NK_RULE_STATE_FPS_TARGET 5
+#define NK_RULE_STATE_FPS_TARGET 6
 #define NK_RULE_TOTAL_TICKS_FOR_MELTDOWN_WIPE 5
 #define NK_RULE_GAME_REACTOR_STARTING_MAX_HEAT 1000.0
 #define NK_RULE_GAME_REACTOR_STARTING_MAX_POWER 100.0
@@ -9,5 +9,7 @@
 #define NK_STATE_RUN_SECONDS -1.0
 // the percentage of the max heat that the total heat in the reactor must be at for the reactor to visually change colors (display visual heat)
 #define NK_RULE_GAME_REACTOR_DISPLAY_VISUAL_HEAT_THRESHOLD 0.01488f
+#define NK_RULE_GAME_FUEL_CELL_ADJACENCY_POWER_BONUS 0.025f
+#define NK_RULE_GAME_FUEL_CELL_ADJACENCY_HEAT_BONUS 0.025f
 
 #endif

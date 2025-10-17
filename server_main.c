@@ -8,11 +8,11 @@ NkVoid testBuildRun()
 {
 #ifdef NK_TEST_BUILD
     {
-        NkTile tile = (NkTile) { .id = (NkComponentIdentifier) { NK_COMPONENT_SINGLE_FUEL_CELL, NK_SINGLE_URANIUM_CELL }, .active = true };
+        NkTile tile = (NkTile) { .id = (NkComponentIdentifier) { NK_COMPONENT_FUEL_CELL, NK_FUEL_CELL_URANIUM }, .active = true };
         nkUpgradeCellComponent(&tile);
-        NK_ASSERT(tile.id.id == NK_SINGLE_THORIUM_CELL , "Expected Thorium Cell");
+        NK_ASSERT(tile.id.id == NK_FUEL_CELL_THORIUM, "Expected Thorium Cell");
         nkUpgradeCellComponent(&tile);
-        NK_ASSERT(tile.id.id == NK_SINGLE_PLUTONIUM_CELL, "Expected Plutonium Cell");
+        NK_ASSERT(tile.id.id == NK_FUEL_CELL_PLUTONIUM, "Expected Plutonium Cell");
     }
 #endif
 }

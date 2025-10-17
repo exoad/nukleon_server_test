@@ -85,51 +85,120 @@ __nk_hot __attribute__((optimize("-ffast-math"))) NkVoid nkUpdate(__nk_unused Nk
     // the way to modify global mutable state seems very jank and very scary but this works
     // just recalculating everytime
     NkInt64 platingAddHeatCapacity = NK_RULE_GAME_REACTOR_STARTING_MAX_HEAT;
-    NkFloat64 heatAdd = 0.0f;
+    // NkFloat64 heatAdd = 0.0f;
     NkFloat64 powerAdd = 0.0f;
+    // == inference pass ==
+    // see how much power and heat each component in the reactor is going to produce this tick
+    //
+    // note: power is added globally while heat is computed and stored locally until later
     for(NkInt16 row = 0; row < nkReactorGetHeight(); row++)
     {
         for(NkInt16 col = 0; col < nkReactorGetWidth(); col++)
         {
             NkTile* tile = &gNkGameInstance.reactor[row][col];
+            tile->tickHeat = 0.0f;
             if(!tile->active)
             {
-                continue; // dont auto flip non active cells for now
+                continue;
             }
             if(nkIsCellId(tile->id))
             {
-                NkComponent* component = nkFindComponentById(tile->id);
-                heatAdd += component->heatOutput;
-                powerAdd += component->powerOutput;
-                tile->health -= 1;
-                if(tile->health <= 0)
+                if(--(tile->health) <= 0)
                 {
-                    tile->health = 0;
                     nkTileToAir(tile);
+                    continue;
                 }
+                NkComponent* component = nkFindComponentById(tile->id);
+                NkUInt16 adj = nkReactorGetOrthoNeighborsOfCat(NK_COMPONENT_FUEL_CELL, row, col);
+                tile->tickHeat = component->heatOutput * ((adj * NK_RULE_GAME_FUEL_CELL_ADJACENCY_HEAT_BONUS) + 1);
+                tile->lastTickPower = component->powerOutput * ((adj * NK_RULE_GAME_FUEL_CELL_ADJACENCY_POWER_BONUS) + 1);
+                powerAdd += tile->lastTickPower;
             }
             else if(nkIsPlatingId(tile->id))
             {
                 NkComponent* component = nkFindComponentById(tile->id);
                 platingAddHeatCapacity += component->custom2;
             }
-            else
+            // else if(nkIsVentId(tile->id))
+            // {
+            //     NkComponent* component = nkFindComponentById(tile->id);
+            //     // vents provide the opposite of fuel cells when they are clustered or grouped together
+            //     // the more vents that are nearby (within 1 cell), the last effective that cell becomes
+            //     // we will take the "full" neighbors in to consideration and not just ortho neighbors
+            //     NkUInt16 ventNeighbors = nkReactorGetFullNeighborsOfCat(NK_COMPONENT_VENTS, row, col);
+            //     tile->lastTickHeat = component->heatOutput * (1 - (ventNeighbors * 0.05f)); // decrease the efficiency of nearby cells by 5%
+            //     heatAdd += tile->lastTickHeat; // we add anyways since it is already a negative value from the last tick (negative = heat removed)
+
+            // }
+            // else
+            // {
+            //     // unknown component, do nothing
+            // }
+        }
+    }
+    // == distribution pass ==
+    // move heat to adjacent containment tiles
+    for(NkInt16 row = 0; row < nkReactorGetHeight(); row++)
+    {
+        for(NkInt16 col = 0; col < nkReactorGetWidth(); col++)
+        {
+            NkTile* tile = &gNkGameInstance.reactor[row][col];
+            if(nkIsHotTile(tile) && nkIsCellId(tile->id))
             {
-                // unknown component, do nothing
+                NkOrthoNeighborTiles ventAdj = nkReactorFindOrthoNeighborsOfCat(NK_COMPONENT_VENTS, row, col);
+                NkInt32 count = (ventAdj.east != null ? 1 : 0) + (ventAdj.north != null ? 1 : 0) + (ventAdj.south != null ? 1 : 0) + (ventAdj.west != null ? 1 : 0);
+                if(count > 0)
+                {
+                    NkFloat32 heatPerVent = tile->tickHeat / count;
+                    if(ventAdj.east != null)
+                    {
+                        ventAdj.east->tickHeat = heatPerVent;
+                    }
+                    if(ventAdj.west != null)
+                    {
+                        ventAdj.west->tickHeat = heatPerVent;
+                    }
+                    if(ventAdj.north != null)
+                    {
+                        ventAdj.north->tickHeat = heatPerVent;
+                    }
+                    if(ventAdj.south != null)
+                    {
+                        ventAdj.south->tickHeat = heatPerVent;
+                    }
+                    tile->tickHeat = 0;
+                }
             }
         }
     }
-    gNkGameInstance.totalHeat = nkClampFloat32((gNkGameInstance.totalHeat + heatAdd) - gNkGameInstance.naturalHeatRemoval, FLT_MAX, 0);
+    // == calculation pass ==
+    // apply the heat characteristics per cells and vent
+    NkFloat32 heatRemoved = 0.0f;
+    NkFloat32 heatGenerated = 0.0f;
+    for(NkInt16 row = 0; row < nkReactorGetHeight(); row++)
+    {
+        for(NkInt16 col = 0; col < nkReactorGetWidth(); col++)
+        {
+            NkTile* tile = &gNkGameInstance.reactor[row][col];
+            if (!tile->active)
+            {
+                continue;
+            }
+            if (nkIsCellId(tile->id))
+            {
+                heatGenerated += tile->tickHeat;
+                tile->lastTickHeat = tile->tickHeat;
+            }
+            else if (nkIsVentId(tile->id))
+            {
+                heatRemoved += tile->tickHeat;
+                tile->lastTickHeat = -tile->tickHeat;
+            }
+        }
+    }
+    gNkGameInstance.totalHeat = nkClampFloat32(gNkGameInstance.totalHeat + (heatGenerated - heatRemoved) - gNkGameInstance.naturalHeatRemoval, FLT_MAX, 0);
     gNkGameInstance.maxHeat = platingAddHeatCapacity;
-    // clamp the produced heat
-    if(gNkGameInstance.totalPower + powerAdd >= gNkGameInstance.maxPower)
-    {
-        gNkGameInstance.totalPower = gNkGameInstance.maxPower;
-    }
-    else
-    {
-        gNkGameInstance.totalPower += powerAdd;
-    }
+    gNkGameInstance.totalPower = nkClampFloat32(gNkGameInstance.totalPower + powerAdd, gNkGameInstance.maxPower, 0);
     willMeltdown = gNkGameInstance.totalHeat > gNkGameInstance.maxHeat;
     _gLastTick.meltdownTicker = _meltdownTicker;
     if(willMeltdown)

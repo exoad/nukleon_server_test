@@ -2,17 +2,16 @@ define_base_component(
     nkparam_id 0,
     nkparam_category NK_COMPONENT_VENTS,
     nkparam_symbol NK_VENT_BASIC,
-    nkparam_name "Basic Vent",
-    nkparam_base_heat 5,
-    nkparam_base_power 1,
+    nkparam_name "Convective Vent",
+    nkparam_base_heat -5.0f,
+    nkparam_base_power 0,
     nkparam_health 200,
-    nkparam_base_price 20.0f,
+    nkparam_base_price 250.0f,
     nkparam_flags 0,
-    nkparam_upgrade_to 0,
+    nkparam_upgrade_to NK_COMPONENT_LEAF,
     nkparam_upgrade_fx null,
     nkparam_custom1 0,
     nkparam_custom2 0.0f
-
 )
 // mod_component(
 // )

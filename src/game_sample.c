@@ -23,6 +23,17 @@ NkPoint2D gNkSMouseLocation = { 0, 0 };
 
 __nk_hot NkVoid nkSample(__nk_unused NkFloat64 dt)
 {
+    static NkUInt64 frameCount = 0;
+    static NkFloat64 elapsedTime = 0.0;
+    static NkInt32 fps = 0;
+    frameCount++;
+    elapsedTime += dt;
+    if(elapsedTime >= 1.0)
+    {
+        fps = frameCount;
+        frameCount = 0;
+        elapsedTime -= 1.0;
+    }
     if(!tigrClosed(_window))
     {
         tigrClear(_window, COLOR_BLACK);
@@ -62,13 +73,17 @@ __nk_hot NkVoid nkSample(__nk_unused NkFloat64 dt)
                         tigrLine(_window, ix + CELL_SIZE, iy, ix, iy + CELL_SIZE, COLOR_RED);
                     }
                 }
-                else if(component->id.category == NK_COMPONENT_SINGLE_FUEL_CELL)
+                else if(component->id.category == NK_COMPONENT_FUEL_CELL)
                 {
                     tigrFillRect(_window, ix, iy, CELL_SIZE, CELL_SIZE, COLOR_YELLOW);
                 }
                 else if(component->id.category == NK_COMPONENT_PLATING)
                 {
                     tigrFillRect(_window, ix, iy, CELL_SIZE, CELL_SIZE, COLOR_GREEN);
+                }
+                else if(component->id.category == NK_COMPONENT_VENTS)
+                {
+                    tigrFillRect(_window, ix, iy, CELL_SIZE, CELL_SIZE, COLOR_BLUE);
                 }
                 else
                 {
@@ -89,14 +104,15 @@ __nk_hot NkVoid nkSample(__nk_unused NkFloat64 dt)
         if(showPopup && popupTile && popupComponent)
         {
 #define POPUP_PADDING 2
-            tigrFillRect(_window, popupX, popupY, 120, 70, COLOR_BLACK);
-            tigrRect(_window, popupX, popupY, 120, 70, COLOR_WHITE);
+            tigrFillRect(_window, popupX, popupY, 160, 90, COLOR_BLACK);
+            tigrRect(_window, popupX, popupY, 160, 90, COLOR_WHITE);
             tigrPrint(_window, tfont, popupX + POPUP_PADDING, popupY + POPUP_PADDING, COLOR_RED, "%s", popupComponent->name);
             tigrPrint(_window, tfont, popupX + POPUP_PADDING, popupY + 10 + POPUP_PADDING, COLOR_WHITE, "ID: %d,%d", popupTile->id.category, popupTile->id.id);
             tigrPrint(_window, tfont, popupX + POPUP_PADDING, popupY + 20 + POPUP_PADDING, COLOR_WHITE, "Tier: %d", popupTile->tier);
             tigrPrint(_window, tfont, popupX + POPUP_PADDING, popupY + 30 + POPUP_PADDING, COLOR_WHITE, "HP: %d (%d)", popupTile->health, popupComponent->health);
             tigrPrint(_window, tfont, popupX + POPUP_PADDING, popupY + 40 + POPUP_PADDING, COLOR_WHITE, "Pwr: %5.2f", popupComponent->powerOutput);
             tigrPrint(_window, tfont, popupX + POPUP_PADDING, popupY + 50 + POPUP_PADDING, COLOR_WHITE, "Heat: %5.2f", popupComponent->heatOutput);
+            tigrPrint(_window, tfont, popupX + POPUP_PADDING, popupY + 60 + POPUP_PADDING, COLOR_WHITE, "Last Tick H/P: %.2f/%.2f", popupTile->lastTickHeat, popupTile->lastTickPower);
         }
         // debug information
         tigrPrint(_window, tfont, 10, 10, COLOR_WHITE, "Delta Time: %5.4f", dt);
@@ -109,6 +125,7 @@ __nk_hot NkVoid nkSample(__nk_unused NkFloat64 dt)
         tigrPrint(_window, tfont, 10, 80, COLOR_WHITE, "Last Tick Power: %5.4f", nkGetLastGameTick()->producedPower);
         tigrPrint(_window, tfont, 10, 90, COLOR_WHITE, "Meltdown Ticker: %d", nkGetLastGameTick()->meltdownTicker);
         tigrPrint(_window, tfont, 10, 100, COLOR_CYAN, "Self Dissipation Rate: %5.4f", gNkGameInstance.naturalHeatRemoval);
+        tigrPrint(_window, tfont, 10, 110, COLOR_WHITE, "FPS: %d", fps);
         // -- END
         tigrUpdate(_window);
     }
