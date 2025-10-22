@@ -26,8 +26,8 @@ typedef enum
 #define nkparam_custom1
 #define nkparam_custom2
 
-NkVoid nkUpgradeCellComponent(NkTile* tile);
-NkVoid nkNoUpGradeFx(NkTile* tile);
+Void nkUpgradeCellComponent(NkTile* tile);
+Void nkNoUpGradeFx(NkTile* tile);
 
 // TODO: introduce only 1 or 2 macros instead of the previous four. implicit/unused fields should not be hidden.
 #define define_base_component(id_, cat_, sym_, name_, heat_, power_, dura_, price_, flags_, upgrade_, upgradeFx_, custom1_, custom2_) sym_,
@@ -94,16 +94,16 @@ typedef enum NkComponentCategory
     NK_COMPONENT_CATEGORIES_COUNT // DO NOT USE FOR GAME COMPONENT REPRESENTATION
 } NkComponentCategory;
 
-extern const NkInt8* const gNkComponentCategoryNamesTable[NK_COMPONENT_CATEGORIES_COUNT];
+extern const Int8* const gNkComponentCategoryNamesTable[NK_COMPONENT_CATEGORIES_COUNT];
 
 typedef struct NkComponentIdentifier
 {
     NkComponentCategory category;
-    NkUInt16 id;
+    UInt16 id;
 } NkComponentIdentifier;
 
 /// @brief Checks if the two component identifiers are the same
-__nk_inline NkBool nkComponentIdentifierEquals(NkComponentIdentifier* a, NkComponentIdentifier* b)
+__nk_inline Bool nkComponentIdentifierEquals(NkComponentIdentifier* a, NkComponentIdentifier* b)
 {
     return a->id == b->id && a->category == b->category;
 }
@@ -111,54 +111,54 @@ __nk_inline NkBool nkComponentIdentifierEquals(NkComponentIdentifier* a, NkCompo
 typedef struct NkTile
 {
     NkComponentIdentifier id;
-    NkUInt16 tier;
-    NkFloat32 generatedHeat; // this tick
-    NkFloat32 generatedPower; // this tick
-    NkFloat32 containedHeat; // or stored heat
-    NkFloat32 maxHeat; // capacity (max heat that can be stored)
-    NkFloat32 power;
-    NkInt32 health;
-    NkBool active; // whether something is working (that is actually counted in the game logic)
+    UInt16 tier;
+    Float32 generatedHeat; // this tick
+    Float32 generatedPower; // this tick
+    Float32 containedHeat; // or stored heat
+    Float32 maxHeat; // capacity (max heat that can be stored)
+    Float32 power;
+    Int32 health;
+    Bool active; // whether something is working (that is actually counted in the game logic)
                    // activity of a tile is attributed to the followign parameters:
                    //   1. the health is <= 0
                    //   2. the containedHeat > maxHeat
                    //   3. the power is == 0
                    //   4. this tile becomes out of bounds
                    //   5. arbitrary reason (manually or automatically set for reason)
-    NkFloat32 lastTickHeat;
-    NkFloat32 lastTickPower;
-    NkFloat32 tickHeat; // current working heat var
+    Float32 lastTickHeat;
+    Float32 lastTickPower;
+    Float32 tickHeat; // current working heat var
 } NkTile;
 
 NkTile newNkTileWithDefaultsFromId(NkComponentIdentifier id);
 
 typedef struct
 {
-    NkString name;
+    CharSeq name;
     NkComponentIdentifier id;
-    NkFloat32 heatOutput;
-    NkFloat32 powerOutput;
-    NkInt32 health;
-    NkVoid (*upgradeFx)(NkTile*);
-    NkInt32 upgradeToId;
-    NkFloat32 basePrice;
-    NkInt32 flags;
+    Float32 heatOutput;
+    Float32 powerOutput;
+    Int32 health;
+    Void (*upgradeFx)(NkTile*);
+    Int32 upgradeToId;
+    Float32 basePrice;
+    Int32 flags;
     // flexible fields; define accordingly (see each component's definition page)
-    NkInt64 custom1;
-    NkFloat32 custom2;
+    Int64 custom1;
+    Float32 custom2;
 } NkComponent;
 
-__nk_inline void nkComponentSetFlag(NkComponent* c, NkUInt32 flag)
+__nk_inline void nkComponentSetFlag(NkComponent* c, UInt32 flag)
 {
     c->flags |= flag;
 }
 
-__nk_inline void nkComponentClearFlag(NkComponent* c, NkUInt32 flag)
+__nk_inline void nkComponentClearFlag(NkComponent* c, UInt32 flag)
 {
     c->flags &= ~flag;
 }
 
-__nk_inline NkBool nkComponentHasFlag(const NkComponent* c, NkUInt32 flag)
+__nk_inline Bool nkComponentHasFlag(const NkComponent* c, UInt32 flag)
 {
     return (c->flags & flag) != 0;
 }
@@ -167,35 +167,35 @@ __nk_inline NkBool nkComponentHasFlag(const NkComponent* c, NkUInt32 flag)
 
 typedef struct {
     NkComponent* array;
-    NkInt32 count;
+    Int32 count;
 } NkComponentCategoryTable;
 
 extern const NkComponentCategoryTable gNkComponentCategories[NK_COMPONENT_CATEGORIES_COUNT];
 extern const NkComponent* kNkAirComponent;
 
-NkVoid nkInitItemsDefinition();
+Void nkInitItemsDefinition();
 
-__nk_always_inline __nk_inline NkBool nkIsCellId(NkComponentIdentifier id)
+__nk_always_inline __nk_inline Bool nkIsCellId(NkComponentIdentifier id)
 {
     return id.category == NK_COMPONENT_FUEL_CELL; // add for compacted fuel cells
 }
 
-__nk_always_inline __nk_inline NkBool nkIsPlatingId(NkComponentIdentifier id)
+__nk_always_inline __nk_inline Bool nkIsPlatingId(NkComponentIdentifier id)
 {
     return id.category == NK_COMPONENT_PLATING;
 }
 
-__nk_always_inline __nk_inline NkBool nkIsVentId(NkComponentIdentifier id)
+__nk_always_inline __nk_inline Bool nkIsVentId(NkComponentIdentifier id)
 {
     return id.category == NK_COMPONENT_VENTS;
 }
 
-__nk_always_inline __nk_inline NkBool nkIsHotTile(NkTile* tile)
+__nk_always_inline __nk_inline Bool nkIsHotTile(NkTile* tile)
 {
     return tile->active && tile->tickHeat > 0.f;
 }
 
-NkVoid nkTileToAir(NkTile* tile);
+Void nkTileToAir(NkTile* tile);
 
 NkComponent* nkFindComponentById(NkComponentIdentifier id);
 

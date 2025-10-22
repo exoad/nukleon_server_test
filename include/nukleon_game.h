@@ -9,38 +9,38 @@
 typedef struct
 {
     NkTile** reactor;
-    NkFloat64 totalPower;
-    NkFloat64 maxPower;
-    NkFloat64 totalHeat;
-    NkFloat64 maxHeat;
-    NkUInt16 rows;
-    NkUInt16 cols;
-    NkUInt16 capacityRows;
-    NkUInt16 capacityCols;
-    NkUInt64 tickIndex;
-    NkUInt64 credits;
-    NkFloat32 naturalHeatRemoval; // per tick how much heat to remove
+    Float64 totalPower;
+    Float64 maxPower;
+    Float64 totalHeat;
+    Float64 maxHeat;
+    UInt16 rows;
+    UInt16 cols;
+    UInt16 capacityRows;
+    UInt16 capacityCols;
+    UInt64 tickIndex;
+    UInt64 credits;
+    Float32 naturalHeatRemoval; // per tick how much heat to remove
 } NkGame;
 
 extern NkGame gNkGameInstance;
 
-NkUInt16 nkReactorGetWidth();
+UInt16 nkReactorGetWidth();
 
 /// @brief For meltdown purposes
-NkVoid nkResetReactor();
+Void nkResetReactor();
 
-NkUInt16 nkReactorGetHeight();
+UInt16 nkReactorGetHeight();
 
-NkVoid nkInitNkReactor(NkUInt16 width, NkUInt16 height);
+Void nkInitNkReactor(UInt16 width, UInt16 height);
 
 /// @brief Get the number of all (including diagonal) neighbors of a cell that are of the same category
-NkUInt16 nkReactorGetFullNeighborsOfCat(NkComponentCategory cat, NkUInt16 row, NkUInt16 col);
+UInt16 nkReactorGetFullNeighborsOfCat(NkComponentCategory cat, UInt16 row, UInt16 col);
 
 /// @brief Get the number of orthogonal (up, down, left, right) neighbors of a cell that are of exactly type [id]
-NkUInt16 nkReactorGetOrthoNeighborsOf(NkComponentIdentifier id, NkUInt16 row, NkUInt16 col);
+UInt16 nkReactorGetOrthoNeighborsOf(NkComponentIdentifier id, UInt16 row, UInt16 col);
 
 /// @brief Returns the number of orthogonal neighbors that are of type [cat]
-NkUInt16 nkReactorGetOrthoNeighborsOfCat(NkComponentCategory cat, NkUInt16 row, NkUInt16 col);
+UInt16 nkReactorGetOrthoNeighborsOfCat(NkComponentCategory cat, UInt16 row, UInt16 col);
 
 typedef struct
 {
@@ -51,15 +51,15 @@ typedef struct
 } NkOrthoNeighborTiles;
 
 /// @brief Returns a struct containing the pointers to the tiles themselves.
-NkOrthoNeighborTiles nkReactorFindOrthoNeighborsOfCat(NkComponentCategory cat, NkUInt16 row, NkUInt16 col);
+NkOrthoNeighborTiles nkReactorFindOrthoNeighborsOfCat(NkComponentCategory cat, UInt16 row, UInt16 col);
 
 /// @brief Free all allocated memory for the reactor grid
-NkVoid nkUninitNkReactor();
+Void nkUninitNkReactor();
 
 /// @brief Checks if the locations [row] and [col] are within the bounds.
-NkBool nkIsValidLocInReactor(NkUInt16 row, NkUInt16 col);
+Bool nkIsValidLocInReactor(UInt16 row, UInt16 col);
 
 /// @brief Copies the data of the given tile into the reactor grid at the given row and column
-NkVoid nkReactorSet(NkUInt16 row, NkUInt16 col, NkTile other);
+Void nkReactorSet(UInt16 row, UInt16 col, NkTile other);
 
 #endif

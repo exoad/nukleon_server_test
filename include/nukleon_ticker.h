@@ -3,28 +3,28 @@
 
 #include "nukleon_types.h"
 
-NkVoid nkInitTime();
+Void nkInitTime();
 
-NkFloat64 nkTimeNowSec();
+Float64 nkTimeNowSec();
 
-NkVoid nkSleepMs(NkInt32 ms);
+Void nkSleepMs(Int32 ms);
 
-NkVoid nkYield();
+Void nkYield();
 
-NkVoid nkGameLoop();
+Void nkGameLoop();
 
-NkUInt64 nkGetCurrentTickIndex();
+UInt64 nkGetCurrentTickIndex();
 
-NkVoid nkUpdate(NkFloat64 dt);
+Void nkUpdate(Float64 dt);
 
 typedef struct {
     // -- tick life cycle information
-    NkUInt64 tickIndex;
-    NkUInt32 tickDurationMs;
+    UInt64 tickIndex;
+    UInt32 tickDurationMs;
     // -- actual game stats
-    NkFloat32 producedHeat;
-    NkFloat32 producedPower;
-    NkInt32 meltdownTicker;
+    Float32 producedHeat;
+    Float32 producedPower;
+    Int32 meltdownTicker;
 } NkGameTick;
 
 NkGameTick* nkGetLastGameTick();

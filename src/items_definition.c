@@ -39,8 +39,8 @@ static NkComponent _ventComponents[] = {
 };
 
 /// Master lookup table that defines and allocates all necessary resources for each category of component
-#define _new_cat(cat) { .array = cat, .count = (NkInt32) (sizeof cat / sizeof *cat) }
-#define _todo_cat() { .array = null, .count = (NkInt32) 0 }
+#define _new_cat(cat) { .array = cat, .count = (Int32) (sizeof cat / sizeof *cat) }
+#define _todo_cat() { .array = null, .count = (Int32) 0 }
 
 /*extern*/ const NkComponentCategoryTable gNkComponentCategories[NK_COMPONENT_CATEGORIES_COUNT] = {
     [NK_COMPONENT_INTERNAL] = _new_cat(_internalComponents),
@@ -68,27 +68,27 @@ static NkComponent _ventComponents[] = {
 #undef define_component
 #undef define_base_component
 
-/*extern*/ const NkInt8* const gNkComponentCategoryNamesTable[NK_COMPONENT_CATEGORIES_COUNT] = {
+/*extern*/ const Int8* const gNkComponentCategoryNamesTable[NK_COMPONENT_CATEGORIES_COUNT] = {
 #include "../assets/strings/component_categories.def"
 };
 
 /*extern-late*/ const NkComponent* kNkAirComponent;
 
-NkVoid nkInitItemsDefinition()
+Void nkInitItemsDefinition()
 {
     kNkAirComponent = &_internalComponents[0]; // we can gurantee for internal items
 }
 
 NkComponent* nkFindComponentById(NkComponentIdentifier id)
 {
-    if((NkUInt32) id.category >= (NkUInt32) NK_COMPONENT_CATEGORIES_COUNT || id.id > gNkComponentCategories[id.category].count)
+    if((UInt32) id.category >= (UInt32) NK_COMPONENT_CATEGORIES_COUNT || id.id > gNkComponentCategories[id.category].count)
     {
         return null;
     }
     return &gNkComponentCategories[id.category].array[id.id];
 }
 
-NkVoid nkUpgradeCellComponent(NkTile* tile)
+Void nkUpgradeCellComponent(NkTile* tile)
 {
     if(!tile)
     {
@@ -111,7 +111,7 @@ NkVoid nkUpgradeCellComponent(NkTile* tile)
     tile->id = upgraded->id;
     tile->containedHeat = upgraded->heatOutput;
     tile->power = upgraded->powerOutput;
-    tile->health = (NkFloat32)upgraded->health;
+    tile->health = (Float32)upgraded->health;
     tile->tier += 1;
     // no auto chain upgrades for now
     // if(upgraded->upgradeFx)
@@ -120,12 +120,12 @@ NkVoid nkUpgradeCellComponent(NkTile* tile)
     // }
 }
 
-NkVoid nkNoUpGradeFx(NkTile* tile)
+Void nkNoUpGradeFx(NkTile* tile)
 {
-    (NkVoid) tile;
+    (Void) tile;
 }
 
-NkVoid nkTileToAir(NkTile* tile)
+Void nkTileToAir(NkTile* tile)
 {
     if(!tile)
     {

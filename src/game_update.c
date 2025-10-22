@@ -3,80 +3,156 @@
 
 static NkGameTick _gLastTick = { 0 };
 
-NkGameTick* nkGetLastGameTick()
+__nk_pure NkGameTick* nkGetLastGameTick()
 {
     return &_gLastTick;
 }
 
-static NkUInt64 _gTickIndex = 0;
+static UInt64 _gTickIndex = 0;
 
-NkUInt64 nkGetCurrentTickIndex()
+__nk_pure UInt64 nkGetCurrentTickIndex()
 {
     return _gTickIndex;
 }
 
-__nk_hot NkVoid nkGameLoop()
+
+__nk_hot Void nkGameLoop()
 {
-    const NkFloat64 dt = 1.0 / NK_RULE_STATE_FPS_TARGET;
-    NkFloat64 startTime = nkTimeNowSec();
-    NkFloat64 nextTime = startTime;
-    NkFloat64 endTime = NK_STATE_RUN_SECONDS > 0 ? startTime + NK_STATE_RUN_SECONDS : -1.0;
+    NK_ASSERT(NK_RULE_UPDATE_TPS_TARGET > 0, "TPS must be greater than 0");
+    NK_ASSERT(NK_RULE_SAMPLE_FPS_TARGET > 0, "FPS must be greater than 0");
+    static const Float64 updateDT = 1.0 / NK_RULE_UPDATE_TPS_TARGET;
+    static const Float64 sampleDT = 1.0 / NK_RULE_SAMPLE_FPS_TARGET;
+    Float64 accumulator = 0.0;
+    Float64 lastTime = nkTimeNowSec();
+    Float64 endTime = NK_STATE_RUN_SECONDS > 0 ? lastTime + NK_STATE_RUN_SECONDS : -1.0;
     while(true)
     {
-        NkFloat64 time = nkTimeNowSec();
-        if(endTime > 0.0 && time >= endTime)
+        Float64 currentTime = nkTimeNowSec();
+        Float64 deltaTime = currentTime - lastTime;
+        lastTime = currentTime;
+        if(endTime > 0.0 && currentTime >= endTime)
         {
             break;
         }
-        if(time >= nextTime)
+        accumulator += deltaTime;
+        if (accumulator > updateDT * 10.0)
         {
-            NkInt32 safety = 0;
-            do // catching up! falling behind is scary D:
-            {
-                nkUpdate(dt);
+            accumulator = updateDT * 10.0;
+        }
+        while (accumulator >= updateDT)
+        {
+            nkUpdate(updateDT);
+
+            _gLastTick = (NkGameTick) {
+                .tickIndex = _gTickIndex,
+                .tickDurationMs = (UInt32) (updateDT * 1000.0),
+                .producedHeat = (Float32) gNkGameInstance.totalHeat,
+                .producedPower = (Float32) gNkGameInstance.totalPower,
+            };
+            _gTickIndex++;
+
+            accumulator -= updateDT;
+        }
 #ifdef NK_ENABLE_UI_SAMPLER
-                nkSample(dt);
+        nkSample(deltaTime);
 #endif
-                _gLastTick = (NkGameTick) {
-                    .tickIndex = _gTickIndex,
-                    .tickDurationMs = (NkUInt32) (dt * 1000.0),
-                    .producedHeat = (NkFloat32) gNkGameInstance.totalHeat,
-                    .producedPower = (NkFloat32) gNkGameInstance.totalPower,
-                };
-                _gTickIndex++;
-                nextTime = startTime + _gTickIndex * dt;
-                if(++safety > 10000) // make sure it isnt catching up to an infinite bound
-                {
-                    NK_PRINTLN("WARNING: Runaway catch up, stopping... (behind by: %f)", time - nextTime);
-                    _gTickIndex = (NkUInt64) ((time - startTime) / dt) + 1;
-                    nextTime = time + dt;
-                    break;
-                }
-            } while(time >= nextTime);
+        Float64 targetNextFrameTime = currentTime + sampleDT;
+        Float64 remainingTime = targetNextFrameTime - nkTimeNowSec();
+        if (remainingTime > 0.0)
+        {
+            Float64 sleepTime = (remainingTime - 0.001) * 1000.0;
+            if(sleepTime > 0.5)
+            {
+                nkSleepMs(sleepTime);
+            }
+            while (nkTimeNowSec() < targetNextFrameTime)
+            {
+                nkYield();
+            }
         }
         else
         {
-            NkFloat64 remaining = nextTime - time;
-            if(remaining > 0)
-            {
-                NkFloat64 sleepTime = (remaining - 0.001) * 1000.0;
-                if(sleepTime > 0.5) // make sure we dont sleep for when the time is too small
-                {
-                    nkSleepMs(sleepTime);
-                }
-                else
-                {
-                    nkYield();
-                }
-            }
+            nkYield();
         }
     }
 }
 
-__nk_hot __attribute__((optimize("-ffast-math"))) NkVoid nkUpdate(__nk_unused NkFloat64 dt)
+// __nk_hot Void nkGameLoop()
+// {
+//     NK_ASSERT(NK_RULE_UPDATE_TPS_TARGET > 0, "TPS must be greater than 0");
+//     NK_ASSERT(NK_RULE_SAMPLE_FPS_TARGET > 0, "FPS must be greater than 0");
+//     NK_ASSERT(NK_RULE_UPDATE_TPS_TARGET <= NK_RULE_SAMPLE_FPS_TARGET, "TPS Must always be less than or equal to the FPS");
+//     static const Float64 updateRatio = NK_RULE_SAMPLE_FPS_TARGET / NK_RULNK_RULE_UPDATE_TPS_TARGETE_UPDATE_TPS_TARGET;
+//     static const Float64 sampleDT = 1.0 / NK_RULE_SAMPLE_FPS_TARGET;
+//     static const Float64 updateDT = 1.0 / NK_RULE_UPDATE_TPS_TARGET;
+//     Int16 fpsTickCounter = 0;
+//     Float64 startTime = nkTimeNowSec();
+//     Float64 accumulator = 0.0;
+//     Float64 nextTime = startTime;
+//     Float64 endTime = NK_STATE_RUN_SECONDS > 0 ? startTime + NK_STATE_RUN_SECONDS : -1.0;
+//     while(true)
+//     {
+//         Float64 time = nkTimeNowSec();
+//         if(endTime > 0.0 && time >= endTime)
+//         {
+//             break;
+//         }
+//         if(time >= nextTime)
+//         {
+//             Int32 safety = 0;
+//             do // catching up! falling behind is scary D:
+//             {
+//                 if(fpsTickCounter >= updateRatio)
+//                 {
+//                     nkUpdate(updateDT);
+//                     _gLastTick = (NkGameTick) {
+//                         .tickIndex = _gTickIndex,
+//                         .tickDurationMs = (UInt32) (updateDT * 1000.0),
+//                         .producedHeat = (Float32) gNkGameInstance.totalHeat,
+//                         .producedPower = (Float32) gNkGameInstance.totalPower,
+//                     };
+//                     _gTickIndex++;
+//                     fpsTickCounter = 0;
+//                 }
+//                 fpsTickCounter++;
+// #ifdef NK_ENABLE_UI_SAMPLER
+//                 nkSample(sampleDT);
+// #endif
+//                 nextTime = startTime + (_gTickIndex * updateRatio + fpsTickCounter) * sampleDT;
+//                 if(++safety > 1000) // lower catchup bound for graphics update
+//                 {
+//                     NK_PRINTLN("WARNING: Runaway (Sample) catch up, stopping... (behind by: %f)", time - nextTime);
+//                     // _gTickIndex = (UInt64) ((time - startTime) / sampleDT) + 1;
+//                     nextTime = time + sampleDT;
+//                     _gTickIndex = (UInt64) ((nextTime - startTime) / updateRatio / sampleDT);
+//                     fpsTickCounter = 1;
+//                     break;
+//                 }
+//             } while(time >= nextTime);
+//         }
+//         else
+//         {
+//             Float64 remaining = nextTime - time;
+//             if(remaining > 0)
+//             {
+//                 Float64 sleepTime = (remaining - 0.001) * 1000.0;
+//                 if(sleepTime > 0.5) // make sure we dont sleep for when the time is too small
+//                 {
+//                     nkSleepMs(sleepTime);
+//                 }
+//                 else
+//                 {
+//                     nkYield();
+//                 }
+//             }
+//         }
+//     }
+// }
+
+__nk_hot __attribute__((optimize("-ffast-math"))) Void nkUpdate(__nk_unused Float64 sampleDT)
 {
-    static NkInt32 _meltdownTicker = 0;
-    NkBool willMeltdown = false;
+    static Int32 _meltdownTicker = 0;
+    Bool willMeltdown = false;
     if(_meltdownTicker == NK_RULE_TOTAL_TICKS_FOR_MELTDOWN_WIPE + 1)
     {
         nkResetReactor();
@@ -84,16 +160,20 @@ __nk_hot __attribute__((optimize("-ffast-math"))) NkVoid nkUpdate(__nk_unused Nk
     }
     // the way to modify global mutable state seems very jank and very scary but this works
     // just recalculating everytime
-    NkInt64 platingAddHeatCapacity = NK_RULE_GAME_REACTOR_STARTING_MAX_HEAT;
-    // NkFloat64 heatAdd = 0.0f;
-    NkFloat64 powerAdd = 0.0f;
+    Int64 platingAddHeatCapacity = NK_RULE_GAME_REACTOR_STARTING_MAX_HEAT;
+    // Float64 heatAdd = 0.0f;
+    Float64 powerAdd = 0.0f;
     // == inference pass ==
     // see how much power and heat each component in the reactor is going to produce this tick
     //
     // note: power is added globally while heat is computed and stored locally until later
-    for(NkInt16 row = 0; row < nkReactorGetHeight(); row++)
+    if(nkSIsButtonPressed(NK_S_LEFT_MOUSE_BUTTON))
     {
-        for(NkInt16 col = 0; col < nkReactorGetWidth(); col++)
+        NK_PRINTLN("Left Click @ %d,%d", gNkSMouseLocation.x, gNkSMouseLocation.y);
+    }
+    for(Int16 row = 0; row < nkReactorGetHeight(); row++)
+    {
+        for(Int16 col = 0; col < nkReactorGetWidth(); col++)
         {
             NkTile* tile = &gNkGameInstance.reactor[row][col];
             tile->tickHeat = 0.0f;
@@ -109,7 +189,7 @@ __nk_hot __attribute__((optimize("-ffast-math"))) NkVoid nkUpdate(__nk_unused Nk
                     continue;
                 }
                 NkComponent* component = nkFindComponentById(tile->id);
-                NkUInt16 adj = nkReactorGetOrthoNeighborsOfCat(NK_COMPONENT_FUEL_CELL, row, col);
+                UInt16 adj = nkReactorGetOrthoNeighborsOfCat(NK_COMPONENT_FUEL_CELL, row, col);
                 tile->tickHeat = component->heatOutput * ((adj * NK_RULE_GAME_FUEL_CELL_ADJACENCY_HEAT_BONUS) + 1);
                 tile->lastTickPower = component->powerOutput * ((adj * NK_RULE_GAME_FUEL_CELL_ADJACENCY_POWER_BONUS) + 1);
                 powerAdd += tile->lastTickPower;
@@ -119,37 +199,22 @@ __nk_hot __attribute__((optimize("-ffast-math"))) NkVoid nkUpdate(__nk_unused Nk
                 NkComponent* component = nkFindComponentById(tile->id);
                 platingAddHeatCapacity += component->custom2;
             }
-            // else if(nkIsVentId(tile->id))
-            // {
-            //     NkComponent* component = nkFindComponentById(tile->id);
-            //     // vents provide the opposite of fuel cells when they are clustered or grouped together
-            //     // the more vents that are nearby (within 1 cell), the last effective that cell becomes
-            //     // we will take the "full" neighbors in to consideration and not just ortho neighbors
-            //     NkUInt16 ventNeighbors = nkReactorGetFullNeighborsOfCat(NK_COMPONENT_VENTS, row, col);
-            //     tile->lastTickHeat = component->heatOutput * (1 - (ventNeighbors * 0.05f)); // decrease the efficiency of nearby cells by 5%
-            //     heatAdd += tile->lastTickHeat; // we add anyways since it is already a negative value from the last tick (negative = heat removed)
-
-            // }
-            // else
-            // {
-            //     // unknown component, do nothing
-            // }
         }
     }
     // == distribution pass ==
     // move heat to adjacent containment tiles
-    for(NkInt16 row = 0; row < nkReactorGetHeight(); row++)
+    for(Int16 row = 0; row < nkReactorGetHeight(); row++)
     {
-        for(NkInt16 col = 0; col < nkReactorGetWidth(); col++)
+        for(Int16 col = 0; col < nkReactorGetWidth(); col++)
         {
             NkTile* tile = &gNkGameInstance.reactor[row][col];
             if(nkIsHotTile(tile) && nkIsCellId(tile->id))
             {
                 NkOrthoNeighborTiles ventAdj = nkReactorFindOrthoNeighborsOfCat(NK_COMPONENT_VENTS, row, col);
-                NkInt32 count = (ventAdj.east != null ? 1 : 0) + (ventAdj.north != null ? 1 : 0) + (ventAdj.south != null ? 1 : 0) + (ventAdj.west != null ? 1 : 0);
+                Int32 count = (ventAdj.east != null ? 1 : 0) + (ventAdj.north != null ? 1 : 0) + (ventAdj.south != null ? 1 : 0) + (ventAdj.west != null ? 1 : 0);
                 if(count > 0)
                 {
-                    NkFloat32 heatPerVent = tile->tickHeat / count;
+                    Float32 heatPerVent = tile->tickHeat / count;
                     if(ventAdj.east != null)
                     {
                         ventAdj.east->tickHeat = heatPerVent;
@@ -173,11 +238,11 @@ __nk_hot __attribute__((optimize("-ffast-math"))) NkVoid nkUpdate(__nk_unused Nk
     }
     // == calculation pass ==
     // apply the heat characteristics per cells and vent
-    NkFloat32 heatRemoved = 0.0f;
-    NkFloat32 heatGenerated = 0.0f;
-    for(NkInt16 row = 0; row < nkReactorGetHeight(); row++)
+    Float32 heatRemoved = 0.0f;
+    Float32 heatGenerated = 0.0f;
+    for(Int16 row = 0; row < nkReactorGetHeight(); row++)
     {
-        for(NkInt16 col = 0; col < nkReactorGetWidth(); col++)
+        for(Int16 col = 0; col < nkReactorGetWidth(); col++)
         {
             NkTile* tile = &gNkGameInstance.reactor[row][col];
             if (!tile->active)
@@ -217,9 +282,9 @@ __nk_hot __attribute__((optimize("-ffast-math"))) NkVoid nkUpdate(__nk_unused Nk
     NK_PRINTLN("Total Heat = %5.4f (%5.4f%c)", gNkGameInstance.totalHeat, gNkGameInstance.totalHeat / gNkGameInstance.maxHeat, '%');
     NK_PRINTLN("Total Power = %5.4f (%5.4f%c)", gNkGameInstance.totalPower, gNkGameInstance.totalPower / gNkGameInstance.maxPower, '%');
     NK_PRINTLN("Meltdown Ticker: %d", _meltdownTicker);
-    for(NkInt16 row = 0; row < nkReactorGetHeight(); row++)
+    for(Int16 row = 0; row < nkReactorGetHeight(); row++)
     {
-        for(NkInt16 col = 0; col < nkReactorGetWidth(); col++)
+        for(Int16 col = 0; col < nkReactorGetWidth(); col++)
         {
             const NkComponentIdentifier v = gNkGameInstance.reactor[row][col].id;
             NK_PRINT(gNkGameInstance.reactor[row][col].active ? "[%d_%dO]" : "[%dY]", v.category, v.id);
@@ -227,4 +292,5 @@ __nk_hot __attribute__((optimize("-ffast-math"))) NkVoid nkUpdate(__nk_unused Nk
         NK_PRINT("%s", "\n");
     }
 #endif
+    nkConsumePolledInputs();
 }

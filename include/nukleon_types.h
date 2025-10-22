@@ -6,23 +6,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef int32_t NkInt32;
-typedef int64_t NkInt64;
-typedef uint32_t NkUInt32;
-typedef uint64_t NkUInt64;
-typedef char NkInt8;
-typedef uint8_t NkUInt8;
-typedef uintptr_t NkUPointer;
-typedef size_t NkSize;
-typedef float NkFloat32;
-typedef double NkFloat64;
-typedef int16_t NkInt16;
-typedef uint16_t NkUInt16;
-typedef void NkVoid;
-typedef const NkInt8* NkString;
+typedef int32_t Int32;
+typedef int64_t Int64;
+typedef uint32_t UInt32;
+typedef uint64_t UInt64;
+typedef char Int8;
+typedef uint8_t UInt8;
+typedef uintptr_t UPtr;
+typedef size_t Size;
+typedef float Float32;
+typedef double Float64;
+typedef int16_t Int16;
+typedef uint16_t UInt16;
+typedef void Void;
+typedef const Int8* CharSeq;
 typedef FILE CFile;
-typedef bool NkBool;
-typedef NkVoid* NkAny;
+typedef bool Bool;
+typedef Void* Any;
 
 #define null NULL
 
@@ -79,5 +79,7 @@ typedef NkVoid* NkAny;
         NK_PANIC(msg);                 \
     }                               \
 } while(0)
+
+CharSeq nkCanonicalizeBool(Bool v);
 
 #endif

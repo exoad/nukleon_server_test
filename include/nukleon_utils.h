@@ -6,24 +6,24 @@
 // -- geometry
 typedef struct NkPoint2D
 {
-    NkInt32 x;
-    NkInt32 y;
+    Int32 x;
+    Int32 y;
 } NkPoint2D;
 
-typedef struct NkSize2D
+typedef struct Size2D
 {
-    NkInt32 width;
-    NkInt32 height;
-} NkSize2D;
+    Int32 width;
+    Int32 height;
+} Size2D;
 
 typedef struct NkRect2D
 {
     NkPoint2D topLeft;
-    NkSize2D size;
+    Size2D size;
 } NkRect2D;
 
-NkBool nkGPointInRect(const NkPoint2D* point, const NkRect2D* rect);
+Bool nkGPointInRect(const NkPoint2D* point, const NkRect2D* rect);
 
-NkFloat32 nkClampFloat32(NkFloat32 value, NkFloat32 max, NkFloat32 min);
+Float32 nkClampFloat32(Float32 value, Float32 max, Float32 min);
 
 #endif

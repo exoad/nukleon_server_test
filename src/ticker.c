@@ -5,19 +5,19 @@
 #include <windows.h>
 static LARGE_INTEGER g_freq;
 
-NkVoid nkInitTime()
+Void nkInitTime()
 {
     QueryPerformanceFrequency(&g_freq);
 }
 
-NkFloat64 nkTimeNowSec()
+Float64 nkTimeNowSec()
 {
     LARGE_INTEGER c;
     QueryPerformanceCounter(&c);
-    return (NkFloat64) c.QuadPart / (NkFloat64) g_freq.QuadPart;
+    return (Float64) c.QuadPart / (Float64) g_freq.QuadPart;
 }
 
-NkVoid nkSleepMs(NkInt32 ms)
+Void nkSleepMs(Int32 ms)
 {
     if(ms > 0)
     {
@@ -25,7 +25,7 @@ NkVoid nkSleepMs(NkInt32 ms)
     }
 }
 
-NkVoid nkYield()
+Void nkYield()
 {
     if(!SwitchToThread())
     {
@@ -36,16 +36,16 @@ NkVoid nkYield()
 #include <time.h>
 #include <unistd.h>
 #include <sched.h>
-NkVoid nkInitTime() {}
+Void nkInitTime() {}
 
-NkFloat64 nkTimeNowSec()
+Float64 nkTimeNowSec()
 {
     struct timespec ts;
     clock_gettime(CLOCK_MONOTONIC, &ts);
-    return (NkFloat64) ts.tv_sec + (NkFloat64) ts.tv_nsec / 1e9;
+    return (Float64) ts.tv_sec + (Float64) ts.tv_nsec / 1e9;
 }
 
-NkVoid nkSleepMs(NkInt32 ms) {
+Void nkSleepMs(Int32 ms) {
     if(ms <= 0)
     {
         return;
@@ -56,7 +56,7 @@ NkVoid nkSleepMs(NkInt32 ms) {
     nanosleep(&ts, NULL);
 }
 
-NkVoid nkYield()
+Void nkYield()
 {
     sched_yield();
 }

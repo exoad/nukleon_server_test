@@ -1,10 +1,10 @@
 #include "nukleon.h"
 #include "tigr.h"
 
-#define REACTOR_WIDTH ((NkUInt16) 32)
-#define REACTOR_HEIGHT ((NkUInt16) 24)
+#define REACTOR_WIDTH ((UInt16) 32)
+#define REACTOR_HEIGHT ((UInt16) 24)
 
-NkVoid testBuildRun()
+Void testBuildRun()
 {
 #ifdef NK_TEST_BUILD
     {
@@ -17,7 +17,7 @@ NkVoid testBuildRun()
 #endif
 }
 
-NkInt32 main()
+Int32 main()
 {
     nkInitTime();
     nkInitItemsDefinition();
@@ -29,7 +29,7 @@ NkInt32 main()
 #define reactor_set(row, col, tile) nkReactorSet(row, col, tile);
 #define new_tile(id) newNkTileWithDefaultsFromId(id)
 #define new_cmp(cat, id) ((NkComponentIdentifier) { cat, id })
-#define for_each_cell_in_reactor(row, col) for(NkInt16 row = 0; row < reactor_height; row++) for(NkInt16 col = 0; col < reactor_width; col++)
+#define for_each_cell_in_reactor(row, col) for(Int16 row = 0; row < reactor_height; row++) for(Int16 col = 0; col < reactor_width; col++)
 #define reactor_get(row, col) gNkGameInstance.reactor[row][col]
 #define toggle_activity(row, col) gNkGameInstance.reactor[row][col].active = !gNkGameInstance.reactor[row][col].active;
 #define is_active(row, col) gNkGameInstance.reactor[row][col].active
